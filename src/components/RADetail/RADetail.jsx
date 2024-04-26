@@ -25,7 +25,7 @@ const RADetail = () => {
   return (
     <div className="dashboard-container p-0 sm:ml-60">
       <PageHeader
-        title="Explore"
+        title="RA Details"
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
         hasNotification={hasNotification}
@@ -56,7 +56,7 @@ const RADetail = () => {
                     <td>01/04/2024</td>
                     <td><Link to="/ra-name">Anuj Kumar</Link></td>
                     <td>0802929384</td>
-                    <td>20%</td>
+                    <td><input type="text" placeholder="Enter Commission" style={{fontSize: "small", fontWeight: "normal"}} className="text-center shadow text-gray-700 leading-tight focus:outline-none focus:shadow-outline p-1.5 text-sm appearance-none border rounded" /></td>
                     <td className="text-red-600">2000</td>
                     <td style={{fontWeight: "600"}} className="text-green-600 font-semibold p-3">3000</td>
                     <td style={{textAlign: "center"}} className="text-green-600">Upload</td>
@@ -65,7 +65,7 @@ const RADetail = () => {
                     <td>01/04/2024</td>
                     <td><Link to="/ra-name">Anuj Kumar</Link></td>
                     <td>0802929384</td>
-                    <td>20%</td>
+                    <td><input type="text" placeholder="Enter Commission" style={{fontSize: "small", fontWeight: "normal"}} className="text-center shadow text-gray-700 leading-tight focus:outline-none focus:shadow-outline p-1.5 text-sm appearance-none border rounded" /></td>
                     <td className="text-red-600">2000</td>
                     <td style={{fontWeight: "600"}} className="text-green-600 font-semibold p-3">3000</td>
                     <td style={{textAlign: "center"}} className="text-green-600">Upload</td>

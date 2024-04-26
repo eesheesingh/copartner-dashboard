@@ -24,7 +24,7 @@ const APDetail = () => {
   return (
     <div className="dashboard-container p-0 sm:ml-60">
       <PageHeader
-        title="Explore"
+        title="AP Details"
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
         hasNotification={hasNotification}
@@ -55,8 +55,8 @@ const APDetail = () => {
                     <td>01/04/2024</td>
                     <td><Link to="/ap-name">Arun Kumar</Link></td>
                     <td>Lorem ipsum dolor...</td>
-                    <td>70%</td>
-                    <td>40%</td>
+                    <td><input type="text" placeholder="Enter Commission" style={{fontSize: "small", fontWeight: "normal"}} className="text-center shadow text-gray-700 leading-tight focus:outline-none focus:shadow-outline p-1.5 text-sm appearance-none border rounded" /></td>
+                    <td><input type="text" placeholder="Enter Commission" style={{fontSize: "small", fontWeight: "normal"}} className="text-center shadow text-gray-700 leading-tight focus:outline-none focus:shadow-outline p-1.5 text-sm appearance-none border rounded" /></td>
                     <td style={{fontWeight: "600"}} className="text-red-600 font-semibold p-3">2000</td>
                     <td style={{textAlign: "center"}} className="text-green-600">3000</td>
                   </tr>
@@ -64,8 +64,8 @@ const APDetail = () => {
                     <td>01/04/2024</td>
                     <td><Link to="/ap-name">Arun Kumar</Link></td>
                     <td>Lorem ipsum dolor...</td>
-                    <td>70%</td>
-                    <td>40%</td>
+                    <td><input type="text" placeholder="Enter Commission" style={{fontSize: "small", fontWeight: "normal"}} className="text-center shadow text-gray-700 leading-tight focus:outline-none focus:shadow-outline p-1.5 text-sm appearance-none border rounded" /></td>
+                    <td><input type="text" placeholder="Enter Commission" style={{fontSize: "small", fontWeight: "normal"}} className="text-center shadow text-gray-700 leading-tight focus:outline-none focus:shadow-outline p-1.5 text-sm appearance-none border rounded" /></td>
                     <td style={{fontWeight: "600"}} className="text-red-600 font-semibold p-3">2000</td>
                     <td style={{textAlign: "center"}} className="text-green-600">3000</td>
                   </tr>

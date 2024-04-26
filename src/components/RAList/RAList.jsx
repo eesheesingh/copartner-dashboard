@@ -10,7 +10,7 @@ const RADetail = () => {
     <div className="dashboard-container p-0 sm:ml-60">
       {/* Page Header */}
       <PageHeader
-        title="Explore"
+        title="RA Listing"
         searchQuery=""
         setSearchQuery={() => {}}
         hasNotification={false} // Adjust as needed
@@ -31,7 +31,7 @@ const RADetail = () => {
       {/* Additional Divs below Request Page */}
       <div className="requestContainer mx-5 bg-[#fff]">
         <div className="requestHeading flex justify-between items-center text-2xl font-bold p-4">
-          <h2 className="pl-3">Anuj Kumar</h2>
+          <h2 className="pl-3 text-xl font-semibold">Anuj Kumar</h2>
         </div>
         {/* Similar Channel Options from Explore Page */}
         

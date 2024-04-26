@@ -13,7 +13,7 @@ const RAPage = () => {
   return (
     <div className="dashboard-container p-0 sm:ml-60">
       <PageHeader
-        title="Explore"
+        title="R.A"
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
         hasNotification={hasNotification}
