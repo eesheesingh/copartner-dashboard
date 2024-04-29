@@ -2,20 +2,20 @@ import { Link } from "react-router-dom";
 import PageHeader from "../Header/Header";
 import { useState } from "react";
 import { ToastContainer } from "react-toastify";
+import MarketingContentPopup from "./MarketingContentPopup";
 
 const MarketingContent = () => {
   const [hasNotification, setHasNotification] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
-  const [buttonBorderColor, setButtonBorderColor] = useState({
-    button1: "transparent",
-    button2: "transparent",
-  });
+  const [activeButton, setActiveButton] = useState("button1");
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
+
+  const handleClosePopup = () => {
+    setIsPopupOpen(false);
+  };
 
   const handleButtonClick = (buttonId) => {
-    setButtonBorderColor((prevState) => ({
-      ...prevState,
-      [buttonId]: "black",
-    }));
+    setActiveButton(buttonId);
   };
 
   return (
@@ -29,25 +29,32 @@ const MarketingContent = () => {
       />
 
       <div className="p-4 flex gap-8">
-        <button
+        <Link
+          to="/marketingcontent/banner"
           onClick={() => handleButtonClick("button1")}
-          className={`px-16 py-4 border-2 rounded-xl border-${buttonBorderColor.button1} border-gray-500 font-semibold`}
+          className={`px-16 py-4 border-2 rounded-xl ${
+            activeButton === "button1" ? "border-black" : "border-gray-200"
+          } font-semibold`}
         >
-          R.A
-        </button>
-        <button
+          Banner
+        </Link>
+        <Link
+          to="/marketingcontent/video"
           onClick={() => handleButtonClick("button2")}
-          className={`px-16 py-4 border-2 rounded-xl border-${buttonBorderColor.button2} border-gray-500 font-semibold`}
+          className={`px-16 py-4 border-2 rounded-xl ${
+            activeButton === "button2" ? "border-black" : "border-gray-200"
+          } font-semibold`}
         >
-          A.P
-        </button>
+          Video
+        </Link>
       </div>
 
       <div className="p-4">
         <div className="dashboard-view-section mb-4">
           <div className="my-8 table-list-mb">
-            <div className="channel-heading">
-              <h3 className="text-xl font-semibold">Banners</h3>
+            <div className="channel-heading flex">
+              <h3 className="text-xl font-semibold mr-auto">Banners</h3>
+              <button className=" border-2 border-black rounded-lg px-4 py-1 mr-4" onClick={() => setIsPopupOpen(true)}>+ Add</button>
             </div>
             {/* <div className="m-8">
               <table className="table-list">
@@ -76,6 +83,7 @@ const MarketingContent = () => {
           </div>
         </div>
       </div>
+      {isPopupOpen && <MarketingContentPopup onClose = {handleClosePopup} />}
       <ToastContainer />
     </div>
   );

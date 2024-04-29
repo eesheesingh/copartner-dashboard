@@ -33,8 +33,8 @@ const App = () => {
       <Route path='ap-name' element= {  <APList /> } />
       <Route path='agencylist' element= {  <AgencyList /> } />
       <Route path='agency' element= {  <AgencyID /> } /> {/*dynamic routing for agency*/}
-      <Route path='transaction' element= {  <Transaction /> } />
-      <Route path='marketingcontent' element= {  <MarketingContent /> } />
+      <Route path='transaction/ra' element= {  <Transaction /> } />
+      <Route path='marketingcontent/banner' element= {  <MarketingContent /> } />
       {/* <Route path='userdata' element= {  <Transaction /> } /> */}
     </Route>
     </>

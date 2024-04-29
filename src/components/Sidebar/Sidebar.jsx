@@ -116,13 +116,13 @@ const Sidebar = () => {
             </Link>
           </li>
           <li>
-            <Link to="/transaction" title="Settings" className={`menu-item flex items-center px-4 py-3 rounded-lg hover:bg-gray-200 group ${isLinkActive('/transaction') ? 'active' : ''}`}>
+            <Link to="/transaction/ra" title="Settings" className={`menu-item flex items-center px-4 py-3 rounded-lg hover:bg-gray-200 group ${isLinkActive('/transaction') ? 'active' : ''}`}>
             <img src={userIcon} alt='user-icon' className='w-6 h-6' />
               <span className="text-base font-bold flex-1 ms-3 whitespace-nowrap">Transaction</span>
             </Link>
           </li>
           <li>
-            <Link to="/marketingcontent" title="Settings" className={`menu-item flex items-center px-4 py-3 rounded-lg hover:bg-gray-200 group ${isLinkActive('/marketingcontent') ? 'active' : ''}`}>
+            <Link to="/marketingcontent/banner" title="Settings" className={`menu-item flex items-center px-4 py-3 rounded-lg hover:bg-gray-200 group ${isLinkActive('/marketingcontent') ? 'active' : ''}`}>
             <img src={userIcon} alt='user-icon' className='w-6 h-6' />
               <span className="text-base font-bold flex-1 ms-3 whitespace-nowrap">Marketing Content</span>
             </Link>

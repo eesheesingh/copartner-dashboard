@@ -6,16 +6,10 @@ import { ToastContainer } from "react-toastify";
 const Transaction = () => {
   const [hasNotification, setHasNotification] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
-  const [buttonBorderColor, setButtonBorderColor] = useState({
-    button1: "transparent",
-    button2: "transparent",
-  });
+  const [activeButton, setActiveButton] = useState("button1");
 
   const handleButtonClick = (buttonId) => {
-    setButtonBorderColor((prevState) => ({
-      ...prevState,
-      [buttonId]: "black",
-    }));
+    setActiveButton(buttonId);
   };
 
   return (
@@ -29,18 +23,24 @@ const Transaction = () => {
       />
 
       <div className="p-4 flex gap-8">
-        <button
+        <Link
+          to="/transaction/ra"
           onClick={() => handleButtonClick("button1")}
-          className={`px-16 py-4 border-2 rounded-xl border-${buttonBorderColor.button1} border-gray-500 font-semibold`}
+          className={`px-16 py-4 border-2 rounded-xl ${
+            activeButton === "button1" ? "border-black" : "border-gray-200"
+          } font-semibold`}
         >
           R.A
-        </button>
-        <button
+        </Link>
+        <Link
+          to="/transaction/ap"
           onClick={() => handleButtonClick("button2")}
-          className={`px-16 py-4 border-2 rounded-xl border-${buttonBorderColor.button2} border-gray-500 font-semibold`}
+          className={`px-16 py-4 border-2 rounded-xl ${
+            activeButton === "button2" ? "border-black" : "border-gray-200"
+          } font-semibold`}
         >
           A.P
-        </button>
+        </Link>
       </div>
 
       <div className="p-4">
@@ -56,7 +56,7 @@ const Transaction = () => {
                     <th style={{ textAlign: "left", paddingLeft: "2rem" }}>
                       Date
                     </th>
-                    <th style={{textAlign: "left"}}>R.A Name</th>
+                    <th style={{ textAlign: "left" }}>R.A Name</th>
                     <th>Amount</th>
                   </tr>
                 </thead>
@@ -65,7 +65,7 @@ const Transaction = () => {
                     <td style={{ textAlign: "left", paddingLeft: "2rem" }}>
                       01/04/2024
                     </td>
-                    <td style={{textAlign: "left"}} className="text-blue-600">
+                    <td style={{ textAlign: "left" }} className="text-blue-600">
                       <Link to="/agency">Arun Kumar</Link>
                     </td>
                     <td>3000</td>
