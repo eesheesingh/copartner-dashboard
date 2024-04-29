@@ -7,10 +7,16 @@ import "react-date-range/dist/theme/default.css";
 import PageHeader from "../Header/Header";
 import { ToastContainer } from "react-toastify";
 import { Link } from "react-router-dom";
+import AdAgencyPopup from "./AdAgencyPopup";
 
 const AgencyList = () => {
   const [hasNotification, setHasNotification] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
+
+  const handleClosePopup = () => {
+    setIsPopupOpen(false);
+  };
 
   // const handleError = (err) =>
   //   toast.info(err, {
@@ -24,7 +30,7 @@ const AgencyList = () => {
   return (
     <div className="dashboard-container p-0 sm:ml-60">
       <PageHeader
-        title="Agency List"
+        title="Ad Agency Details"
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
         hasNotification={hasNotification}
@@ -34,8 +40,9 @@ const AgencyList = () => {
       <div className="p-4">
         <div className="dashboard-view-section mb-4">
           <div className="my-8 table-list-mb">
-            <div className="channel-heading">
-              <h3 className="text-xl font-semibold">Listing</h3>
+            <div className="channel-heading flex">
+            <h3 className="text-xl font-semibold mr-auto">Listing</h3>
+              <button className=" border-2 border-black rounded-lg px-4 py-1 mr-4" onClick={() => setIsPopupOpen(true)}>+ Add</button>
             </div>
             <div className="m-8">
               <table className="table-list">
@@ -60,6 +67,7 @@ const AgencyList = () => {
           </div>
         </div>
       </div>
+      {isPopupOpen && <AdAgencyPopup onClose = {handleClosePopup} />}
       <ToastContainer />
     </div>
   );

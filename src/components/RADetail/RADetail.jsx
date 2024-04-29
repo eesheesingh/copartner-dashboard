@@ -8,11 +8,18 @@ import "react-date-range/dist/theme/default.css";
 import PageHeader from "../Header/Header";
 import { ToastContainer } from "react-toastify";
 import { Link } from "react-router-dom";
+import { FaPen } from "react-icons/fa";
+import Bin from '../../assets/TrashBinMinimalistic.png'
+import RAPopup from "./RAPopup";
 
 const RADetail = () => {
   const [hasNotification, setHasNotification] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
 
+  const handleClosePopup = () => {
+    setIsPopupOpen(false);
+  };
   // const handleError = (err) =>
   //   toast.info(err, {
   //     position: "bottom-left",
@@ -35,8 +42,9 @@ const RADetail = () => {
       <div className="p-4">
         <div className="dashboard-view-section mb-4">
           <div className="my-8 table-list-mb">
-            <div className="channel-heading">
-              <h3 className="text-xl font-semibold">Listing</h3>
+            <div className="channel-heading flex">
+              <h3 className="text-xl font-semibold mr-auto">Listing</h3>
+              <button className=" border-2 border-black rounded-lg px-4 py-1 mr-4" onClick={() => setIsPopupOpen(true)}>+ Add</button>
             </div>
             <div className="m-8">
               <table className="table-list">
@@ -47,8 +55,8 @@ const RADetail = () => {
                     <th>SEBI No.</th>
                     <th>Commission Fix</th>
                     <th>Spend</th>
-                    <th>Earn</th>
                     <th>Documents</th>
+                    <th>Action</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -58,8 +66,8 @@ const RADetail = () => {
                     <td>0802929384</td>
                     <td><input type="text" placeholder="Enter Commission" style={{fontSize: "small", fontWeight: "normal"}} className="text-center shadow text-gray-700 leading-tight focus:outline-none focus:shadow-outline p-1.5 text-sm appearance-none border rounded" /></td>
                     <td className="text-red-600">2000</td>
-                    <td style={{fontWeight: "600"}} className="text-green-600 font-semibold p-3">3000</td>
-                    <td style={{textAlign: "center"}} className="text-green-600">Upload</td>
+                    <td style={{textAlign: "center"}}><button>Upload</button></td>
+                    <td className="text-green-600 flex justify-center items-center gap-6"><FaPen className="text-blue-600"/><img className="w-6 h-6" src={Bin} alt="" /></td>
                   </tr>
                   <tr>
                     <td>01/04/2024</td>
@@ -67,8 +75,8 @@ const RADetail = () => {
                     <td>0802929384</td>
                     <td><input type="text" placeholder="Enter Commission" style={{fontSize: "small", fontWeight: "normal"}} className="text-center shadow text-gray-700 leading-tight focus:outline-none focus:shadow-outline p-1.5 text-sm appearance-none border rounded" /></td>
                     <td className="text-red-600">2000</td>
-                    <td style={{fontWeight: "600"}} className="text-green-600 font-semibold p-3">3000</td>
-                    <td style={{textAlign: "center"}} className="text-green-600">Upload</td>
+                    <td style={{textAlign: "center"}}><button>Upload</button></td>
+                    <td className="text-green-600 flex justify-center items-center gap-6"><FaPen className="text-blue-600"/><img className="w-6 h-6" src={Bin} alt="" /></td>
                   </tr>
                 </tbody>
               </table>
@@ -76,6 +84,7 @@ const RADetail = () => {
           </div>
         </div>
       </div>
+      {isPopupOpen && <RAPopup onClose = {handleClosePopup} />}
       <ToastContainer />
     </div>
   );

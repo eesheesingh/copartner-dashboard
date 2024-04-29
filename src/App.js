@@ -15,6 +15,7 @@ import APList from './components/APList/APList';
 import AgencyList from './components/AgencyList/AgencyList';
 import AgencyID from "./components/AgencyID/AgencyID";
 import Transaction from './components/Transaction/Transaction';
+import MarketingContent from './components/MarketingContent/MarketingContent';
 
 const App = () => {
  
@@ -33,6 +34,8 @@ const App = () => {
       <Route path='agencylist' element= {  <AgencyList /> } />
       <Route path='agency' element= {  <AgencyID /> } /> {/*dynamic routing for agency*/}
       <Route path='transaction' element= {  <Transaction /> } />
+      <Route path='marketingcontent' element= {  <MarketingContent /> } />
+      {/* <Route path='userdata' element= {  <Transaction /> } /> */}
     </Route>
     </>
   ))

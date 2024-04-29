@@ -10,7 +10,7 @@ const RADetail = () => {
     <div className="dashboard-container p-0 sm:ml-60">
       {/* Page Header */}
       <PageHeader
-        title="RA Listing"
+        title="R.A"
         searchQuery=""
         setSearchQuery={() => {}}
         hasNotification={false} // Adjust as needed

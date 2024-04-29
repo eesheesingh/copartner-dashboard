@@ -10,7 +10,7 @@ const UserDetail = () => {
     <div className="dashboard-container p-0 sm:ml-60">
       {/* Page Header */}
       <PageHeader
-        title="User-Detail"
+        title="A.P"
         searchQuery=""
         setSearchQuery={() => {}}
         hasNotification={false} // Adjust as needed

@@ -1,7 +1,7 @@
 
 import { FaAngleLeft } from "react-icons/fa6";
 import PageHeader from "../Header/Header";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const APPage = () => {
   const navigate = useNavigate();
