@@ -10,6 +10,26 @@ import { ToastContainer } from "react-toastify";
 import { Link } from "react-router-dom";
 
 const Dashboard = () => {
+  const data = [
+    {
+      apName: "Varun Kumar",
+      usersCome: 150,
+      usersPay: 100,
+      spendOnAP: 600,
+      spendOnRA: 200,
+      earning: 200,
+    },
+    {
+      apName: "Parvez Alam",
+      usersCome: 150,
+      usersPay: 100,
+      spendOnAP: 600,
+      spendOnRA: 200,
+      earning: 200,
+    },
+    // Add more data objects as needed
+  ];
+
   const [hasNotification, setHasNotification] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -34,7 +54,7 @@ const Dashboard = () => {
 
       <div className="p-4">
         <div className="dashboard-view-section mb-4">
-          <div className="my-8 table-list-mb">
+          <div className="table-list-mb">
             <div className="channel-heading">
               <h3 className="text-xl font-semibold">Listing</h3>
             </div>
@@ -51,14 +71,20 @@ const Dashboard = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td><Link to="a.p">Varun Kumar</Link></td>
-                    <td>150</td>
-                    <td className="text-blue-400"><Link to="a.p">100</Link></td>
-                    <td className="text-red-500">600</td>
-                    <td className="text-red-500">200</td>
-                    <td className="text-green-600">200</td>
-                  </tr>
+                  {data.map((row, index) => (
+                    <tr key={index}>
+                      <td>
+                        <Link to={`/${row.apName}`}>{row.apName}</Link>
+                      </td>
+                      <td>{row.usersCome}</td>
+                      <td className="text-blue-400">
+                        <Link to={`/${row.apName}`}>{row.usersPay}</Link>
+                      </td>
+                      <td className="text-red-500">{row.spendOnAP}</td>
+                      <td className="text-red-500">{row.spendOnRA}</td>
+                      <td className="text-green-600">{row.earning}</td>
+                    </tr>
+                  ))}
                 </tbody>
               </table>
             </div>

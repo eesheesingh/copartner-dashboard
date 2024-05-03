@@ -51,7 +51,7 @@ const MarketingContent = () => {
 
       <div className="p-4">
         <div className="dashboard-view-section mb-4">
-          <div className="my-8 table-list-mb">
+          <div className="table-list-mb">
             <div className="channel-heading flex">
               <h3 className="text-xl font-semibold mr-auto">Banners</h3>
               <button className=" border-2 border-black rounded-lg px-4 py-1 mr-4" onClick={() => setIsPopupOpen(true)}>+ Add</button>

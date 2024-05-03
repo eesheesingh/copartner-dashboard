@@ -1,10 +1,31 @@
 import "./UserDetail.css";
 import { FaAngleLeft } from "react-icons/fa6";
 import PageHeader from "../Header/Header";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 const UserDetail = () => {
+
+  const userDetails = [
+    {
+      name: "Varun Kumar",
+      mobile: "9898981923",
+      transactions: [
+        { date: "01/04/2024", amount: 1000, ra: "Eeshee Pal Singh", subscription: "Service" },
+      ],
+    },
+    {
+      name: "Parvez Alam",
+      mobile: "7987897973",
+      transactions: [
+        { date: "02/04/2024", amount: 2000, ra: "Khatri Pal Singh", subscription: "Service" },
+      ],
+    },
+  ];
+
   const navigate = useNavigate();
+  const { id } = useParams();
+  
+  const user = userDetails.find(user => user.mobile === id);
 
   return (
     <div className="dashboard-container p-0 sm:ml-60">
@@ -19,21 +40,21 @@ const UserDetail = () => {
 
       {/* Back Button */}
       <div className="back-button flex items-center text-2xl font-bold p-6">
-        <button
+        {!user ? <div>User not found</div> : <button
           style={{ display: "flex", alignItems: "center" }}
           onClick={() => navigate("/a.p")}
         >
           <FaAngleLeft />
           <span className="ml-1">Back</span>
-        </button>
+        </button>}
       </div>
 
       {/* Additional Divs below Request Page */}
-      <div className="requestContainer mx-5 bg-[#fff]">
+      {user && <div className="requestContainer mx-5 bg-[#fff]">
         <div className="requestHeading flex items-center text-2xl font-bold p-4">
-          <h2 className="pl-3 text-xl font-semibold">Varun Kumar :</h2>
+          <h2 className="pl-3 text-xl font-semibold">{user.name} :</h2>
           <div className="channelOptions flex place-content-between px-6 text-xl font-semibold">
-            8909090910
+            {user.mobile}
           </div>
         </div>
         {/* Similar Channel Options from Explore Page */}
@@ -50,16 +71,18 @@ const UserDetail = () => {
               </tr>
             </thead>
             <tbody>
-              <tr className="request-numbers font-semibold">
-                <td>01/04/2024</td>
-                <td className="text-center">1000</td>
-                <td className="text-center">Eeshee Pal Singh</td>
-                <td className="text-center">Service</td>
-              </tr>
+              {user.transactions.map((transaction, index) => (
+                <tr key={index} className="request-numbers font-semibold">
+                  <td>{transaction.date}</td>
+                  <td className="text-center">{transaction.amount}</td>
+                  <td className="text-center">{transaction.ra}</td>
+                  <td className="text-center">{transaction.subscription}</td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>
-      </div>
+      </div>}
     </div>
   );
 };

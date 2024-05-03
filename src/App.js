@@ -24,8 +24,8 @@ const App = () => {
     <Route path= "/" element= {  <Sidebar />  } errorElement={<ErrorPage />}>
       <Route path='' element= {  <Dashboard /> } />
       <Route path='r.a' element= {  <RAPage /> } />
-      <Route path='a.p' element= {  <APPage /> } />   {/*dynamic routing in a.p */}
-      <Route path='user-number' element= {  <UserDetail /> } />   {/*dynamic routing for number in a.p */}
+      <Route path='/:apName' element= {  <APPage /> } />
+      <Route path='/:apName/:id' element= {  <UserDetail /> } />
       <Route path='ra-name' element= {  <RAList /> } />
       <Route path='blogs' element= {  <Blog /> } />
       <Route path='radetails' element= {  <RADetail /> } />
