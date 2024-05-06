@@ -75,7 +75,7 @@ const APPage = () => {
       <div className="back-button flex items-center text-2xl font-bold p-6">
         <button
           style={{ display: "flex", alignItems: "center" }}
-          onClick={() => navigate("/")}
+          onClick={() => navigate(-1)}
         >
           <FaAngleLeft />
           <span className="ml-1">Back</span>

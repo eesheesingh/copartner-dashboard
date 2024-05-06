@@ -73,6 +73,11 @@ const APDetail = () => {
     handleClosePopup();
   };
 
+  const handleChangeMode = () => {
+    setEditItem(viewItem);
+    setViewItem(null);
+  };
+
   return (
     <div className="dashboard-container p-0 sm:ml-60">
       <PageHeader
@@ -95,7 +100,7 @@ const APDetail = () => {
                 + Add
               </button>
             </div>
-            <div className="m-8">
+            <div className="py-4 px-8">
               <table className="table-list">
                 <thead>
                   <tr>
@@ -120,19 +125,19 @@ const APDetail = () => {
                       <td>{item.CommissionFix2}</td>
                       <td className="text-red-600">{item.Spend}</td>
                       <td className="text-green-600 flex justify-center items-center gap-6">
-                      <button
-                        onClick={() => handleOpenPopup(item)}
-                        aria-label="Edit"
-                      >
-                        <FaPen className="text-blue-600" />
-                      </button>
-                      <button
-                        onClick={() => handleOpenPopup(item, "view")} // Set viewing mode
-                        aria-label="View"
-                      >
-                        <IoEyeSharp className=" text-blue-500 text-xl" />
-                      </button>
-                    </td>
+                        <button
+                          onClick={() => handleOpenPopup(item)}
+                          aria-label="Edit"
+                        >
+                          <FaPen className="text-blue-600" />
+                        </button>
+                        <button
+                          onClick={() => handleOpenPopup(item, "view")} // Set viewing mode
+                          aria-label="View"
+                        >
+                          <IoEyeSharp className=" text-blue-500 text-xl" />
+                        </button>
+                      </td>
                     </tr>
                   ))}
                 </tbody>
@@ -155,6 +160,7 @@ const APDetail = () => {
           onSave={handleSave}
           mode="view"
           initialValues={viewItem}
+          onChangeMode={handleChangeMode} // Pass handleChangeMode function
         />
       )}
       <ToastContainer />

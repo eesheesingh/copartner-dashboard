@@ -58,7 +58,7 @@ const Dashboard = () => {
             <div className="channel-heading">
               <h3 className="text-xl font-semibold">Listing</h3>
             </div>
-            <div className="m-8">
+            <div className="py-4 px-8">
               <table className="table-list">
                 <thead>
                   <tr>

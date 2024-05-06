@@ -16,6 +16,11 @@ import AgencyList from './components/AgencyList/AgencyList';
 import AgencyID from "./components/AgencyID/AgencyID";
 import Transaction from './components/Transaction/Transaction';
 import MarketingContent from './components/MarketingContent/MarketingContent';
+import UserData from './components/UserData/UserData';
+import RelationManagement from './components/Relationship/RelationManagement';
+import SubAdmin from './components/SubAdmin/SubAdmin';
+import Join from './components/Join/Join';
+import Access from './components/SubAdmin/Access';
 
 const App = () => {
  
@@ -24,18 +29,22 @@ const App = () => {
     <Route path= "/" element= {  <Sidebar />  } errorElement={<ErrorPage />}>
       <Route path='' element= {  <Dashboard /> } />
       <Route path='r.a' element= {  <RAPage /> } />
-      <Route path='/:apName' element= {  <APPage /> } />
-      <Route path='/:apName/:id' element= {  <UserDetail /> } />
-      <Route path='ra-name' element= {  <RAList /> } />
+      <Route path=':apName' element= {  <APPage /> } />
+      <Route path=':apName/:apId' element= {  <UserDetail /> } />
+      <Route path='r.a/:raName' element= {  <RAList /> } />
       <Route path='blogs' element= {  <Blog /> } />
       <Route path='radetails' element= {  <RADetail /> } />
       <Route path='apdetails' element= {  <APDetail /> } />
       <Route path='ap-name' element= {  <APList /> } />
       <Route path='agencylist' element= {  <AgencyList /> } />
-      <Route path='agency' element= {  <AgencyID /> } /> {/*dynamic routing for agency*/}
-      <Route path='transaction/ra' element= {  <Transaction /> } />
-      <Route path='marketingcontent/banner' element= {  <MarketingContent /> } />
-      {/* <Route path='userdata' element= {  <Transaction /> } /> */}
+      <Route path='agency' element= {  <AgencyID /> } />
+      <Route path='transaction' element= {  <Transaction /> } />
+      <Route path='marketingcontent' element= {  <MarketingContent /> } />
+      <Route path='userdata' element= {  <UserData /> } />
+      <Route path='relationship' element= {  <RelationManagement /> } />
+      <Route path='sub-admin' element= {  <SubAdmin /> } />
+      <Route path='sub-admin/access' element= {  <Access /> } />
+      <Route path='join' element= {  <Join /> } />
     </Route>
     </>
   ))

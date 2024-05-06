@@ -8,10 +8,21 @@ const RAPage = () => {
   const rpData = [
     {
       name: "Anuj Kumar",
-      link: "/ra-name",
       users: 100,
       spendOnRA: 200,
       earning: 500,
+    },
+    {
+      name: "Kapil Sharma",
+      users: 200,
+      spendOnRA: 300,
+      earning: 700,
+    },
+    {
+      name: "Kishan Kapoor",
+      users: 250,
+      spendOnRA: 500,
+      earning: 950,
     },
     // Add more data objects as needed
   ];
@@ -35,7 +46,7 @@ const RAPage = () => {
             <div className="channel-heading">
               <h3 className="text-xl font-semibold">Listing</h3>
             </div>
-            <div className="m-8">
+            <div className="py-4 px-8">
               <table className="table-list">
                 <thead>
                   <tr>
@@ -51,10 +62,10 @@ const RAPage = () => {
                   {rpData.map((row, index) => (
                     <tr key={index}>
                       <td style={{ textAlign: "left", paddingLeft: "2rem" }}>
-                        <Link to={row.link}>{row.name}</Link>
+                        <Link to={`/r.a/${row.name}`}>{row.name}</Link>
                       </td>
                       <td className="text-blue-600">
-                        <Link to={row.link}>{row.users}</Link>
+                        <Link to={`/r.a/${row.name}`}>{row.users}</Link>
                       </td>
                       <td className="text-red-500">{row.spendOnRA}</td>
                       <td className="text-green-600">{row.earning}</td>

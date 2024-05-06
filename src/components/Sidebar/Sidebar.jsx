@@ -1,11 +1,10 @@
-// Sidebar.jsx
-import { useState, useRef } from 'react';
-import { BiLogOut } from 'react-icons/bi';
-import { IoSettingsOutline } from 'react-icons/io5';
-import './Sidebar.css';
-import Logo from '../../assets/copartner.png';
-import { Link, Outlet, useNavigate, useLocation } from 'react-router-dom';
-import userIcon from '../../assets/user-octagon.png'
+import { useState, useRef } from "react";
+import { BiLogOut } from "react-icons/bi";
+import { IoSettingsOutline } from "react-icons/io5";
+import Logo from "../../assets/copartner.png";
+import { Link, Outlet, useNavigate, useLocation } from "react-router-dom";
+import userIcon from "../../assets/user-octagon.png";
+import { click } from "@testing-library/user-event/dist/click";
 
 const Sidebar = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -32,22 +31,63 @@ const Sidebar = () => {
     }
   };
 
-  document.addEventListener('mousedown', handleClickOutside);
+  document.addEventListener("mousedown", handleClickOutside);
 
-  // Function to check if the link is active
   const isLinkActive = (path) => {
     return location.pathname === path;
   };
 
+  const links = [
+    { to: "/", title: "Dashboard", label: "A.P", icon: userIcon },
+    { to: "/r.a", title: "Overview", label: "R.A", icon: userIcon },
+    {
+      to: "/blogs",
+      title: "Settings",
+      label: "Blog Upload",
+      icon: IoSettingsOutline,
+    },
+    {
+      to: "/radetails",
+      title: "Settings",
+      label: "R.A Details",
+      icon: IoSettingsOutline,
+    },
+    {
+      to: "/apdetails",
+      title: "Settings",
+      label: "A.P Details",
+      icon: IoSettingsOutline,
+    },
+    {
+      to: "/agencylist",
+      title: "Settings",
+      label: "Ad Agency",
+      icon: userIcon,
+    },
+    {
+      to: "/transaction",
+      title: "Settings",
+      label: "Transaction",
+      icon: userIcon,
+    },
+    {
+      to: "/marketingcontent",
+      title: "Settings",
+      label: "Marketing Content",
+      icon: userIcon,
+    },
+    { to: "/userdata", title: "Settings", label: "User Data", icon: userIcon },
+    { to: "/relationship", title: "Settings", label: "Relationship Management", icon: userIcon },
+    { to: "/join", title: "Settings", label: "Join", icon: userIcon },
+    { to: "/sub-admin", title: "Settings", label: "Sub Admin Management", icon: userIcon },
+  ];
 
   return (
     <>
       <button
-        data-drawer-target="logo-sidebar"
-        data-drawer-toggle="logo-sidebar"
         aria-controls="logo-sidebar"
         type="button"
-        className="sidebar-button inline-flex items-center p-2 mt-2 ms-3 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
+        className="inline-flex items-center p-2 mt-2 ml-3 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
         onClick={toggleSidebar}
       >
         <span className="sr-only">Open sidebar</span>
@@ -56,94 +96,57 @@ const Sidebar = () => {
           aria-hidden="true"
           fill="currentColor"
           viewBox="0 0 20 20"
-          xmlns="http://www.w3.org/2000/svg"
         >
-          <path d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z"></path>
+          <path
+            fillRule="evenodd"
+            d="M3 5a1 1 0 000 2h14a1 1 0 100-2H3zm-1 7a1 1 0 011-1h14a1 1 0 110 2H3a1 1 0 01-1-1zm1-4a1 1 0 100 2h14a1 1 0 100-2H3z"
+            clipRule="evenodd"
+          />
         </svg>
       </button>
 
       <aside
         ref={sidebarRef}
         id="logo-sidebar"
-        className={`sidebar-container fixed top-0 left-0 z-40 w-60 h-screen transition-transform ${
-          isSidebarOpen ? 'translate-x-0' : '-translate-x-full sm:translate-x-0'
+        className={`fixed top-0 left-0 z-40 w-60 h-screen transition-transform bg-gray-50 ${
+          isSidebarOpen ? "translate-x-0" : "-translate-x-full sm:translate-x-0"
         }`}
         aria-label="Sidebar"
       >
-        <div className="sidebar-content h-full px-7 py-4 overflow-y-auto bg-gray-50">
-          <Link to="" className="brand-logo flex items-center ps-2.5 mb-5 pb-6 py-3">
-            <img
-              src={Logo}
-              className="h-10 me-3 sm:h-10"
-              alt="Logo"
-            />
+        <div className="flex flex-col h-full overflow-hidden">
+          <Link onClick={() => handleClickOutside(click)} to="/" className="flex items-center py-6 px-7">
+            <img src={Logo} className="h-10 mr-3" alt="Logo" />
           </Link>
-          <ul className="sidebar-menu space-y-4 font-medium">
-          <li>
-            <Link to="/" title="Dashboard" className={`menu-item flex items-center px-4 py-3 rounded-lg hover:bg-gray-200 group ${isLinkActive('/') ? 'active' : ''}`}>
-              <img src={userIcon} alt='user-icon' className='w-6 h-6' />
-              <span className="text-base font-bold ms-3">A.P</span>
-            </Link>
-          </li>
-          <li>
-            <Link to="/r.a" title="Overview" className={`menu-item flex items-center px-4 py-3 rounded-lg hover:bg-gray-200 group ${isLinkActive('/r.a') ? 'active' : ''}`}>
-              <img src={userIcon} alt='user-icon' className='w-6 h-6' />
-              <span className="text-base font-bold flex-1 ms-3 whitespace-nowrap">R.A</span>
-            </Link>
-          </li>
-          <li>
-            <Link to="/blogs" title="Settings" className={`menu-item flex items-center px-4 py-3 rounded-lg hover:bg-gray-200 group ${isLinkActive('/blogs') ? 'active' : ''}`}>
-              <IoSettingsOutline className='text-2xl' />
-              <span className="text-base font-bold flex-1 ms-3 whitespace-nowrap">Blog Upload</span>
-            </Link>
-          </li>
-          <li>
-            <Link to="/radetails" title="Settings" className={`menu-item flex items-center px-4 py-3 rounded-lg hover:bg-gray-200 group ${isLinkActive('/radetails') ? 'active' : ''}`}>
-              <IoSettingsOutline className='text-2xl' />
-              <span className="text-base font-bold flex-1 ms-3 whitespace-nowrap">R.A Details</span>
-            </Link>
-          </li>
-          <li>
-            <Link to="/apdetails" title="Settings" className={`menu-item flex items-center px-4 py-3 rounded-lg hover:bg-gray-200 group ${isLinkActive('/apdetails') ? 'active' : ''}`}>
-              <IoSettingsOutline className='text-2xl' />
-              <span className="text-base font-bold flex-1 ms-3 whitespace-nowrap">A.P Details</span>
-            </Link>
-          </li>
-          <li>
-            <Link to="/agencylist" title="Settings" className={`menu-item flex items-center px-4 py-3 rounded-lg hover:bg-gray-200 group ${isLinkActive('/agencylist') ? 'active' : ''}`}>
-            <img src={userIcon} alt='user-icon' className='w-6 h-6' />
-              <span className="text-base font-bold flex-1 ms-3 whitespace-nowrap">Ad Agency</span>
-            </Link>
-          </li>
-          <li>
-            <Link to="/transaction/ra" title="Settings" className={`menu-item flex items-center px-4 py-3 rounded-lg hover:bg-gray-200 group ${isLinkActive('/transaction') ? 'active' : ''}`}>
-            <img src={userIcon} alt='user-icon' className='w-6 h-6' />
-              <span className="text-base font-bold flex-1 ms-3 whitespace-nowrap">Transaction</span>
-            </Link>
-          </li>
-          <li>
-            <Link to="/marketingcontent/banner" title="Settings" className={`menu-item flex items-center px-4 py-3 rounded-lg hover:bg-gray-200 group ${isLinkActive('/marketingcontent') ? 'active' : ''}`}>
-            <img src={userIcon} alt='user-icon' className='w-6 h-6' />
-              <span className="text-base font-bold flex-1 ms-3 whitespace-nowrap">Marketing Content</span>
-            </Link>
-          </li>
-          <li>
-            <Link to="/userdata" title="Settings" className={`menu-item flex items-center px-4 py-3 rounded-lg hover:bg-gray-200 group ${isLinkActive('/userdata') ? 'active' : ''}`}>
-            <img src={userIcon} alt='user-icon' className='w-6 h-6' />
-              <span className="text-base font-bold flex-1 ms-3 whitespace-nowrap">User Data</span>
-            </Link>
-          </li>
-      </ul>
-
-
-          {/* Sign out button */}
+          <div className="overflow-y-auto">
+            <ul className="space-y-4 font-medium px-4">
+              {links.map(({ to, title, label, icon: Icon }, index) => (
+                <li key={to}>
+                  <Link
+                    onClick={() => handleClickOutside(click)}
+                    to={to}
+                    title={title}
+                    className={`flex items-center px-7 py-3 rounded-lg hover:bg-gray-200 ${
+                      isLinkActive(to) ? "bg-gray-200" : ""
+                    }`}
+                  >
+                    {typeof Icon === "string" ? (
+                      <img src={Icon} alt="icon" className="w-6 h-6" />
+                    ) : (
+                      <Icon className="w-6 h-6" />
+                    )}
+                    <span className="ml-3 text-base font-bold">{label}</span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
           <button
-            className="sign-out-button flex items-center px-4 py-3 text-gray-900 rounded-lg hover:bg-gray-200 group"
+            className="flex items-center px-7 py-3 mt-auto text-gray-900 rounded-lg hover:bg-gray-200"
             onClick={Logout}
-            title='Sign Out'
+            title="Sign Out"
           >
-            <BiLogOut className='text-2xl' />
-            <span className="text-base font-bold ms-3">Logout</span>
+            <BiLogOut className="text-2xl" />
+            <span className="ml-3 text-base font-bold">Logout</span>
           </button>
         </div>
       </aside>
@@ -153,4 +156,3 @@ const Sidebar = () => {
 };
 
 export default Sidebar;
- 

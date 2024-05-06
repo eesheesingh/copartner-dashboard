@@ -24,29 +24,35 @@ function RAPopup({ onClose, onSave, mode, initialValues }) {
   const [errors, setErrors] = useState({});
 
   useEffect(() => {
+    initializeFormData();
+  }, [currentMode, initialValues]);
+
+  const initializeFormData = () => {
+    const defaultFormData = {
+      RAName: "",
+      SEBI: "",
+      Mobile: "",
+      MailId: "",
+      Type: "",
+      Experience: "",
+      Followers: "",
+      CommissionFix: "",
+      ChannelLink: "",
+      PremiumLink: "",
+      ProfileImg: "",
+      Documents: null,
+      Active: true,
+    };
+
     if ((currentMode === "edit" || currentMode === "view") && initialValues) {
       setFormData((prevFormData) => ({
         ...prevFormData,
         ...initialValues,
       }));
     } else if (currentMode === "add") {
-      setFormData({
-        RAName: "",
-        SEBI: "",
-        Mobile: "",
-        MailId: "",
-        Type: "",
-        Experience: "",
-        Followers: "",
-        CommissionFix: "",
-        ChannelLink: "",
-        PremiumLink: "",
-        ProfileImg: "",
-        Documents: null,
-        Active: true,
-      });
+      setFormData(defaultFormData);
     }
-  }, [currentMode, initialValues]);
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -227,23 +233,23 @@ function RAPopup({ onClose, onSave, mode, initialValues }) {
 
         <form
           onSubmit={handleSubmit}
-          className="p-12 grid grid-cols-2 gap-8 text-left"
+          className="px-12 py-4 grid grid-cols-2 gap-8 text-left"
         >
           {renderFields(formFields)}
           {currentMode !== "view" ? (
             <button
-              className="col-span-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+              className="col-span-2 mx-auto bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-16 rounded focus:outline-none focus:shadow-outline"
               type="submit"
             >
               {currentMode === "add" ? "Add" : "Save Changes"}
             </button>
           ) : (
             <button
-              className="col-span-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+              className="col-span-2 mx-auto bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-16 rounded focus:outline-none focus:shadow-outline"
               onClick={() => setCurrentMode("edit")}
               disabled={currentMode === "edit"}
             >
-              Change
+              Edit
             </button>
           )}
         </form>

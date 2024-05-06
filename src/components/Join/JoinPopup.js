@@ -1,0 +1,42 @@
+import { TextField } from '@mui/material'
+import React from 'react'
+import close from "../../assets/close.png";
+
+const JoinPopup = ({ closeJoin }) => {
+  return (
+    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+      <div className="popup bg-white border-1 border-[#ffffff2a] m-4 rounded-lg w-3/4 text-center">
+        <div className="bg-[#dddddd] p-4 rounded-t-lg flex justify-between items-center">
+          <h2 className="text-left font-semibold text-2xl">Add Channel</h2>
+          <div className="flex items-center">
+            <button onClick={closeJoin}>
+              <img className="w-8 h-8" src={close} alt="close" />
+            </button>
+          </div>
+        </div>
+
+        <form className="px-12 py-4 grid grid-cols-2 my-4 gap-8 text-left">
+          <TextField
+            id="name"
+            name="name"
+            label="Name"
+            variant="outlined"
+            fullWidth
+            required
+          />
+          <TextField
+            id="type"
+            name="type"
+            variant="outlined"
+            label="Link"
+            fullWidth
+            required
+          />
+        </form>
+        <button className="px-12 bg-blue-500 text-white py-2 mb-8 border-2 rounded-lg">Add</button>
+      </div>
+    </div>
+  )
+}
+
+export default JoinPopup
