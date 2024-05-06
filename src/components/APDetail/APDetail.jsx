@@ -33,6 +33,15 @@ const APDetail = () => {
       CommissionFix2: "35",
       Spend: 2000,
     },
+    {
+      id: 2,
+      joinDate: "01/04/2024",
+      APName: "Shivam Malhotra",
+      Mobile: "7890873272",
+      CommissionFix1: "23",
+      CommissionFix2: "35",
+      Spend: 2000,
+    },
   ]);
 
   const handleOpenPopup = (item, mode = "edit") => {
@@ -118,7 +127,7 @@ const APDetail = () => {
                     <tr className="even:bg-gray-100 odd:bg-white" key={item.id}>
                       <td>{item.joinDate}</td>
                       <td>
-                        <Link to={`/ap-name/${item.id}`}>{item.APName}</Link>
+                        <Link to={`/apdetails/${item.APName}`}>{item.APName}</Link>
                       </td>
                       <td>{item.Mobile}</td>
                       <td>{item.CommissionFix1}</td>

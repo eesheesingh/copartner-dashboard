@@ -29,6 +29,15 @@ const RADetail = () => {
       Spend: 2000,
       Documents: "",
     },
+    {
+      id: 1,
+      joinDate: "01/04/2024",
+      RAName: "Kapil Kumar",
+      SEBI: "0802929384",
+      CommissionFix: "10",
+      Spend: 2000,
+      Documents: "",
+    },
   ]);
 
   const handleOpenPopup = useCallback((item, mode = "edit") => {
@@ -131,7 +140,7 @@ const RADetail = () => {
                       >
                         <td>{item.joinDate}</td>
                         <td>
-                          <Link to={`/ra-name/${item.id}`}>{item.RAName}</Link>
+                          <Link to={`/r.a/${item.RAName}`}>{item.RAName}</Link>
                         </td>
                         <td>{item.SEBI}</td>
                         <td>{item.CommissionFix}%</td>

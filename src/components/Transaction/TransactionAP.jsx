@@ -2,6 +2,16 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 const TransactionAP = () => {
+  const transactions = [
+    {
+      id: 1,
+      date: "01/04/2024",
+      name: "Arun Kumar",
+      mobile: "8787878728",
+      amount: 3000,
+    },
+  ];
+
   return (
     <div className="dashboard-view-section mb-4">
       <div className="table-list-mb">
@@ -20,24 +30,27 @@ const TransactionAP = () => {
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td style={{ textAlign: "left", paddingLeft: "2rem" }}>
-                  01/04/2024
-                </td>
-                <td style={{ textAlign: "left" }} className="text-blue-600">
-                  <Link to="/agency">Arun Kumar</Link>
-                </td>
-                <td style={{ textAlign: "left" }}>8787878728</td>
-                <td>3000</td>
-                <td>
-                  <label for="R.A request">Select</label>
-
-                  <select name="R.A request" id="R.A request">
-                    <option value="accept">Accept</option>
-                    <option value="reject">Reject</option>
-                  </select>
-                </td>
-              </tr>
+              {transactions.map((transaction, index) => (
+                <tr key={index}>
+                  <td style={{ textAlign: "left", paddingLeft: "2rem" }}>
+                    {transaction.date}
+                  </td>
+                  <td style={{ textAlign: "left" }} className="text-blue-600">
+                    <Link to={`${transaction.name}`}>
+                      {transaction.name}
+                    </Link>
+                  </td>
+                  <td style={{ textAlign: "left" }}>{transaction.mobile}</td>
+                  <td>{transaction.amount}</td>
+                  <td>
+                    <label htmlFor="R.A request">Select</label>
+                    <select name="R.A request" id="R.A request">
+                      <option value="accept">Accept</option>
+                      <option value="reject">Reject</option>
+                    </select>
+                  </td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>

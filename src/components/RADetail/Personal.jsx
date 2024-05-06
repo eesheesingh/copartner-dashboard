@@ -7,7 +7,6 @@ import PageHeader from '../Header/Header'
 
 const Personal = () => {
 
-    const [searchQuery, setSearchQuery] = useState("");
   const [activeButton, setActiveButton] = useState("button1");
   const [popup, setPopup] = useState({
     isOpen: false,
@@ -94,7 +93,7 @@ const Personal = () => {
                     <tr className="even:bg-gray-100 odd:bg-white" key={item.id}>
                       <td>{item.joinDate}</td>
                       <td>
-                        <Link to={`personal`}>{item.RAName}</Link>
+                        <Link to={`/r.a/${item.RAName}`}>{item.RAName}</Link>
                       </td>
                       <td>{item.SEBI}</td>
                       <td className="text-green-600 flex justify-center items-center gap-6">

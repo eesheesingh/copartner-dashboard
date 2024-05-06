@@ -56,7 +56,7 @@ const RAList = () => {
 
       {!selectedRA ? (
         <div className="flex items-center justify-center mt-28 text-3xl font-bold p-6">
-          R.A details not found for {raName}
+          R.A details not found
         </div>
       ) : (
         <div className="requestContainer mx-5 bg-[#fff]">

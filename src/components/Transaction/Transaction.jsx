@@ -8,6 +8,32 @@ const Transaction = () => {
   const [hasNotification, setHasNotification] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [activeButton, setActiveButton] = useState("button1");
+  const [transactions, setTransactions] = useState([
+    {
+      id: 1,
+      date: "01/04/2024",
+      raName: "Zestify",
+      sebiNo: "89798798234",
+      amount: 3000,
+      request: "",
+    },
+    {
+      id: 1,
+      date: "01/04/2024",
+      raName: "Copartner",
+      sebiNo: "89798798234",
+      amount: 3000,
+      request: "",
+    },
+    {
+      id: 1,
+      date: "01/04/2024",
+      raName: "HailGro",
+      sebiNo: "89798798234",
+      amount: 3000,
+      request: "",
+    },
+  ]);
 
   const handleButtonClick = (buttonId) => {
     setActiveButton(buttonId);
@@ -63,27 +89,35 @@ const Transaction = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    <tr>
-                      <td style={{ textAlign: "left", paddingLeft: "2rem" }}>
-                        01/04/2024
-                      </td>
-                      <td
-                        style={{ textAlign: "left" }}
-                        className="text-blue-600"
-                      >
-                        <Link to="/agency">Arun Kumar</Link>
-                      </td>
-                      <td style={{ textAlign: "left" }}>89798798234</td>
-                      <td>3000</td>
-                      <td>
-                        <label for="R.A request">Select</label>
-
-                        <select name="R.A request" id="R.A request">
-                          <option value="accept">Accept</option>
-                          <option value="reject">Reject</option>
-                        </select>
-                      </td>
-                    </tr>
+                    {transactions.map((transaction) => (
+                      <tr key={transaction.id}>
+                        <td style={{ textAlign: "left", paddingLeft: "2rem" }}>
+                          {transaction.date}
+                        </td>
+                        <td style={{ textAlign: "left" }} className="text-blue-600">
+                          <Link to={`${transaction.raName}`}>{transaction.raName}</Link>
+                        </td>
+                        <td style={{ textAlign: "left" }}>{transaction.sebiNo}</td>
+                        <td>{transaction.amount}</td>
+                        <td>
+                          <label htmlFor={`request-${transaction.id}`}>Select</label>
+                          <select
+                            name={`request-${transaction.id}`}
+                            id={`request-${transaction.id}`}
+                            value={transaction.request}
+                            onChange={(e) => {
+                              const updatedTransactions = transactions.map((t) =>
+                                t.id === transaction.id ? { ...t, request: e.target.value } : t
+                              );
+                              setTransactions(updatedTransactions);
+                            }}
+                          >
+                            <option value="accept">Accept</option>
+                            <option value="reject">Reject</option>
+                          </select>
+                        </td>
+                      </tr>
+                    ))}
                   </tbody>
                 </table>
               </div>

@@ -27,6 +27,14 @@ const Dashboard = () => {
       spendOnRA: 200,
       earning: 200,
     },
+    {
+      apName: "Kapil Sharma",
+      usersCome: 150,
+      usersPay: 100,
+      spendOnAP: 600,
+      spendOnRA: 200,
+      earning: 200,
+    },
     // Add more data objects as needed
   ];
 
