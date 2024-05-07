@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Input, Select, MenuItem, TextField, Switch } from "@mui/material";
+import { Input, MenuItem, TextField, Switch, InputLabel } from "@mui/material";
 import "react-toastify/dist/ReactToastify.css";
 import close from "../../assets/close.png";
 
@@ -58,34 +58,30 @@ function RAPopup({ onClose, onSave, mode, initialValues }) {
     const { name, value } = e.target;
     let newErrors = { ...errors };
 
-    // Validation for mobile number
     if (name === "Mobile") {
       const mobilePattern = /^[0-9]{10}$/;
       if (!mobilePattern.test(value)) {
-        newErrors = { ...newErrors, Mobile: "Invalid mobile number" };
+        newErrors.Mobile = "Invalid mobile number";
       } else {
         delete newErrors.Mobile;
       }
     }
 
-    // Validation for email
     if (name === "MailId") {
       const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (!emailPattern.test(value)) {
-        newErrors = { ...newErrors, MailId: "Invalid email address" };
+        newErrors.MailId = "Invalid email address";
       } else {
         delete newErrors.MailId;
       }
     }
 
-    // Validation for commission fix
-    if (name === "CommissionFix" && parseInt(value) > 100) {
-      newErrors = {
-        ...newErrors,
-        CommissionFix: "Commission fix cannot exceed 100%",
-      };
-    } else {
-      delete newErrors.CommissionFix;
+    if (name === "CommissionFix") {
+      if (parseInt(value) > 100) {
+        newErrors.CommissionFix = "Commission fix cannot exceed 100%";
+      } else {
+        delete newErrors.CommissionFix;
+      }
     }
 
     setErrors(newErrors);
@@ -99,6 +95,10 @@ function RAPopup({ onClose, onSave, mode, initialValues }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (Object.keys(errors).length > 0) {
+      alert("Please correct the inputs before submitting.");
+      return;
+    }
     if (currentMode === "add" || currentMode === "edit") {
       onSave(formData);
     }
@@ -119,18 +119,23 @@ function RAPopup({ onClose, onSave, mode, initialValues }) {
       return (
         <div key={field.name}>
           {field.type === "file" ? (
-            <Input
-              type="file"
-              name={field.name}
-              fullWidth
-              required={field.required}
-              disabled={isDisabled}
-              inputProps={field.inputProps}
-              onChange={handleFileChange}
-              className={inputClasses}
-            />
+            <div>
+              <InputLabel name={field.name}>{field.label}</InputLabel>
+              <Input
+                type="file"
+                name={field.name}
+                label={field.label}
+                fullWidth
+                required={field.required}
+                disabled={isDisabled}
+                inputProps={field.inputProps}
+                onChange={handleFileChange}
+                className={inputClasses}
+              />
+            </div>
           ) : field.name === "Type" ? (
-            <Select
+            <TextField
+              select
               label={field.label}
               value={formData[field.name]}
               name={field.name}
@@ -144,13 +149,14 @@ function RAPopup({ onClose, onSave, mode, initialValues }) {
               <MenuItem value={1}>Future & Options</MenuItem>
               <MenuItem value={2}>Equity</MenuItem>
               <MenuItem value={3}>Commodity</MenuItem>
-            </Select>
+            </TextField>
           ) : (
             <TextField
               label={field.label}
               value={formData[field.name]}
               name={field.name}
               onChange={handleChange}
+              type={field.type || "text"}
               variant="outlined"
               fullWidth
               required={field.required}
@@ -173,13 +179,18 @@ function RAPopup({ onClose, onSave, mode, initialValues }) {
 
   const formFields = [
     { name: "RAName", label: "R.A Name", required: true },
-    { name: "SEBI", label: "SEBI No.", required: true },
-    { name: "Mobile", label: "Mobile Number", required: true },
+    { name: "SEBI", label: "SEBI No.", required: true, type: "number" },
+    { name: "Mobile", label: "Mobile Number", required: true, type: "number" },
     { name: "MailId", label: "Mail ID", required: true },
     { name: "Type", label: "Type", required: true },
     { name: "Experience", label: "Experience", required: true },
     { name: "Followers", label: "Followers", required: true },
-    { name: "CommissionFix", label: "Commission Fix", required: true },
+    {
+      name: "CommissionFix",
+      label: "Commission Fix",
+      required: true,
+      type: "number",
+    },
     { name: "ChannelLink", label: "Telegram Channel Link", required: true },
     { name: "PremiumLink", label: "Premium Channel Link", required: true },
     {

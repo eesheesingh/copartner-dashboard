@@ -1,24 +1,49 @@
 import { TextField } from "@mui/material";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import close from "../../assets/close.png";
 
-const AgencyPopup = ({ onClose }) => {
+const AgencyPopup = ({ onClose, selectedAgency, onSubmit }) => {
   const [RAName, setRAName] = useState("");
   const [link, setLink] = useState("");
 
+  useEffect(() => {
+    if (selectedAgency) {
+      setRAName(selectedAgency.name);
+      setLink(selectedAgency.link);
+    } else {
+      setRAName("");
+      setLink("");
+    }
+  }, [selectedAgency]);
+
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log("Blog Title:", RAName);
-    console.log("Landing Page Link:", link);
+    
+    if (!RAName.trim() || !link.trim()) {
+      alert("Please fill out all fields");
+      return;
+    }
+
+    const formData = { name: RAName, link };
+
+    if (selectedAgency) {
+      onSubmit(selectedAgency.id, formData);
+    } else {
+      onSubmit(formData);
+    }
+
     setRAName("");
     setLink("");
     onClose();
   };
+
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
       <div className="popup bg-white border-1 border-[#ffffff2a] m-4 rounded-lg w-3/4 text-center">
         <div className="bg-[#dddddd] p-4 rounded-t-lg flex justify-between">
-          <h2 className="text-left font-semibold text-2xl">Add</h2>
+          <h2 className="text-left font-semibold text-2xl">
+            {selectedAgency ? "Edit" : "Add"}
+          </h2>
           <button onClick={onClose}>
             <img className="w-8 h-8 mr-4" src={close} alt="" />
           </button>
@@ -33,9 +58,6 @@ const AgencyPopup = ({ onClose }) => {
               variant="outlined"
               fullWidth
               required
-              InputLabelProps={{
-                shrink: true,
-              }}
             />
           </div>
           <div className="flex flex-col">
@@ -48,9 +70,6 @@ const AgencyPopup = ({ onClose }) => {
               fullWidth
               multiline
               required
-              InputLabelProps={{
-                shrink: true,
-              }}
             />
           </div>
         </div>
@@ -58,7 +77,7 @@ const AgencyPopup = ({ onClose }) => {
           className="px-12 bg-blue-500 text-white py-2 border-2 rounded-lg mb-8"
           onClick={handleSubmit}
         >
-          Add
+          {selectedAgency ? "Save Changes" : "Add"}
         </button>
       </div>
     </div>

@@ -1,15 +1,27 @@
+// MarketingContent.js
+
+import React, { useState } from "react";
 import PageHeader from "../Header/Header";
-import { useState } from "react";
 import { ToastContainer } from "react-toastify";
 import MarketingContentPopup from "./MarketingContentPopup";
-import MarketingVideo from "./MarketingVideo";
 import BannerMarketing from "./BannerMarketing";
+import MarketingVideo from "./MarketingVideo";
 
 const MarketingContent = () => {
   const [hasNotification, setHasNotification] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [activeButton, setActiveButton] = useState("Banners");
   const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [bannersData, setBannersData] = useState([
+    { id: 1, name: "Banner 1", image: null },
+    { id: 2, name: "Banner 2", image: null },
+    { id: 3, name: "Banner 3", image: null },
+  ]);
+  const [videosData, setVideosData] = useState([
+    { id: 1, name: "Video 1", video: null },
+    { id: 2, name: "Video 2", video: null },
+    { id: 3, name: "Video 3", video: null },
+  ]);
 
   const handleClosePopup = () => {
     setIsPopupOpen(false);
@@ -17,6 +29,17 @@ const MarketingContent = () => {
 
   const handleButtonClick = (buttonId) => {
     setActiveButton(buttonId);
+  };
+
+  const handleSaveData = (newData) => {
+    if (activeButton === "Banners") {
+      setBannersData([
+        ...bannersData,
+        { ...newData, id: bannersData.length + 1 },
+      ]);
+    } else {
+      setVideosData([...videosData, { ...newData, id: videosData.length + 1 }]);
+    }
   };
 
   return (
@@ -62,26 +85,27 @@ const MarketingContent = () => {
             </div>
             {activeButton === "Banners" ? (
               <div className="grid grid-cols-3 gap-4 p-4">
-                <BannerMarketing bannerName="My Banner" />
-                <BannerMarketing bannerName="My Banner" />
-                <BannerMarketing bannerName="My Banner" />
-                <BannerMarketing bannerName="My Banner" />
-                <BannerMarketing bannerName="My Banner" />
-                <BannerMarketing bannerName="My Banner" />
+                {bannersData.map((banner) => (
+                  <BannerMarketing key={banner.id} banner={banner} />
+                ))}
               </div>
             ) : (
               <div className="grid grid-cols-3 gap-4 p-4">
-                <MarketingVideo bannerName="Video Name" />
-                <MarketingVideo bannerName="Video Name" />
-                <MarketingVideo bannerName="Video Name" />
-                <MarketingVideo bannerName="Video Name" />
-                <MarketingVideo bannerName="Video Name" />
+                {videosData.map((video) => (
+                  <MarketingVideo key={video.id} video={video} />
+                ))}
               </div>
             )}
           </div>
         </div>
       </div>
-      {isPopupOpen && <MarketingContentPopup onClose={handleClosePopup} />}
+      {isPopupOpen && (
+        <MarketingContentPopup
+          onClose={handleClosePopup}
+          contentType={activeButton}
+          onSave={handleSaveData}
+        />
+      )}
       <ToastContainer />
     </div>
   );

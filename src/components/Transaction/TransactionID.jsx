@@ -10,7 +10,7 @@ const TransactionID = () => {
   const { transactionId } = useParams();
   const [selectedAP, setSelectedAP] = useState([
     {
-      name: "Zestify",
+      name: "Krishan Shrivastava",
       link: "www.zestify.com",
       tableData: [
         {
@@ -32,7 +32,7 @@ const TransactionID = () => {
       ],
     },
     {
-      name: "Copartner",
+      name: "Shivam Rajpal",
       link: "www.copartner.com",
       tableData: [
         {

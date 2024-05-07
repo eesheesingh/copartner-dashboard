@@ -31,16 +31,16 @@ const APDetail = () => {
       Mobile: "7890873272",
       CommissionFix1: "23",
       CommissionFix2: "35",
-      Spend: 2000,
+      Spend: 1000,
     },
     {
-      id: 2,
+      id: 3,
       joinDate: "01/04/2024",
       APName: "Shivam Malhotra",
-      Mobile: "7890873272",
-      CommissionFix1: "23",
-      CommissionFix2: "35",
-      Spend: 2000,
+      Mobile: "8687676287",
+      CommissionFix1: "78",
+      CommissionFix2: "56",
+      Spend: 3000,
     },
   ]);
 
@@ -169,7 +169,7 @@ const APDetail = () => {
           onSave={handleSave}
           mode="view"
           initialValues={viewItem}
-          onChangeMode={handleChangeMode} // Pass handleChangeMode function
+          onChangeMode={handleChangeMode}
         />
       )}
       <ToastContainer />

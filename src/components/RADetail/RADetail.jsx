@@ -13,6 +13,7 @@ import Personal from "./Personal";
 const RADetail = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [activeButton, setActiveButton] = useState("button1");
+  const [hasNotification, setHasNotification] = useState(true);
   const [popup, setPopup] = useState({
     isOpen: false,
     item: null,
@@ -30,7 +31,7 @@ const RADetail = () => {
       Documents: "",
     },
     {
-      id: 1,
+      id: 2,
       joinDate: "01/04/2024",
       RAName: "Kapil Kumar",
       SEBI: "0802929384",
@@ -85,6 +86,7 @@ const RADetail = () => {
         title="R.A Details"
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
+        setHasNotification={setHasNotification}
       />
 
       <div className="px-4 flex gap-8">

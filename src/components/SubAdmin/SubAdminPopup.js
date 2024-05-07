@@ -28,7 +28,8 @@ const SubAdminPopup = ({ closeSubAdmin }) => {
             fullWidth
             required
           />
-          <Select
+          <TextField
+            select
             id="type"
             name="type"
             variant="outlined"
@@ -39,7 +40,7 @@ const SubAdminPopup = ({ closeSubAdmin }) => {
             <MenuItem value="Type1">Type1</MenuItem>
             <MenuItem value="Type2">Type2</MenuItem>
             <MenuItem value="Type3">Type3</MenuItem>
-          </Select>
+          </TextField>
         </form>
         <button className="px-12 bg-blue-500 text-white py-2 mb-8 border-2 rounded-lg">Add</button>
       </div>

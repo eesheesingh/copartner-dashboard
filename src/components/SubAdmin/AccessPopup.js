@@ -1,6 +1,6 @@
 import React from "react";
 import close from "../../assets/close.png";
-import { InputLabel, MenuItem, Select } from "@mui/material";
+import { InputLabel, MenuItem, Select, TextField } from "@mui/material";
 
 const AccessPopup = ({ closeAccess }) => {
   return (
@@ -18,7 +18,8 @@ const AccessPopup = ({ closeAccess }) => {
         <form className="px-12 py-4 grid grid-cols-2 my-4 gap-8 text-left">
           <div className="flex flex-col">
             <InputLabel id="Role">Role</InputLabel>
-            <Select
+            <TextField
+              select
               labelId="Role"
               id="type"
               name="type"
@@ -36,11 +37,12 @@ const AccessPopup = ({ closeAccess }) => {
               <MenuItem value="Type3">Marketing Content</MenuItem>
               <MenuItem value="Type3">User Data</MenuItem>
               <MenuItem value="Type3">Join</MenuItem>
-            </Select>
+            </TextField>
           </div>
           <div className="flex flex-col">
             <InputLabel id="Access">Access</InputLabel>
-            <Select
+            <TextField
+              select
               id="type"
               labelId="Access"
               name="type"
@@ -50,7 +52,7 @@ const AccessPopup = ({ closeAccess }) => {
             >
               <MenuItem value="Type1">Veiw Only</MenuItem>
               <MenuItem value="Type3">Edit</MenuItem>
-            </Select>
+            </TextField>
           </div>
         </form>
         <button className="px-12 bg-blue-500 text-white py-2 mb-8 border-2 rounded-lg">

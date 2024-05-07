@@ -2,7 +2,7 @@ import React from "react";
 import { FaPen } from "react-icons/fa";
 import Bin from "../../assets/TrashBinMinimalistic.png";
 
-const WithAP = ({ activeButton }) => {
+const WithAP = ({ activeButton, data }) => {
   return (
     <>
       <div className="channel-heading flex">
@@ -12,7 +12,7 @@ const WithAP = ({ activeButton }) => {
         </button>
       </div>
       <div className="py-4 px-8">
-      <table className="table-list">
+        <table className="table-list">
           <thead>
             <tr>
               <th style={{ textAlign: "left", paddingLeft: "2rem" }}>Date</th>
@@ -22,21 +22,23 @@ const WithAP = ({ activeButton }) => {
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td style={{ textAlign: "left", paddingLeft: "2rem" }}>
-                01/04/2024
-              </td>
-              <td style={{ textAlign: "left" }}>Anuj Kumar</td>
-              <td>Vinit</td>
-              <td className="flex justify-center items-center gap-6">
-                <FaPen className="text-blue-600 cursor-pointer" />
-                <img
-                  className="w-6 h-6 cursor-pointer"
-                  src={Bin}
-                  alt="Delete"
-                />
-              </td>
-            </tr>
+            {data.map((item, index) => (
+              <tr key={index}>
+                <td style={{ textAlign: "left", paddingLeft: "2rem" }}>
+                  {item.date}
+                </td>
+                <td style={{ textAlign: "left" }}>{item.apName}</td>
+                <td>{item.relationManagement}</td>
+                <td className="flex justify-center items-center gap-6">
+                  <FaPen className="text-blue-600 cursor-pointer" />
+                  <img
+                    className="w-6 h-6 cursor-pointer"
+                    src={Bin}
+                    alt="Delete"
+                  />
+                </td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>
