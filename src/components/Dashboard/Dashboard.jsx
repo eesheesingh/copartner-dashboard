@@ -80,7 +80,7 @@ const Dashboard = () => {
                 </thead>
                 <tbody>
                   {data.map((row, index) => (
-                    <tr key={index}>
+                    <tr key={index} className="even:bg-gray-100 odd:bg-white">
                       <td>
                         <Link to={`/${row.apName}`}>{row.apName}</Link>
                       </td>

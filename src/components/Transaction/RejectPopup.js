@@ -20,7 +20,7 @@ const RejectPopup = ({ onClose, memberId }) => {
             <img className="w-8 h-8 mr-4" src={close} alt="" />
           </button>
         </div>
-        <div className="font-semibold text-2xl p-12 flex flex-col gap-12 text-left">
+        <div className="font-semibold text-2xl px-12 py-4 flex flex-col gap-12 text-left">
           <div className="relative flex flex-col w-1/2">
             <TextField
               id="message"

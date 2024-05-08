@@ -147,7 +147,7 @@ function APDetailPopup({ onClose, onSave, mode, initialValues, onChangeMode }) {
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
       <div className="popup bg-white border-1 border-[#ffffff2a] m-4 rounded-lg w-3/4 text-center">
-        <div className="bg-[#dddddd] p-4 rounded-t-lg flex justify-between items-center">
+        <div className="bg-[#dddddd] px-4 py-2 rounded-t-lg flex justify-between items-center">
           <h2 className="text-left font-semibold text-2xl">
             {mode === "add" ? "Add" : mode === "edit" ? "Edit" : "View"}
           </h2>
@@ -174,7 +174,7 @@ function APDetailPopup({ onClose, onSave, mode, initialValues, onChangeMode }) {
         </div>
         <form
           onSubmit={handleSubmit}
-          className="p-12 grid grid-cols-2 gap-6 text-left"
+          className="px-12 py-4 grid grid-cols-2 gap-6 text-left"
         >
           {fields.map((field) => {
             // Check if the field should be displayed based on the mode

@@ -40,7 +40,7 @@ const AgencyPopup = ({ onClose, selectedAgency, onSubmit }) => {
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
       <div className="popup bg-white border-1 border-[#ffffff2a] m-4 rounded-lg w-3/4 text-center">
-        <div className="bg-[#dddddd] p-4 rounded-t-lg flex justify-between">
+        <div className="bg-[#dddddd] px-4 py-2 rounded-t-lg flex justify-between">
           <h2 className="text-left font-semibold text-2xl">
             {selectedAgency ? "Edit" : "Add"}
           </h2>
@@ -48,7 +48,7 @@ const AgencyPopup = ({ onClose, selectedAgency, onSubmit }) => {
             <img className="w-8 h-8 mr-4" src={close} alt="" />
           </button>
         </div>
-        <div className="font-semibold text-2xl p-12 flex flex-col gap-12 text-left">
+        <div className="font-semibold text-2xl px-12 py-4 flex flex-col gap-4 text-left">
           <div className="relative flex flex-col w-1/2">
             <TextField
               id="RA-name"

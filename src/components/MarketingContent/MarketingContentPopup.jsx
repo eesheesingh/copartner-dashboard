@@ -55,7 +55,7 @@ function MarketingContentPopup({ onClose, contentType, onSave }) {
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
       <div className="popup bg-white border-1 border-[#ffffff2a] m-4 rounded-lg w-3/4 text-center">
-        <div className="bg-[#dddddd] p-4 rounded-t-lg flex justify-between">
+        <div className="bg-[#dddddd] px-4 py-2 rounded-t-lg flex justify-between">
           <h2 className="text-left font-semibold text-2xl">
             Add {contentType}
           </h2>
@@ -63,7 +63,7 @@ function MarketingContentPopup({ onClose, contentType, onSave }) {
             <img className="w-8 h-8 mr-4" src={close} alt="" />
           </button>
         </div>
-        <div className="font-semibold text-2xl p-12 flex gap-12 text-left">
+        <div className="font-semibold text-2xl px-12 py-4 flex gap-12 text-left">
           <div className="flex flex-col gap-4">
             {contentType === "Banners" ? (
               <>

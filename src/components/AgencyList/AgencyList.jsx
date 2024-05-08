@@ -1,8 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
 import PageHeader from "../Header/Header";
-import { ToastContainer } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 import { Link } from "react-router-dom";
 import AdAgencyPopup from "./AdAgencyPopup";
 import Bin from "../../assets/TrashBinMinimalistic.png";
@@ -13,66 +13,106 @@ const AgencyList = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [selectedAgency, setSelectedAgency] = useState(null);
-  const [agencyList, setAgencyList] = useState([
-    {
-      id: 1,
-      date: "01/04/2024",
-      name: "Zestify",
-      link: "ad1",
-      users: 3000,
-    },
-    {
-      id: 2,
-      date: "01/04/2024",
-      name: "Copartner",
-      link: "ad2",
-      users: 3000,
-    },
-    {
-      id: 3,
-      date: "01/04/2024",
-      name: "HailGro",
-      link: "ad3",
-      users: 3000,
-    },
-  ]);
+  const [agencyList, setAgencyList] = useState([]);
+
+  useEffect(() => {
+    fetchAgencyList();
+  }, []);
+
+  const fetchAgencyList = async () => {
+    try {
+      const response = await fetch(
+        "https://copartners.in:5134/api/AdvertisingAgency"
+      );
+      if (!response.ok) {
+        throw new Error("Failed to fetch agency list");
+      }
+      const data = await response.json();
+      console.log(data.data);
+      setAgencyList(data.data);
+    } catch (error) {
+      console.error("Error fetching agency list:", error);
+      toast.error("Failed to fetch agency list");
+    }
+  };
 
   const handleClosePopup = () => {
     setIsPopupOpen(false);
     setSelectedAgency(null);
   };
 
-  const handleDeleteAgency = (id) => {
-    const updatedAgencies = agencyList.filter((agency) => agency.id !== id);
-    setAgencyList(updatedAgencies);
+  const handleDeleteAgency = async (id) => {
+    try {
+      console.log(id);
+      const response = await fetch(
+        `https://copartners.in:5134/api/AdvertisingAgency/${id}`,
+        {
+          method: "DELETE",
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to delete agency");
+      }
+
+      toast.success("Agency deleted successfully!");
+      fetchAgencyList();
+    } catch (error) {
+      console.error("Error deleting agency:", error);
+      toast.error("Failed to delete agency");
+    }
   };
 
   const handleEditAgency = (agency) => {
     if (agency) {
-      // Editing an existing agency
       setSelectedAgency(agency);
     } else {
-      // Adding a new agency
       setSelectedAgency(null);
     }
     setIsPopupOpen(true);
   };
 
-  const handleSubmitAgency = (formData) => {
+  const handleSubmitAgency = async (formData) => {
+    const endpoint = "https://copartners.in:5134/api/AdvertisingAgency";
+
     if (selectedAgency) {
-      // Editing an existing agency
-      const updatedAgencies = agencyList.map((agency) =>
-        agency.id === selectedAgency.id ? { ...agency, ...formData } : agency
-      );
-      setAgencyList(updatedAgencies);
+      try {
+        const response = await fetch(`${endpoint}/${selectedAgency.id}`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ ...formData, id: selectedAgency.id }),
+        });
+
+        if (!response.ok) throw new Error("Failed to update the agency");
+        fetchAgencyList();
+        toast.success("Agency updated successfully!");
+      } catch (error) {
+        console.error("Update error:", error);
+        toast.error("Failed to update agency");
+      }
     } else {
-      // Adding a new agency
-      const newAgency = {
-        id: agencyList.length + 1,
-        date: new Date().toLocaleDateString(),
-        ...formData,
-      };
-      setAgencyList([...agencyList, newAgency]);
+      try {
+        const response = await fetch(endpoint, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            ...formData,
+            date: new Date().toLocaleDateString(),
+          }),
+        });
+
+        if (!response.ok) throw new Error("Failed to create new agency");
+
+        fetchAgencyList();
+        toast.success("Agency added successfully!");
+      } catch (error) {
+        console.error("Creation error:", error);
+        toast.error("Failed to add new agency");
+      }
     }
   };
 
@@ -93,7 +133,7 @@ const AgencyList = () => {
               <h3 className="text-xl font-semibold mr-auto">Listing</h3>
               <button
                 className="border-2 border-black rounded-lg px-4 py-1 mr-4"
-                onClick={() => handleEditAgency(null)} // Add button
+                onClick={() => handleEditAgency(null)}
               >
                 + Add
               </button>
@@ -103,8 +143,10 @@ const AgencyList = () => {
                 <thead>
                   <tr>
                     <th>Date</th>
-                    <th>Agency Name</th>
-                    <th>Landing Page Link</th>
+                    <th style={{ textAlign: "left", paddingLeft: "9rem" }}>
+                      Agency Name
+                    </th>
+                    <th style={{ textAlign: "left" }}>Landing Page Link</th>
                     <th>Users</th>
                     <th>Action</th>
                   </tr>
@@ -112,19 +154,27 @@ const AgencyList = () => {
                 <tbody>
                   {agencyList.map((agency) => (
                     <tr key={agency.id}>
-                      <td style={{ fontWeight: "700" }}>{agency.date}</td>
+                      <td style={{ fontWeight: "700" }}>
+                        {new Date(agency.joinDate).toLocaleDateString()}
+                      </td>
                       <td
-                        style={{ fontWeight: "700" }}
+                        style={{
+                          fontWeight: "700",
+                          textAlign: "left",
+                          paddingLeft: "9rem",
+                        }}
                         className="text-blue-400"
                       >
-                        <Link to={`${agency.name}`}>{agency.name}</Link>
+                        <Link to={`${agency.id}`}>{agency.agencyName}</Link>
                       </td>
-                      <td>{agency.link}</td>
-                      <td>{agency.users}</td>
+                      <td style={{ textAlign: "left" }}>
+                        {agency.link.substring(0, 20)}...
+                      </td>
+                      <td>{agency.usersCount}</td>
                       <td className="flex justify-center items-center gap-6">
                         <FaPen
                           className="text-blue-600 cursor-pointer"
-                          onClick={() => handleEditAgency(agency)} // Edit button
+                          onClick={() => handleEditAgency(agency)}
                         />
                         <img
                           onClick={() => handleDeleteAgency(agency.id)}

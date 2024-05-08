@@ -212,7 +212,7 @@ function RAPopup({ onClose, onSave, mode, initialValues }) {
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
       <div className="popup bg-white border-1 border-[#ffffff2a] m-4 rounded-lg w-3/4 text-center">
-        <div className="bg-[#dddddd] p-4 rounded-t-lg flex justify-between items-center">
+        <div className="bg-[#dddddd] px-4 py-2 rounded-t-lg flex justify-between items-center">
           <h2 className="text-left font-semibold text-2xl">
             {currentMode === "add"
               ? "Add RA"
@@ -244,7 +244,7 @@ function RAPopup({ onClose, onSave, mode, initialValues }) {
 
         <form
           onSubmit={handleSubmit}
-          className="px-12 py-4 grid grid-cols-2 gap-8 text-left"
+          className="px-12 py-4 grid grid-cols-2 gap-6 text-left"
         >
           {renderFields(formFields)}
           {currentMode !== "view" ? (

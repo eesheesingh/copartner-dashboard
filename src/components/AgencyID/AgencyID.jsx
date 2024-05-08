@@ -2,63 +2,36 @@ import { FaAngleLeft, FaPen } from "react-icons/fa";
 import PageHeader from "../Header/Header";
 import { useNavigate, useParams } from "react-router-dom";
 import Bin from "../../assets/TrashBinMinimalistic.png";
-import { useState } from "react";
-import { ToastContainer } from "react-toastify";
+import { useEffect, useState } from "react";
+import { ToastContainer, toast } from "react-toastify";
 import AgencyPopup from "./AgencyPopup";
 
 const AgencyID = () => {
   const navigate = useNavigate();
-  const { agencyName } = useParams();
+  const { agencyId } = useParams();
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [selectedAgency, setSelectedAgency] = useState(null);
-  const [agencies, setAgencies] = useState([
-    {
-      id: 1,
-      RAName: "Arun Kumar",
-      name: "Zestify",
-      link: "Lorem, ipsum dolor. dummy text",
-      userCount: 90,
-    },
-    {
-      id: 2,
-      RAName: "Kapil Mishra",
-      name: "Copartner",
-      link: "ljkalksdf",
-      userCount: 80,
-    },
-    {
-      id: 3,
-      RAName: "Ritik Kapoor",
-      name: "Copartner",
-      link: "adsfasdf",
-      userCount: 80,
-    },
-    {
-      id: 4,
-      RAName: "Sheetal Choudhary",
-      name: "Copartner",
-      link: "qewrqwerqwer",
-      userCount: 80,
-    },
-    {
-      id: 5,
-      RAName: "Kirti Kumari",
-      name: "Copartner",
-      link: "zcvzcvzcv",
-      userCount: 80,
-    },
-    {
-      id: 6,
-      RAName: "Krishan Bagri",
-      name: "Copartner",
-      link: "Lorem, ipsum dolor. dummy text",
-      userCount: 80,
-    },
-  ]);
+  const [agencies, setAgencies] = useState([]);
 
-  const filteredAgencies = agencies.filter(
-    (agency) => agency.name === agencyName
-  );
+  useEffect(() => {
+    fetchAgency();
+  }, []);
+
+  const fetchAgency = async () => {
+    try {
+      const response = await fetch(
+        `https://copartners.in:5134/api/AdvertisingAgency/${agencyId}`
+      );
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+      setAgencies([data.data]);
+    } catch (error) {
+      console.error("Fetching error:", error);
+      toast.error(`Failed to fetch agency: ${error.message}`);
+    }
+  };
 
   const handleDeleteAgency = (id) => {
     const updatedAgencies = agencies.filter((agency) => agency.id !== id);
@@ -124,19 +97,34 @@ const AgencyID = () => {
           <table className="table-list">
             <thead>
               <tr className="requestColumns">
-                <th style={{textAlign: "left", paddingLeft: "4rem"}} className="text-left">RA Name</th>
-                <th style={{textAlign: "left"}}>Link</th>
-                <th style={{textAlign: "left"}}>User</th>
+                <th
+                  style={{ textAlign: "left", paddingLeft: "4rem" }}
+                  className="text-left"
+                >
+                  RA Name
+                </th>
+                <th style={{ textAlign: "left" }}>Link</th>
+                <th style={{ textAlign: "left" }}>User</th>
                 <th>Action</th>
               </tr>
             </thead>
             <tbody>
-              {filteredAgencies.map((agency) => (
+              {agencies.map((agency) => (
                 <tr key={agency.id} className="request-numbers font-semibold">
-                  <td style={{textAlign: "left", paddingLeft: "4rem"}} className="p-3">{agency.RAName}</td>
-                  <td style={{textAlign: "left"}} className="p-3">{agency.link}</td>
-                  <td style={{textAlign: "left"}} className="p-3 text-center text-blue-400">
-                    {agency.userCount}
+                  <td
+                    style={{ textAlign: "left", paddingLeft: "4rem" }}
+                    className="p-3"
+                  >
+                    {agency.agencyName}
+                  </td>
+                  <td style={{ textAlign: "left" }} className="p-3">
+                    {agency.link}
+                  </td>
+                  <td
+                    style={{ textAlign: "left" }}
+                    className="p-3 text-center text-blue-400"
+                  >
+                    {agency.usersCount}
                   </td>
                   <td className="flex justify-center items-center gap-6">
                     <FaPen

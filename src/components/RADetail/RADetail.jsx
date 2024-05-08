@@ -1,9 +1,9 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import "./RADetail.css";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
 import PageHeader from "../Header/Header";
-import { ToastContainer } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 import { Link } from "react-router-dom";
 import { FaPen } from "react-icons/fa";
 import { IoEyeSharp } from "react-icons/io5";
@@ -20,26 +20,27 @@ const RADetail = () => {
     mode: "edit",
   });
 
-  const [data, setData] = useState([
-    {
-      id: 1,
-      joinDate: "01/04/2024",
-      RAName: "Anuj Kumar",
-      SEBI: "0802929384",
-      CommissionFix: "10",
-      Spend: 2000,
-      Documents: "",
-    },
-    {
-      id: 2,
-      joinDate: "01/04/2024",
-      RAName: "Kapil Kumar",
-      SEBI: "0802929384",
-      CommissionFix: "10",
-      Spend: 2000,
-      Documents: "",
-    },
-  ]);
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    try {
+      const response = await fetch(
+        "https://copartners.in:5132/api/Experts/RAListingDetails"
+      );
+      if (!response.ok) {
+        throw new Error("Failed to fetch data");
+      }
+      const fetchedData = await response.json();
+      setData(fetchedData.data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      toast.error("Failed to fetch RA Details");
+    }
+  };
 
   const handleOpenPopup = useCallback((item, mode = "edit") => {
     setPopup({ isOpen: true, item, mode });
@@ -142,11 +143,11 @@ const RADetail = () => {
                       >
                         <td>{item.joinDate}</td>
                         <td>
-                          <Link to={`/r.a/${item.RAName}`}>{item.RAName}</Link>
+                          <Link to={`/r.a/${item.id}`}>{item.name}</Link>
                         </td>
-                        <td>{item.SEBI}</td>
-                        <td>{item.CommissionFix}%</td>
-                        <td className="text-red-600">{item.Spend}</td>
+                        <td>{item.sebiNo}</td>
+                        <td>{item.fixCommission}%</td>
+                        <td className="text-red-600">{item.raEarning}</td>
                         <td className="text-green-600 flex justify-center items-center gap-6">
                           <button
                             onClick={() => handleOpenPopup(item, "edit")}

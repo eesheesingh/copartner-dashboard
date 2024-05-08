@@ -1,34 +1,32 @@
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import PageHeader from "../Header/Header";
 import "./RAPage.css";
-import { useState } from "react";
-import { ToastContainer } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const RAPage = () => {
-  const rpData = [
-    {
-      name: "Anuj Kumar",
-      users: 100,
-      spendOnRA: 200,
-      earning: 500,
-    },
-    {
-      name: "Kapil Sharma",
-      users: 200,
-      spendOnRA: 300,
-      earning: 700,
-    },
-    {
-      name: "Kishan Kapoor",
-      users: 250,
-      spendOnRA: 500,
-      earning: 950,
-    },
-    // Add more data objects as needed
-  ];
+  const [rpData, setRpData] = useState([]);
 
   const [hasNotification, setHasNotification] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
+
+  useEffect(() => {
+    const fetchRAData = async () => {
+      try {
+        const response = await fetch("https://copartners.in:5132/api/Experts/RAListing");
+        if (!response.ok) {
+          throw new Error('Something went wrong, status ' + response.status);
+        }
+        const data = await response.json();
+        setRpData(data.data);
+      } catch (error) {
+        toast.error(`Failed to fetch data: ${error.message}`);
+      }
+    };
+
+    fetchRAData();
+  }, []);
 
   return (
     <div className="dashboard-container p-0 sm:ml-60">
@@ -60,15 +58,15 @@ const RAPage = () => {
                 </thead>
                 <tbody>
                   {rpData.map((row, index) => (
-                    <tr key={index}>
+                    <tr key={index} className="even:bg-gray-100 odd:bg-white">
                       <td style={{ textAlign: "left", paddingLeft: "2rem" }}>
                         <Link to={`/r.a/${row.name}`}>{row.name}</Link>
                       </td>
                       <td className="text-blue-600">
-                        <Link to={`/r.a/${row.name}`}>{row.users}</Link>
+                        <Link to={`/r.a/${row.name}`}>{row.usersCount}</Link>
                       </td>
-                      <td className="text-red-500">{row.spendOnRA}</td>
-                      <td className="text-green-600">{row.earning}</td>
+                      <td className="text-red-500">{row.raEarning}</td>
+                      <td className="text-green-600">{row.cpEarning}</td>
                     </tr>
                   ))}
                 </tbody>
