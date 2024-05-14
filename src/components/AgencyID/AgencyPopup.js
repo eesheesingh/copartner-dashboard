@@ -8,7 +8,7 @@ const AgencyPopup = ({ onClose, selectedAgency, onSubmit }) => {
 
   useEffect(() => {
     if (selectedAgency) {
-      setRAName(selectedAgency.name);
+      setRAName(selectedAgency.agencyName);
       setLink(selectedAgency.link);
     } else {
       setRAName("");

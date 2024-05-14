@@ -1,86 +1,71 @@
 import React, { useState, useEffect } from "react";
 import { Input, MenuItem, TextField, Switch, InputLabel } from "@mui/material";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import close from "../../assets/close.png";
 
 function RAPopup({ onClose, onSave, mode, initialValues }) {
   const [currentMode, setCurrentMode] = useState(mode);
+  const [copartnerChecked, setCopartnerChecked] = useState(true);
   const isViewMode = currentMode === "view";
   const [formData, setFormData] = useState({
-    RAName: "",
-    SEBI: "",
-    Mobile: "",
-    MailId: "",
-    Type: "",
-    Experience: "",
-    Followers: "",
-    CommissionFix: "",
-    ChannelLink: "",
-    PremiumLink: "",
-    ProfileImg: "",
-    Documents: null,
-    Active: true,
+    name: "",
+    sebiRegNo: "",
+    mobileNumber: "",
+    email: "",
+    expertTypeId: "",
+    experience: "",
+    channelName: "",
+    rating: "",
+    telegramFollower: "",
+    fixCommission: "",
+    telegramChannel: "",
+    premiumTelegramChannel: "",
+    expertImagePath: null,
+    sebiRegCertificatePath: null,
+    isCoPartner: true,
+    isActive: true,
   });
   const [errors, setErrors] = useState({});
 
   useEffect(() => {
-    initializeFormData();
-  }, [currentMode, initialValues]);
-
-  const initializeFormData = () => {
-    const defaultFormData = {
-      RAName: "",
-      SEBI: "",
-      Mobile: "",
-      MailId: "",
-      Type: "",
-      Experience: "",
-      Followers: "",
-      CommissionFix: "",
-      ChannelLink: "",
-      PremiumLink: "",
-      ProfileImg: "",
-      Documents: null,
-      Active: true,
-    };
-
-    if ((currentMode === "edit" || currentMode === "view") && initialValues) {
-      setFormData((prevFormData) => ({
-        ...prevFormData,
-        ...initialValues,
-      }));
-    } else if (currentMode === "add") {
-      setFormData(defaultFormData);
+    if (initialValues && (mode === "edit" || mode === "view")) {
+      setFormData({ ...initialValues });
+      setCopartnerChecked(initialValues.isCoPartner);
     }
+  }, [mode, initialValues]);
+
+  const handleCopartnerChange = () => {
+    setCopartnerChecked(!copartnerChecked);
   };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     let newErrors = { ...errors };
 
-    if (name === "Mobile") {
+    if (name === "mobileNumber") {
       const mobilePattern = /^[0-9]{10}$/;
       if (!mobilePattern.test(value)) {
-        newErrors.Mobile = "Invalid mobile number";
+        newErrors.mobileNumber = "Invalid mobile number";
       } else {
-        delete newErrors.Mobile;
+        delete newErrors.mobileNumber;
       }
     }
 
-    if (name === "MailId") {
+    if (name === "email") {
       const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (!emailPattern.test(value)) {
-        newErrors.MailId = "Invalid email address";
+        newErrors.email = "Invalid email address";
       } else {
-        delete newErrors.MailId;
+        delete newErrors.email;
       }
     }
 
-    if (name === "CommissionFix") {
+    if (name === "fixCommission") {
       if (parseInt(value) > 100) {
-        newErrors.CommissionFix = "Commission fix cannot exceed 100%";
+        newErrors.fixCommission = "Commission fix cannot exceed 100%";
       } else {
-        delete newErrors.CommissionFix;
+        delete newErrors.fixCommission;
       }
     }
 
@@ -89,18 +74,45 @@ function RAPopup({ onClose, onSave, mode, initialValues }) {
   };
 
   const handleFileChange = (e) => {
-    const file = e.target.files[0];
-    setFormData({ ...formData, Documents: file });
+    const { name, files } = e.target;
+    setFormData({ ...formData, [name]: files[0] });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
     if (Object.keys(errors).length > 0) {
       alert("Please correct the inputs before submitting.");
       return;
     }
-    if (currentMode === "add" || currentMode === "edit") {
-      onSave(formData);
+
+    const dataToSubmit = new FormData();
+    Object.keys(formData).forEach((key) => {
+      dataToSubmit.append(key, formData[key]);
+    });
+
+    dataToSubmit.set("isCoPartner", copartnerChecked);
+
+    const url = currentMode === "add" ? "https://copartners.in:5132/api/Experts" : `https://copartners.in:5132/api/Experts/${formData.id}`;
+    const method = currentMode === "add" ? "POST" : "PUT";
+
+    try {
+      const response = await fetch(url, {
+        method,
+        body: dataToSubmit,
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to save data");
+      }
+
+      const responseData = await response.json();
+      onSave(responseData);
+      toast.success("Data saved successfully");
+      onClose();
+    } catch (error) {
+      console.error("Error saving data:", error);
+      toast.error("Failed to save data");
     }
   };
 
@@ -110,7 +122,8 @@ function RAPopup({ onClose, onSave, mode, initialValues }) {
       const isDisabled =
         currentMode === "view" ||
         (currentMode === "edit" &&
-          (field.name === "RAName" || field.name === "SEBI"));
+          (field.name === "name" || field.name === "sebiRegNo")) ||
+        (field.name === "fixCommission" && !copartnerChecked);
 
       const inputClasses = `w-full p-2 rounded border border-gray-300 focus:outline-none focus:border-blue-500 ${
         isFieldFilled && !isViewMode ? "bg-gray-100" : ""
@@ -133,7 +146,7 @@ function RAPopup({ onClose, onSave, mode, initialValues }) {
                 className={inputClasses}
               />
             </div>
-          ) : field.name === "Type" ? (
+          ) : field.name === "expertTypeId" ? (
             <TextField
               select
               label={field.label}
@@ -161,11 +174,6 @@ function RAPopup({ onClose, onSave, mode, initialValues }) {
               fullWidth
               required={field.required}
               disabled={isDisabled}
-              InputProps={
-                field.type === "file"
-                  ? { type: "file", onChange: handleFileChange }
-                  : null
-              }
               inputProps={field.inputProps}
               className={inputClasses}
               error={!!errors[field.name]}
@@ -178,30 +186,31 @@ function RAPopup({ onClose, onSave, mode, initialValues }) {
   };
 
   const formFields = [
-    { name: "RAName", label: "R.A Name", required: true },
-    { name: "SEBI", label: "SEBI No.", required: true, type: "number" },
-    { name: "Mobile", label: "Mobile Number", required: true, type: "number" },
-    { name: "MailId", label: "Mail ID", required: true },
-    { name: "Type", label: "Type", required: true },
-    { name: "Experience", label: "Experience", required: true },
-    { name: "Followers", label: "Followers", required: true },
+    { name: "name", label: "R.A Name", required: true },
+    { name: "sebiRegNo", label: "SEBI No.", required: true },
+    { name: "mobileNumber", label: "Mobile Number", required: true, type: "number" },
+    { name: "email", label: "Mail ID", required: true },
+    { name: "expertTypeId", label: "Type", required: true },
+    { name: "experience", label: "Experience", required: true, type: "number" },
+    { name: "channelName", label: "Channel Name", required: true },
+    { name: "rating", label: "Rating", required: true, type: "number" },
+    { name: "telegramFollower", label: "Followers", required: true, type: "number" },
     {
-      name: "CommissionFix",
+      name: "fixCommission",
       label: "Commission Fix",
-      required: true,
       type: "number",
     },
-    { name: "ChannelLink", label: "Telegram Channel Link", required: true },
-    { name: "PremiumLink", label: "Premium Channel Link", required: true },
+    { name: "telegramChannel", label: "Telegram Channel Link", required: true },
+    { name: "premiumTelegramChannel", label: "Premium Channel Link", required: true },
     {
-      name: "ProfileImg",
+      name: "expertImagePath",
       label: "Profile Image",
-      required: true,
       type: "file",
+      required: true,
       inputProps: { accept: "image/*" },
     },
     {
-      name: "Documents",
+      name: "sebiRegCertificatePath",
       label: "Document",
       required: true,
       type: "file",
@@ -224,12 +233,12 @@ function RAPopup({ onClose, onSave, mode, initialValues }) {
             {(currentMode === "edit" || currentMode === "view") && (
               <div className="flex items-center mr-4">
                 <span className="mr-2">
-                  {formData.Active ? "Active" : "Inactive"}
+                  {formData.isActive ? "Active" : "Inactive"}
                 </span>
                 <Switch
-                  checked={formData.Active}
+                  checked={formData.isActive}
                   onChange={(e) =>
-                    setFormData({ ...formData, Active: e.target.checked })
+                    setFormData({ ...formData, isActive: e.target.checked })
                   }
                   color="primary"
                   disabled={currentMode === "view"}
@@ -244,9 +253,24 @@ function RAPopup({ onClose, onSave, mode, initialValues }) {
 
         <form
           onSubmit={handleSubmit}
-          className="px-12 py-4 grid grid-cols-2 gap-6 text-left"
+          className="px-12 py-4 grid grid-cols-2 gap-4 text-left"
         >
           {renderFields(formFields)}
+          <div className="relative flex items-center col-span-2">
+            <input
+              type="checkbox"
+              id="copartnerCheckbox"
+              checked={copartnerChecked}
+              onChange={handleCopartnerChange}
+              className="md:w-4 w-6 md:h-4 h-6 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+            />
+            <label
+              htmlFor="copartnerCheckbox"
+              className="ml-3 text-sm text-gray-500 dark:text-gray-400"
+            >
+              Become Copartner
+            </label>
+          </div>
           {currentMode !== "view" ? (
             <button
               className="col-span-2 mx-auto bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-16 rounded focus:outline-none focus:shadow-outline"

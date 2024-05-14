@@ -96,7 +96,7 @@ function BlogPage({ onClose, blog = null, onSubmit }) {
           <div className="flex flex-col gap-4">
             <label htmlFor="image-upload">Upload Title Image</label>
             <img
-              className="w-96 cursor-pointer"
+              className={`w-96 ${selectedImage && 'h-56'} cursor-pointer`}
               src={selectedImage ? URL.createObjectURL(selectedImage) : select}
               alt="Select"
               onClick={handleSelectImageClick}

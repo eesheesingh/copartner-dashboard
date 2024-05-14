@@ -20,13 +20,13 @@ const AgencyID = () => {
   const fetchAgency = async () => {
     try {
       const response = await fetch(
-        `https://copartners.in:5134/api/AdvertisingAgency/${agencyId}`
+        `https://copartners.in:5134/api/ExpertsAdvertisingAgency/${agencyId}`
       );
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       const data = await response.json();
-      setAgencies([data.data]);
+      setAgencies(data.data);
     } catch (error) {
       console.error("Fetching error:", error);
       toast.error(`Failed to fetch agency: ${error.message}`);

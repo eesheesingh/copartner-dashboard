@@ -2,11 +2,11 @@ import React, { useCallback, useState } from "react";
 import { FaPen } from "react-icons/fa";
 import { IoEyeSharp } from "react-icons/io5";
 import { Link } from "react-router-dom";
-import { ToastContainer } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 import PageHeader from "../Header/Header";
 import RAPopup from "./RAPopup";
 
-const Personal = () => {
+const Personal = ({data}) => {
   const [activeButton, setActiveButton] = useState("button1");
   const [popup, setPopup] = useState({
     isOpen: false,
@@ -14,20 +14,24 @@ const Personal = () => {
     mode: "edit",
   });
 
-  const [data, setData] = useState([
-    {
-      id: 1,
-      joinDate: "01/04/2024",
-      RAName: "Anuj Kumar",
-      SEBI: "0802929384",
-      CommissionFix: "10",
-      Spend: 2000,
-      Documents: "",
-    },
-  ]);
-
-  const handleOpenPopup = useCallback((item, mode = "edit") => {
-    setPopup({ isOpen: true, item, mode });
+  const handleOpenPopup = useCallback(async (item, mode = "edit") => {
+    if (mode === "edit" || mode === "view") {
+      try {
+        const response = await fetch(
+          `https://copartners.in:5132/api/Experts/${item.id}`
+        );
+        if (!response.ok) {
+          throw new Error("Failed to fetch data");
+        }
+        const fetchedData = await response.json();
+        setPopup({ isOpen: true, item: fetchedData.data, mode });
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        toast.error("Failed to fetch RA Details");
+      }
+    } else {
+      setPopup({ isOpen: true, item: null, mode });
+    }
   }, []);
 
   const handleClosePopup = useCallback(() => {
@@ -55,15 +59,10 @@ const Personal = () => {
               },
             ];
 
-      setData(newData);
       handleClosePopup();
     },
     [data, popup.mode]
   );
-
-  const handleButtonClick = (buttonId) => {
-    setActiveButton(buttonId);
-  };
 
   return (
     <div className="dashboard-view-section mb-4">
@@ -91,11 +90,11 @@ const Personal = () => {
             <tbody>
               {data.map((item) => (
                 <tr className="even:bg-gray-100 odd:bg-white" key={item.id}>
-                  <td>{item.joinDate}</td>
+                  <td>{new Date(item.joinDate).toLocaleDateString()}</td>
                   <td>
-                    <Link to={`/r.a/${item.RAName}`}>{item.RAName}</Link>
+                    <Link to={`/r.a/${item.id}`}>{item.name}</Link>
                   </td>
-                  <td>{item.SEBI}</td>
+                  <td>{item.sebiNo}</td>
                   <td className="text-green-600 flex justify-center items-center gap-6">
                     <button
                       onClick={() => handleOpenPopup(item, "edit")}

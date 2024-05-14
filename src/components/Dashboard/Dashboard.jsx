@@ -1,54 +1,37 @@
-// Dashboard.jsx
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "./Dashboard.css";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
-import "react-date-range/dist/styles.css";
-import "react-date-range/dist/theme/default.css";
+import "react-toastify/dist/ReactToastify.css";
 import PageHeader from "../Header/Header";
-import { ToastContainer } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 import { Link } from "react-router-dom";
 
 const Dashboard = () => {
-  const data = [
-    {
-      apName: "Varun Kumar",
-      usersCome: 150,
-      usersPay: 100,
-      spendOnAP: 600,
-      spendOnRA: 200,
-      earning: 200,
-    },
-    {
-      apName: "Parvez Alam",
-      usersCome: 150,
-      usersPay: 100,
-      spendOnAP: 600,
-      spendOnRA: 200,
-      earning: 200,
-    },
-    {
-      apName: "Kapil Sharma",
-      usersCome: 150,
-      usersPay: 100,
-      spendOnAP: 600,
-      spendOnRA: 200,
-      earning: 200,
-    },
-    // Add more data objects as needed
-  ];
-
+  const [data, setData] = useState([]);
   const [hasNotification, setHasNotification] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
 
-  // const handleError = (err) =>
-  //   toast.info(err, {
-  //     position: "bottom-left",
-  //   });
-  // const handleSuccess = (message) =>
-  //   toast.success(message, {
-  //     position: "bottom-left",
-  //   });
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    try {
+      const response = await fetch(
+        `https://copartners.in:5133/api/APDashboard/DashboardAPListing?page=1&pageSize=10`
+      );
+      if (!response.ok) {
+        throw new Error("Failed to fetch data");
+      }
+      const jsonData = await response.json();
+      setData(jsonData.data);
+    } catch (error) {
+      toast.error("Failed to fetch data", {
+        position: "top-right",
+      });
+    }
+  };
 
   return (
     <div className="dashboard-container p-0 sm:ml-60">
@@ -80,7 +63,7 @@ const Dashboard = () => {
                 </thead>
                 <tbody>
                   {data.map((row, index) => (
-                    <tr key={index} className="even:bg-gray-100 odd:bg-white">
+                    <tr key={index} className={index % 2 === 0 ? "even:bg-gray-100 odd:bg-white" : "odd:bg-gray-100 even:bg-white"}>
                       <td>
                         <Link to={`/${row.apName}`}>{row.apName}</Link>
                       </td>

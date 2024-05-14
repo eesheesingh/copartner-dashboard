@@ -14,7 +14,7 @@ const RAPage = () => {
   useEffect(() => {
     const fetchRAData = async () => {
       try {
-        const response = await fetch("https://copartners.in:5132/api/Experts/RAListing");
+        const response = await fetch("https://copartners.in:5132/api/RADashboard/DashboardRAListing?page=1&pageSize=10");
         if (!response.ok) {
           throw new Error('Something went wrong, status ' + response.status);
         }
@@ -60,10 +60,10 @@ const RAPage = () => {
                   {rpData.map((row, index) => (
                     <tr key={index} className="even:bg-gray-100 odd:bg-white">
                       <td style={{ textAlign: "left", paddingLeft: "2rem" }}>
-                        <Link to={`/r.a/${row.name}`}>{row.name}</Link>
+                        <Link to={`/r.a/${row.id}`}>{row.name}</Link>
                       </td>
                       <td className="text-blue-600">
-                        <Link to={`/r.a/${row.name}`}>{row.usersCount}</Link>
+                        <Link to={`/r.a/${row.id}`}>{row.usersCount}</Link>
                       </td>
                       <td className="text-red-500">{row.raEarning}</td>
                       <td className="text-green-600">{row.cpEarning}</td>

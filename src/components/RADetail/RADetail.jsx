@@ -29,7 +29,7 @@ const RADetail = () => {
   const fetchData = async () => {
     try {
       const response = await fetch(
-        "https://copartners.in:5132/api/Experts/RAListingDetails"
+        `https://copartners.in:5132/api/RADashboard/DashboardRADetails?page=1&pageSize=100`
       );
       if (!response.ok) {
         throw new Error("Failed to fetch data");
@@ -42,8 +42,24 @@ const RADetail = () => {
     }
   };
 
-  const handleOpenPopup = useCallback((item, mode = "edit") => {
-    setPopup({ isOpen: true, item, mode });
+  const handleOpenPopup = useCallback(async (item, mode = "edit") => {
+    if (mode === "edit" || mode === "view") {
+      try {
+        const response = await fetch(
+          `https://copartners.in:5132/api/Experts/${item.id}`
+        );
+        if (!response.ok) {
+          throw new Error("Failed to fetch data");
+        }
+        const fetchedData = await response.json();
+        setPopup({ isOpen: true, item: fetchedData.data, mode });
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        toast.error("Failed to fetch RA Details");
+      }
+    } else {
+      setPopup({ isOpen: true, item: null, mode });
+    }
   }, []);
 
   const handleClosePopup = useCallback(() => {
@@ -141,7 +157,7 @@ const RADetail = () => {
                         className="even:bg-gray-100 odd:bg-white"
                         key={item.id}
                       >
-                        <td>{item.joinDate}</td>
+                        <td>{new Date(item.joinDate).toLocaleDateString()}</td>
                         <td>
                           <Link to={`/r.a/${item.id}`}>{item.name}</Link>
                         </td>
@@ -170,7 +186,7 @@ const RADetail = () => {
             </div>
           </div>
         ) : (
-          <Personal />
+          <Personal data={data}/>
         )}
       </div>
       {popup.isOpen && (
@@ -178,7 +194,7 @@ const RADetail = () => {
           onClose={handleClosePopup}
           onSave={handleSave}
           mode={popup.mode}
-          initialValues={popup.item || {}}
+          initialValues={popup.item}
         />
       )}
       <ToastContainer />

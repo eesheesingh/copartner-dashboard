@@ -26,6 +26,7 @@ import SubAdmin from "./components/SubAdmin/SubAdmin";
 import Join from "./components/Join/Join";
 import Access from "./components/SubAdmin/Access";
 import TransactionID from "./components/Transaction/TransactionID";
+import Login from "./components/LoginCredentials/Login";
 
 const App = () => {
   const router = createBrowserRouter(
@@ -35,7 +36,7 @@ const App = () => {
         <Route path="r.a" element={<RAPage />} />
         <Route path=":apName" element={<APPage />} />
         <Route path=":apName/:apId" element={<UserDetail />} />
-        <Route path="r.a/:raName" element={<RAList />} />
+        <Route path="r.a/:raId" element={<RAList />} />
         <Route path="blogs" element={<Blog />} />
         <Route path="radetails" element={<RADetail />} />
         <Route path="apdetails" element={<APDetail />} />
@@ -50,6 +51,7 @@ const App = () => {
         <Route path="sub-admin" element={<SubAdmin />} />
         <Route path="sub-admin/access" element={<Access />} />
         <Route path="join" element={<Join />} />
+        <Route path="login" element={<Login />} />
       </Route>
     )
   );

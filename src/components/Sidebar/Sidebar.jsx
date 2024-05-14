@@ -80,6 +80,7 @@ const Sidebar = () => {
     { to: "/relationship", title: "Settings", label: "Relationship Management", icon: userIcon },
     { to: "/join", title: "Settings", label: "Join", icon: userIcon },
     { to: "/sub-admin", title: "Settings", label: "Sub Admin Management", icon: userIcon },
+    { to: "/login", title: "Settings", label: "Login Credentials", icon: userIcon },
   ];
 
   return (

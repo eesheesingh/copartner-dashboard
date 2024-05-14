@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
 import PageHeader from "../Header/Header";
@@ -14,35 +14,28 @@ const APDetail = () => {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [viewItem, setViewItem] = useState(null);
   const [editItem, setEditItem] = useState(null);
-  const [data, setData] = useState([
-    {
-      id: 1,
-      joinDate: "01/04/2024",
-      APName: "Arun Kumar",
-      Mobile: "8788789891",
-      CommissionFix1: "",
-      CommissionFix2: "",
-      Spend: 2000,
-    },
-    {
-      id: 2,
-      joinDate: "01/04/2024",
-      APName: "Mithun Kumar",
-      Mobile: "7890873272",
-      CommissionFix1: "23",
-      CommissionFix2: "35",
-      Spend: 1000,
-    },
-    {
-      id: 3,
-      joinDate: "01/04/2024",
-      APName: "Shivam Malhotra",
-      Mobile: "8687676287",
-      CommissionFix1: "78",
-      CommissionFix2: "56",
-      Spend: 3000,
-    },
-  ]);
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    try {
+      const response = await fetch(
+        `https://copartners.in:5133/api/APDashboard/DashobaordAPDetails?page=1&pageSize=10`
+      );
+      if (!response.ok) {
+        throw new Error("Failed to fetch data");
+      }
+      const fetchedData = await response.json();
+      console.log(fetchData.data)
+      setData(fetchedData.data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      toast.error("Failed to fetch A.P Details");
+    }
+  };
 
   const handleOpenPopup = (item, mode = "edit") => {
     if (mode === "view") {
@@ -125,14 +118,14 @@ const APDetail = () => {
                 <tbody>
                   {data.map((item) => (
                     <tr className="even:bg-gray-100 odd:bg-white" key={item.id}>
-                      <td>{item.joinDate}</td>
+                      <td>{new Date(item.joinDate).toLocaleDateString()}</td>
                       <td>
-                        <Link to={`/apdetails/${item.APName}`}>{item.APName}</Link>
+                        <Link to={`/apdetails/${item.apName}`}>{item.apName}</Link>
                       </td>
-                      <td>{item.Mobile}</td>
-                      <td>{item.CommissionFix1}</td>
-                      <td>{item.CommissionFix2}</td>
-                      <td className="text-red-600">{item.Spend}</td>
+                      <td>{item.mobileNumber}</td>
+                      <td>{item.fixCommission1}</td>
+                      <td>{item.fixCommission2}</td>
+                      <td className="text-red-600">{item.apEarning}</td>
                       <td className="text-green-600 flex justify-center items-center gap-6">
                         <button
                           onClick={() => handleOpenPopup(item)}
@@ -141,7 +134,7 @@ const APDetail = () => {
                           <FaPen className="text-blue-600" />
                         </button>
                         <button
-                          onClick={() => handleOpenPopup(item, "view")} // Set viewing mode
+                          onClick={() => handleOpenPopup(item, "view")}
                           aria-label="View"
                         >
                           <IoEyeSharp className=" text-blue-500 text-xl" />

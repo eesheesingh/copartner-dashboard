@@ -1,27 +1,32 @@
-// MarketingContent.js
-
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import PageHeader from "../Header/Header";
-import { ToastContainer } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 import MarketingContentPopup from "./MarketingContentPopup";
 import BannerMarketing from "./BannerMarketing";
 import MarketingVideo from "./MarketingVideo";
+import "react-toastify/dist/ReactToastify.css";
 
 const MarketingContent = () => {
   const [hasNotification, setHasNotification] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [activeButton, setActiveButton] = useState("Banners");
   const [isPopupOpen, setIsPopupOpen] = useState(false);
-  const [bannersData, setBannersData] = useState([
-    { id: 1, name: "Banner 1", image: null },
-    { id: 2, name: "Banner 2", image: null },
-    { id: 3, name: "Banner 3", image: null },
-  ]);
-  const [videosData, setVideosData] = useState([
-    { id: 1, name: "Video 1", video: null },
-    { id: 2, name: "Video 2", video: null },
-    { id: 3, name: "Video 3", video: null },
-  ]);
+  const [bannersData, setBannersData] = useState([]);
+  const [videosData, setVideosData] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch("https://copartners.in:5134/api/MarketingContent");
+        const data = await response.json();
+        setBannersData(data.filter(item => item.contentType === "banner"));
+        setVideosData(data.filter(item => item.contentType === "video"));
+      } catch (error) {
+        toast.error("Failed to fetch marketing content");
+      }
+    };
+    fetchData();
+  }, []);
 
   const handleClosePopup = () => {
     setIsPopupOpen(false);
@@ -31,14 +36,32 @@ const MarketingContent = () => {
     setActiveButton(buttonId);
   };
 
-  const handleSaveData = (newData) => {
-    if (activeButton === "Banners") {
-      setBannersData([
-        ...bannersData,
-        { ...newData, id: bannersData.length + 1 },
-      ]);
-    } else {
-      setVideosData([...videosData, { ...newData, id: videosData.length + 1 }]);
+  const handleSaveData = async (newData) => {
+    try {
+      const formData = new FormData();
+      formData.append(activeButton === "Banners" ? "image" : "video", newData.file);
+      formData.append("name", newData.name);
+      formData.append("contentType", activeButton.toLowerCase());
+
+      const response = await fetch("https://copartners.in:5134/api/MarketingContent", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to save data");
+      }
+
+      const savedData = await response.json();
+      if (activeButton === "Banners") {
+        setBannersData([...bannersData, savedData]);
+      } else {
+        setVideosData([...videosData, savedData]);
+      }
+
+      toast.success(`${activeButton} added successfully`);
+    } catch (error) {
+      toast.error("Failed to save data");
     }
   };
 
@@ -77,7 +100,7 @@ const MarketingContent = () => {
             <div className="channel-heading flex">
               <h3 className="text-xl font-semibold mr-auto">{activeButton}</h3>
               <button
-                className=" border-2 border-black rounded-lg px-4 py-1 mr-4"
+                className="border-2 border-black rounded-lg px-4 py-1 mr-4"
                 onClick={() => setIsPopupOpen(true)}
               >
                 + Add

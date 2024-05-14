@@ -28,7 +28,6 @@ const AgencyList = () => {
         throw new Error("Failed to fetch agency list");
       }
       const data = await response.json();
-      console.log(data.data);
       setAgencyList(data.data);
     } catch (error) {
       console.error("Error fetching agency list:", error);
