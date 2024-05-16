@@ -20,7 +20,6 @@ const RAList = () => {
           throw new Error("Failed to fetch data");
         }
         const data = await response.json();
-        console.log(data);
         setSelectedRA(data.data);
       } catch (error) {
         toast.error("Error fetching RA data:", error);
@@ -71,8 +70,8 @@ const RAList = () => {
               <tbody>
                 {selectedRA.map((ra, index) => (
                   <tr key={index} className="request-numbers font-semibold">
-                    <td className="p-3">{ra.date}</td>
-                    <td className="p-3">{ra.users}</td>
+                    <td className="p-3">{new Date(ra.date).toLocaleDateString()}</td>
+                    <td className="p-3">{ra.userMobileNo}</td>
                     <td className="p-3 text-center">{ra.apName}</td>
                     <td className="p-3 text-yellow-400 text-center">
                       {ra.amount}

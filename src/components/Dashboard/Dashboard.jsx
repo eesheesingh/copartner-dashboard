@@ -25,6 +25,7 @@ const Dashboard = () => {
         throw new Error("Failed to fetch data");
       }
       const jsonData = await response.json();
+      console.log(jsonData.data)
       setData(jsonData.data);
     } catch (error) {
       toast.error("Failed to fetch data", {
@@ -67,13 +68,13 @@ const Dashboard = () => {
                       <td>
                         <Link to={`/${row.apName}`}>{row.apName}</Link>
                       </td>
-                      <td>{row.usersCome}</td>
+                      <td>{row.usersCount}</td>
                       <td className="text-blue-400">
-                        <Link to={`/${row.apName}`}>{row.usersPay}</Link>
+                        <Link to={`/${row.apName}`}>{row.usersPayment}</Link>
                       </td>
-                      <td className="text-red-500">{row.spendOnAP}</td>
-                      <td className="text-red-500">{row.spendOnRA}</td>
-                      <td className="text-green-600">{row.earning}</td>
+                      <td className="text-red-500">{row.apEarning}</td>
+                      <td className="text-red-500">{row.raEarning}</td>
+                      <td className="text-green-600">{row.cpEarning}</td>
                     </tr>
                   ))}
                 </tbody>
