@@ -27,6 +27,8 @@ import Join from "./components/Join/Join";
 import Access from "./components/SubAdmin/Access";
 import TransactionID from "./components/Transaction/TransactionID";
 import Login from "./components/LoginCredentials/Login";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const App = () => {
   const router = createBrowserRouter(
@@ -61,6 +63,7 @@ const App = () => {
       <main className="main-content">
         <RouterProvider router={router} />
       </main>
+      <ToastContainer />
     </div>
   );
 };

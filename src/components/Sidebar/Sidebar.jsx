@@ -5,6 +5,7 @@ import Logo from "../../assets/copartner.png";
 import { Link, Outlet, useNavigate, useLocation } from "react-router-dom";
 import userIcon from "../../assets/user-octagon.png";
 import { click } from "@testing-library/user-event/dist/click";
+import { ToastContainer } from "react-toastify";
 
 const Sidebar = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -152,6 +153,7 @@ const Sidebar = () => {
         </div>
       </aside>
       <Outlet />
+      <ToastContainer />
     </>
   );
 };

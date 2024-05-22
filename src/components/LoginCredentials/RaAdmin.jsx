@@ -2,12 +2,12 @@ import React from "react";
 import { FaPen } from "react-icons/fa";
 import Bin from "../../assets/TrashBinMinimalistic.png";
 
-const WithRA = ({ activeButton, data }) => {
+const WithRA = ({ activeButton, data, openSubAdmin }) => {
   return (
     <>
       <div className="channel-heading flex">
         <h3 className="text-xl font-semibold mr-auto">{activeButton}</h3>
-        <button className="border-2 border-black rounded-lg px-4 py-1 mr-4">
+        <button onClick={openSubAdmin} className="border-2 border-black rounded-lg px-4 py-1 mr-4">
           + Add
         </button>
       </div>

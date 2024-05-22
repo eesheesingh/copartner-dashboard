@@ -1,18 +1,37 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { FaPen } from "react-icons/fa";
 import { IoEyeSharp } from "react-icons/io5";
 import { Link } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
-import PageHeader from "../Header/Header";
 import RAPopup from "./RAPopup";
 
-const Personal = ({data}) => {
-  const [activeButton, setActiveButton] = useState("button1");
+const Personal = () => {
+  const [data, setData] = useState([]);
   const [popup, setPopup] = useState({
     isOpen: false,
     item: null,
     mode: "edit",
   });
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    try {
+      const response = await fetch(
+        `https://copartners.in:5132/api/RADashboard/DashboardRADetails?isCoPartner=false&page=1&pageSize=10`
+      );
+      if (!response.ok) {
+        throw new Error("Failed to fetch data");
+      }
+      const fetchedData = await response.json();
+      setData(fetchedData.data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      toast.error("Failed to fetch RA Details");
+    }
+  };
 
   const handleOpenPopup = useCallback(async (item, mode = "edit") => {
     if (mode === "edit" || mode === "view") {
@@ -59,6 +78,7 @@ const Personal = ({data}) => {
               },
             ];
 
+      setData(newData);
       handleClosePopup();
     },
     [data, popup.mode]

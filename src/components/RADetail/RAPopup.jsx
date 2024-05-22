@@ -202,6 +202,7 @@ function RAPopup({ onClose, onSave, mode, initialValues }) {
     },
     { name: "telegramChannel", label: "Telegram Channel Link", required: true },
     { name: "premiumTelegramChannel", label: "Premium Channel Link", required: true },
+    { name: "chatId", label: "Chat ID", required: true },
     {
       name: "expertImagePath",
       label: "Profile Image",
@@ -253,7 +254,7 @@ function RAPopup({ onClose, onSave, mode, initialValues }) {
 
         <form
           onSubmit={handleSubmit}
-          className="px-12 py-4 grid grid-cols-2 gap-4 text-left"
+          className="px-12 py-4 grid grid-cols-2 gap-x-4 gap-y-2 text-left"
         >
           {renderFields(formFields)}
           <div className="relative flex items-center col-span-2">

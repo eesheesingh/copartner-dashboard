@@ -29,7 +29,7 @@ const RADetail = () => {
   const fetchData = async () => {
     try {
       const response = await fetch(
-        `https://copartners.in:5132/api/RADashboard/DashboardRADetails?page=1&pageSize=100`
+        `https://copartners.in:5132/api/RADashboard/DashboardRADetails?isCoPartner=true&page=1&pageSize=10`
       );
       if (!response.ok) {
         throw new Error("Failed to fetch data");
@@ -186,7 +186,7 @@ const RADetail = () => {
             </div>
           </div>
         ) : (
-          <Personal data={data}/>
+          <Personal />
         )}
       </div>
       {popup.isOpen && (

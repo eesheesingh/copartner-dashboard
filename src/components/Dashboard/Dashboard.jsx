@@ -66,11 +66,11 @@ const Dashboard = () => {
                   {data.map((row, index) => (
                     <tr key={index} className={index % 2 === 0 ? "even:bg-gray-100 odd:bg-white" : "odd:bg-gray-100 even:bg-white"}>
                       <td>
-                        <Link to={`/${row.apName}`}>{row.apName}</Link>
+                        <Link to={`/${row.id}`}>{row.apName}</Link>
                       </td>
                       <td>{row.usersCount}</td>
                       <td className="text-blue-400">
-                        <Link to={`/${row.apName}`}>{row.usersPayment}</Link>
+                        <Link to={`/${row.id}`}>{row.usersPayment}</Link>
                       </td>
                       <td className="text-red-500">{row.apEarning}</td>
                       <td className="text-red-500">{row.raEarning}</td>

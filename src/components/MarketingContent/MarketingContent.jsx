@@ -19,8 +19,9 @@ const MarketingContent = () => {
       try {
         const response = await fetch("https://copartners.in:5134/api/MarketingContent");
         const data = await response.json();
-        setBannersData(data.filter(item => item.contentType === "banner"));
-        setVideosData(data.filter(item => item.contentType === "video"));
+        console.log(data.data)
+        setBannersData(data.data.filter(item => item.contentType.toLowerCase() === "banner"));
+        setVideosData(data.data.filter(item => item.contentType.toLowerCase() === "video"));
       } catch (error) {
         toast.error("Failed to fetch marketing content");
       }

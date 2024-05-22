@@ -2,11 +2,11 @@ import { TextField } from "@mui/material";
 import React, { useState } from "react";
 import close from "../../assets/close.png";
 
-const AcceptPopup = ({ onClose, memberId }) => {
+const AcceptPopup = ({ onClose, memberId, onConfirm }) => {
   const [transactionId, setTransactionId] = useState("");
 
   const handleSubmit = () => {
-    console.log(transactionId, memberId);
+    onConfirm(transactionId);
   };
 
   return (

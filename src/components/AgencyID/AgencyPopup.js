@@ -1,10 +1,11 @@
-import { TextField } from "@mui/material";
+import { MenuItem, TextField } from "@mui/material";
 import React, { useState, useEffect } from "react";
 import close from "../../assets/close.png";
 
 const AgencyPopup = ({ onClose, selectedAgency, onSubmit }) => {
   const [RAName, setRAName] = useState("");
   const [link, setLink] = useState("");
+  const [RAList, setRAList] = useState([]);
 
   useEffect(() => {
     if (selectedAgency) {
@@ -16,9 +17,27 @@ const AgencyPopup = ({ onClose, selectedAgency, onSubmit }) => {
     }
   }, [selectedAgency]);
 
+  useEffect(() => {
+    const fetchRAList = async () => {
+      try {
+        const response = await fetch('https://copartners.in:5132/api/Experts');
+        if (!response.ok) {
+          throw new Error('Failed to fetch RA list');
+        }
+        const data = await response.json();
+        console.log(data)
+        setRAList(data.data);
+      } catch (error) {
+        console.error('Error fetching RA list:', error);
+      }
+    };
+
+    fetchRAList();
+  }, []);
+
   const handleSubmit = (event) => {
     event.preventDefault();
-    
+
     if (!RAName.trim() || !link.trim()) {
       alert("Please fill out all fields");
       return;
@@ -51,6 +70,7 @@ const AgencyPopup = ({ onClose, selectedAgency, onSubmit }) => {
         <div className="font-semibold text-2xl px-12 py-4 flex flex-col gap-4 text-left">
           <div className="relative flex flex-col w-1/2">
             <TextField
+              select
               id="RA-name"
               label="RA"
               value={RAName}
@@ -58,7 +78,13 @@ const AgencyPopup = ({ onClose, selectedAgency, onSubmit }) => {
               variant="outlined"
               fullWidth
               required
-            />
+            >
+              {RAList.map((ra) => (
+                <MenuItem key={ra.id} value={ra.name}>
+                  {ra.name}
+                </MenuItem>
+              ))}
+            </TextField>
           </div>
           <div className="flex flex-col">
             <TextField
