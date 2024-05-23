@@ -12,6 +12,7 @@ const AgencyID = () => {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [selectedAgency, setSelectedAgency] = useState(null);
   const [agencies, setAgencies] = useState([]);
+  console.log(agencies)
 
   useEffect(() => {
     fetchAgency();
@@ -33,9 +34,22 @@ const AgencyID = () => {
     }
   };
 
-  const handleDeleteAgency = (id) => {
-    const updatedAgencies = agencies.filter((agency) => agency.id !== id);
-    setAgencies(updatedAgencies);
+  const handleDeleteAgency = async (id) => {
+    try {
+      const response = await fetch(`https://copartners.in:5134/api/ExpertsAdvertisingAgency/${id}`, {
+        method: 'DELETE',
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      toast.success('Agency deleted successfully!');
+      fetchAgency(); // Refetch the agency list
+    } catch (error) {
+      console.error("Deleting error:", error);
+      toast.error(`Failed to delete agency: ${error.message}`);
+    }
   };
 
   const handleClosePopup = () => {
@@ -48,19 +62,8 @@ const AgencyID = () => {
     setIsPopupOpen(true);
   };
 
-  const handleSubmit = (formData) => {
-    if (selectedAgency) {
-      const updatedAgencies = agencies.map((a) =>
-        a.id === selectedAgency.id ? { ...a, ...formData } : a
-      );
-      setAgencies(updatedAgencies);
-    } else {
-      const newAgency = {
-        id: agencies.length + 1,
-        ...formData,
-      };
-      setAgencies([...agencies, newAgency]);
-    }
+  const handleSubmit = () => {
+    fetchAgency();
     setIsPopupOpen(false);
   };
 
@@ -111,12 +114,12 @@ const AgencyID = () => {
             </thead>
             <tbody>
               {agencies.map((agency) => (
-                <tr key={agency.id} className="request-numbers font-semibold">
+                <tr key={agency.expertsAdAgencyId} className="request-numbers font-semibold">
                   <td
                     style={{ textAlign: "left", paddingLeft: "4rem" }}
                     className="p-3"
                   >
-                    {agency.agencyName}
+                    {agency.expertsName}
                   </td>
                   <td style={{ textAlign: "left" }} className="p-3">
                     {agency.link}
@@ -136,7 +139,7 @@ const AgencyID = () => {
                       className="w-6 h-6 cursor-pointer"
                       src={Bin}
                       alt="Delete"
-                      onClick={() => handleDeleteAgency(agency.id)}
+                      onClick={() => handleDeleteAgency(agency.expertsAdAgencyId)}
                     />
                   </td>
                 </tr>
@@ -148,6 +151,7 @@ const AgencyID = () => {
       {isPopupOpen && (
         <AgencyPopup
           onClose={handleClosePopup}
+          agencyId={agencyId}
           selectedAgency={selectedAgency}
           onSubmit={handleSubmit}
         />

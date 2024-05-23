@@ -4,7 +4,7 @@ import "react-date-range/dist/theme/default.css";
 import PageHeader from "../Header/Header";
 import { ToastContainer, toast } from "react-toastify";
 import { Link } from "react-router-dom";
-import { FaPen } from "react-icons/fa"; // Replaced delete icon with eye icon
+import { FaPen } from "react-icons/fa";
 import APDetailPopup from "./APDetailPopup";
 import { IoEyeSharp } from "react-icons/io5";
 
@@ -23,13 +23,12 @@ const APDetail = () => {
   const fetchData = async () => {
     try {
       const response = await fetch(
-        `https://copartners.in:5133/api/APDashboard/DashobaordAPDetails?page=1&pageSize=10`
+        `https://copartners.in:5133/api/APDashboard/DashobaordAPDetails`
       );
       if (!response.ok) {
         throw new Error("Failed to fetch data");
       }
       const fetchedData = await response.json();
-      console.log(fetchData.data)
       setData(fetchedData.data);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -53,25 +52,50 @@ const APDetail = () => {
     setViewItem(null);
   };
 
-  const handleSave = (item) => {
-    if (viewItem) {
-      handleClosePopup();
-      return;
+  const handleSave = async (item) => {
+    const requestBody = {
+      name: item.name,
+      affiliatePartnerImagePath: item.affiliatePartnerImagePath,
+      email: item.email,
+      mobileNumber: item.mobileNumber,
+      gst: item.gst,
+      pan: item.pan,
+      address: item.address,
+      state: item.state,
+      referralCode: item.referralCode,
+      referralLink: item.referralLink,
+      fixCommission1: item.fixCommission1,
+      fixCommission2: item.fixCommission2,
+      relationshipManagerId: "",
+      isActive: item.isActive,
+    };
+
+    const url =
+      editItem && editItem.id
+        ? `https://copartners.in:5133/api/AffiliatePartner/${editItem.id}`
+        : "https://copartners.in:5133/api/AffiliatePartner";
+    const method = editItem && editItem.id ? "PUT" : "POST";
+
+    try {
+      const response = await fetch(url, {
+        method,
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(requestBody),
+      });
+      console.log(requestBody);
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      toast.success("A.P. details saved successfully!");
+      fetchData();
+    } catch (error) {
+      console.error("Error saving A.P. details:", error);
+      toast.error(`Failed to save A.P. details: ${error.message}`);
     }
-  
-    if (editItem) {
-      setData(
-        data.map((dataItem) =>
-          dataItem.id === editItem.id ? { ...dataItem, ...item } : dataItem
-        )
-      );
-    } else {
-      const newItem = {
-        ...item,
-        id: data.length > 0 ? Math.max(...data.map((d) => d.id)) + 1 : 1,
-      };
-      setData([...data, newItem]);
-    }
+
     handleClosePopup();
   };
 
@@ -120,7 +144,7 @@ const APDetail = () => {
                     <tr className="even:bg-gray-100 odd:bg-white" key={item.id}>
                       <td>{new Date(item.joinDate).toLocaleDateString()}</td>
                       <td>
-                        <Link to={`/apdetails/${item.apName}`}>{item.apName}</Link>
+                        <Link to={`/apdetails/${item.id}`}>{item.apName}</Link>
                       </td>
                       <td>{item.mobileNumber}</td>
                       <td>{item.fixCommission1}</td>
@@ -128,7 +152,7 @@ const APDetail = () => {
                       <td className="text-red-600">{item.apEarning}</td>
                       <td className="text-green-600 flex justify-center items-center gap-6">
                         <button
-                          onClick={() => handleOpenPopup(item)}
+                          onClick={() => handleOpenPopup(item, "edit")}
                           aria-label="Edit"
                         >
                           <FaPen className="text-blue-600" />
@@ -148,12 +172,12 @@ const APDetail = () => {
           </div>
         </div>
       </div>
-      {(isPopupOpen && !viewItem) && (
+      {isPopupOpen && !viewItem && (
         <APDetailPopup
           onClose={handleClosePopup}
           onSave={handleSave}
           mode={editItem ? "edit" : "add"}
-          initialValues={editItem || {}}
+          initialValues1={editItem || {}}
         />
       )}
       {viewItem && (
@@ -161,7 +185,7 @@ const APDetail = () => {
           onClose={handleClosePopup}
           onSave={handleSave}
           mode="view"
-          initialValues={viewItem}
+          initialValues1={viewItem}
           onChangeMode={handleChangeMode}
         />
       )}

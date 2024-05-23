@@ -9,61 +9,43 @@ import "react-toastify/dist/ReactToastify.css";
 const MarketingContent = () => {
   const [hasNotification, setHasNotification] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
-  const [activeButton, setActiveButton] = useState("Banners");
+  const [activeButton, setActiveButton] = useState("Banner");
   const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [selectedContent, setSelectedContent] = useState(null);
   const [bannersData, setBannersData] = useState([]);
   const [videosData, setVideosData] = useState([]);
 
+  const fetchData = async () => {
+    try {
+      const response = await fetch("https://copartners.in:5134/api/MarketingContent");
+      const data = await response.json();
+      setBannersData(data.data.filter(item => item.contentType.toLowerCase() === "banner"));
+      setVideosData(data.data.filter(item => item.contentType.toLowerCase() === "videos"));
+    } catch (error) {
+      toast.error("Failed to fetch marketing content");
+    }
+  };
+
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch("https://copartners.in:5134/api/MarketingContent");
-        const data = await response.json();
-        console.log(data.data)
-        setBannersData(data.data.filter(item => item.contentType.toLowerCase() === "banner"));
-        setVideosData(data.data.filter(item => item.contentType.toLowerCase() === "video"));
-      } catch (error) {
-        toast.error("Failed to fetch marketing content");
-      }
-    };
     fetchData();
   }, []);
 
   const handleClosePopup = () => {
     setIsPopupOpen(false);
+    setSelectedContent(null);
   };
 
   const handleButtonClick = (buttonId) => {
     setActiveButton(buttonId);
   };
 
-  const handleSaveData = async (newData) => {
-    try {
-      const formData = new FormData();
-      formData.append(activeButton === "Banners" ? "image" : "video", newData.file);
-      formData.append("name", newData.name);
-      formData.append("contentType", activeButton.toLowerCase());
+  const handleSaveData = () => {
+    fetchData();
+  };
 
-      const response = await fetch("https://copartners.in:5134/api/MarketingContent", {
-        method: "POST",
-        body: formData,
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to save data");
-      }
-
-      const savedData = await response.json();
-      if (activeButton === "Banners") {
-        setBannersData([...bannersData, savedData]);
-      } else {
-        setVideosData([...videosData, savedData]);
-      }
-
-      toast.success(`${activeButton} added successfully`);
-    } catch (error) {
-      toast.error("Failed to save data");
-    }
+  const handleEditClick = (content) => {
+    setSelectedContent(content);
+    setIsPopupOpen(true);
   };
 
   return (
@@ -78,9 +60,9 @@ const MarketingContent = () => {
 
       <div className="px-4 flex gap-8">
         <button
-          onClick={() => handleButtonClick("Banners")}
+          onClick={() => handleButtonClick("Banner")}
           className={`px-16 py-4 border-2 rounded-xl ${
-            activeButton === "Banners" ? "border-black" : "border-gray-200"
+            activeButton === "Banner" ? "border-black" : "border-gray-200"
           } font-semibold`}
         >
           Banner
@@ -107,16 +89,26 @@ const MarketingContent = () => {
                 + Add
               </button>
             </div>
-            {activeButton === "Banners" ? (
+            {activeButton === "Banner" ? (
               <div className="grid grid-cols-3 gap-4 p-4">
                 {bannersData.map((banner) => (
-                  <BannerMarketing key={banner.id} banner={banner} />
+                  <BannerMarketing
+                    update={fetchData}
+                    key={banner.id}
+                    banner={banner}
+                    onEditClick={handleEditClick}
+                  />
                 ))}
               </div>
             ) : (
               <div className="grid grid-cols-3 gap-4 p-4">
                 {videosData.map((video) => (
-                  <MarketingVideo key={video.id} video={video} />
+                  <MarketingVideo
+                    update={fetchData}
+                    key={video.id}
+                    video={video}
+                    onEditClick={handleEditClick}
+                  />
                 ))}
               </div>
             )}
@@ -128,6 +120,7 @@ const MarketingContent = () => {
           onClose={handleClosePopup}
           contentType={activeButton}
           onSave={handleSaveData}
+          content={selectedContent}
         />
       )}
       <ToastContainer />

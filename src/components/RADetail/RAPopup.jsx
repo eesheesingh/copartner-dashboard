@@ -5,6 +5,7 @@ import "react-toastify/dist/ReactToastify.css";
 import close from "../../assets/close.png";
 
 function RAPopup({ onClose, onSave, mode, initialValues }) {
+  console.log(initialValues)
   const [currentMode, setCurrentMode] = useState(mode);
   const [copartnerChecked, setCopartnerChecked] = useState(true);
   const isViewMode = currentMode === "view";
@@ -23,6 +24,11 @@ function RAPopup({ onClose, onSave, mode, initialValues }) {
     premiumTelegramChannel: "",
     expertImagePath: null,
     sebiRegCertificatePath: null,
+    pan: "",
+    address: "",
+    state: "",
+    signatureImage: null,
+    gst: "",
     isCoPartner: true,
     isActive: true,
   });
@@ -73,9 +79,37 @@ function RAPopup({ onClose, onSave, mode, initialValues }) {
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleFileChange = (e) => {
+  const handleFileChange = async (e) => {
     const { name, files } = e.target;
-    setFormData({ ...formData, [name]: files[0] });
+    const file = files[0];
+
+    if (file) {
+      try {
+        // Create a FormData object
+        const formData = new FormData();
+        formData.append("file", file, file.name);
+
+        const response = await fetch(
+          "https://copartners.in:5134/api/AWSStorage?prefix=Images",
+          {
+            method: "POST",
+            body: formData,
+          }
+        );
+        const data = await response.json();
+        const presignedURL = data.data.presignedUrl;
+
+        setFormData((prevFormData) => ({
+          ...prevFormData,
+          [name]: presignedURL,
+        }));
+
+        toast.success(`${name} uploaded successfully!`);
+      } catch (error) {
+        console.error("Error uploading file:", error);
+        toast.error(`Failed to upload ${name}`);
+      }
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -86,20 +120,21 @@ function RAPopup({ onClose, onSave, mode, initialValues }) {
       return;
     }
 
-    const dataToSubmit = new FormData();
-    Object.keys(formData).forEach((key) => {
-      dataToSubmit.append(key, formData[key]);
-    });
+    const dataToSubmit = { ...formData, isCoPartner: copartnerChecked };
 
-    dataToSubmit.set("isCoPartner", copartnerChecked);
-
-    const url = currentMode === "add" ? "https://copartners.in:5132/api/Experts" : `https://copartners.in:5132/api/Experts/${formData.id}`;
+    const url =
+      currentMode === "add"
+        ? "https://copartners.in:5132/api/Experts"
+        : `https://copartners.in:5132/api/Experts/${formData.id}`;
     const method = currentMode === "add" ? "POST" : "PUT";
 
     try {
       const response = await fetch(url, {
         method,
-        body: dataToSubmit,
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(dataToSubmit),
       });
 
       if (!response.ok) {
@@ -145,6 +180,26 @@ function RAPopup({ onClose, onSave, mode, initialValues }) {
                 onChange={handleFileChange}
                 className={inputClasses}
               />
+              {formData[field.name] && (
+                <div className="mt-2">
+                  {field.name === "sebiRegCertificatePath" || "expertImagePath" || "signatureImage" ? (
+                    <a
+                      href={formData[field.name]}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-500 underline"
+                    >
+                      View {field.label}
+                    </a>
+                  ) : (
+                    <img
+                      src={formData[field.name]}
+                      alt={field.label}
+                      className="max-w-full h-auto"
+                    />
+                  )}
+                </div>
+              )}
             </div>
           ) : field.name === "expertTypeId" ? (
             <TextField
@@ -188,21 +243,55 @@ function RAPopup({ onClose, onSave, mode, initialValues }) {
   const formFields = [
     { name: "name", label: "R.A Name", required: true },
     { name: "sebiRegNo", label: "SEBI No.", required: true },
-    { name: "mobileNumber", label: "Mobile Number", required: true, type: "number" },
+    {
+      name: "mobileNumber",
+      label: "Mobile Number",
+      required: true,
+      type: "number",
+    },
     { name: "email", label: "Mail ID", required: true },
     { name: "expertTypeId", label: "Type", required: true },
     { name: "experience", label: "Experience", required: true, type: "number" },
     { name: "channelName", label: "Channel Name", required: true },
     { name: "rating", label: "Rating", required: true, type: "number" },
-    { name: "telegramFollower", label: "Followers", required: true, type: "number" },
+    {
+      name: "telegramFollower",
+      label: "Followers",
+      required: true,
+      type: "number",
+    },
     {
       name: "fixCommission",
       label: "Commission Fix",
       type: "number",
     },
     { name: "telegramChannel", label: "Telegram Channel Link", required: true },
-    { name: "premiumTelegramChannel", label: "Premium Channel Link", required: true },
+    {
+      name: "premiumTelegramChannel",
+      label: "Premium Channel Link",
+      required: true,
+    },
     { name: "chatId", label: "Chat ID", required: true },
+    {
+      name: "pan",
+      label: "PAN Card",
+      required: true,
+    },
+    {
+      name: "address",
+      label: "Address",
+      required: true,
+    },
+    {
+      name: "state",
+      label: "State",
+      required: true,
+    },
+    {
+      name: "gst",
+      label: "GST Number",
+      required: true,
+    },
     {
       name: "expertImagePath",
       label: "Profile Image",
@@ -211,18 +300,25 @@ function RAPopup({ onClose, onSave, mode, initialValues }) {
       inputProps: { accept: "image/*" },
     },
     {
-      name: "sebiRegCertificatePath",
-      label: "Document",
-      required: true,
+      name: "signatureImage",
+      label: "Signature Image",
       type: "file",
-      inputProps: { accept: ".pdf,.doc,.docx" },
+      required: true,
+      inputProps: { accept: "image/*" },
+    },
+    {
+      name: "sebiRegCertificatePath",
+      label: "SEBI Reg. Certificate",
+      type: "file",
+      required: true,
+      inputProps: { accept: "image/*" },
     },
   ];
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-      <div className="popup bg-white border-1 border-[#ffffff2a] m-4 rounded-lg w-3/4 text-center">
-        <div className="bg-[#dddddd] px-4 py-2 rounded-t-lg flex justify-between items-center">
+    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 overflow-auto">
+      <div className="popup bg-white border-1 border-[#ffffff2a] m-4 rounded-lg w-3/4 max-h-screen overflow-y-auto text-center">
+        <div className="bg-[#dddddd] z-10 px-4 py-2 rounded-t-lg flex justify-between items-center sticky top-0">
           <h2 className="text-left font-semibold text-2xl">
             {currentMode === "add"
               ? "Add RA"
@@ -289,7 +385,6 @@ function RAPopup({ onClose, onSave, mode, initialValues }) {
             </button>
           )}
         </form>
-        <div className="flex justify-center mt-4"></div>
       </div>
     </div>
   );

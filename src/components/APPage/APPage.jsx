@@ -1,60 +1,34 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import "./APPage.css";
 import { FaAngleLeft } from "react-icons/fa6";
 import PageHeader from "../Header/Header";
 import { Link, useNavigate, useParams } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const APPage = () => {
   const { apName } = useParams();
-
-  const apData = [
-    {
-      name: "Varun Kumar",
-      link: "https://t.me-3423412/lkadf",
-      tableData: [
-        {
-          date: "01/04/2024",
-          user: "9898981923",
-          amount: 1000,
-          ra: "Eeshee Pal Singh",
-          subscription: "Service",
-        },
-        {
-          date: "01/04/2024",
-          user: "7987897973",
-          amount: 1000,
-          ra: "Eeshee Pal Singh",
-          subscription: "Service",
-        },
-      ],
-    },
-    {
-      name: "Parvez Alam",
-      link: "https://t.me-897893/kjalkdf",
-      tableData: [
-        {
-          date: "02/04/2024",
-          user: "7897233234",
-          amount: 1000,
-          ra: "Kishan Pal Singh",
-          subscription: "Service",
-        },
-        {
-          date: "01/04/2024",
-          user: "7987897973",
-          amount: 1000,
-          ra: "Subhash Pal Singh",
-          subscription: "Service",
-        },
-      ],
-    },
-    // Add more AP data as needed
-  ];
-
   const navigate = useNavigate();
+  const [apData, setApData] = useState(null);
 
-  // Find the AP data based on the provided apName parameter
-  const selectedAP = apData.find((ap) => ap.name === apName);
+  useEffect(() => {
+    fetchAPData();
+  }, [apName]);
+
+  const fetchAPData = async () => {
+    try {
+      const response = await fetch(
+        `https://copartners.in:5133/api/APDashboard/GetDashboardAPListingData/${apName}`
+      );
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+      setApData(data.data);
+    } catch (error) {
+      console.error("Fetching error:", error);
+      toast.error(`Failed to fetch AP data: ${error.message}`);
+    }
+  };
 
   return (
     <div className="dashboard-container p-0 sm:ml-60">
@@ -79,14 +53,14 @@ const APPage = () => {
       </div>
 
       {/* Display AP details */}
-      {selectedAP ? (
+      {apData ? (
         <div className="requestContainer mx-5 bg-[#fff]">
           <div className="requestHeading flex justify-between items-center text-2xl font-bold p-4">
-            <h2 className="pl-3 text-xl font-semibold">{selectedAP.name}</h2>
+            <h2 className="pl-3 text-xl font-semibold">{apData[0]?.apName}</h2>
             <div className="channelOptions flex place-content-between px-6">
               <div className="chatLinks flex">
                 <h3 className="mr-2 channel-heads text-lg">Link:</h3>
-                <p className="text-lg">{selectedAP.link}</p>
+                <p className="text-lg">{apData[0]?.referralLink || "N/A"}</p>
               </div>
             </div>
           </div>
@@ -104,14 +78,18 @@ const APPage = () => {
                 </tr>
               </thead>
               <tbody>
-                {selectedAP.tableData.map((data, index) => (
+                {apData.map((data, index) => (
                   <tr key={index} className="request-numbers font-semibold">
-                    <td className="p-3">{data.date}</td>
                     <td className="p-3">
-                      <Link to={`/${apName}/${data.user}`}>{data.user}</Link>
+                      {new Date(data.date).toLocaleDateString()}
+                    </td>
+                    <td className="p-3">
+                      <Link to={`/${apName}/${data.userMobileNo}`}>
+                        {data.userMobileNo}
+                      </Link>
                     </td>
                     <td className="p-3 text-center">{data.amount}</td>
-                    <td className="p-3 text-center">{data.ra}</td>
+                    <td className="p-3 text-center">{data.raName}</td>
                     <td className="p-3 text-center">{data.subscription}</td>
                   </tr>
                 ))}

@@ -25,7 +25,6 @@ const Dashboard = () => {
         throw new Error("Failed to fetch data");
       }
       const jsonData = await response.json();
-      console.log(jsonData.data)
       setData(jsonData.data);
     } catch (error) {
       toast.error("Failed to fetch data", {

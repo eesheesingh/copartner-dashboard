@@ -1,15 +1,16 @@
 import { MenuItem, TextField } from "@mui/material";
 import React, { useState, useEffect } from "react";
 import close from "../../assets/close.png";
+import { toast } from "react-toastify";
 
-const AgencyPopup = ({ onClose, selectedAgency, onSubmit }) => {
+const AgencyPopup = ({ onClose, selectedAgency, onSubmit, agencyId }) => {
   const [RAName, setRAName] = useState("");
   const [link, setLink] = useState("");
   const [RAList, setRAList] = useState([]);
 
   useEffect(() => {
     if (selectedAgency) {
-      setRAName(selectedAgency.agencyName);
+      setRAName(selectedAgency.expertsId);
       setLink(selectedAgency.link);
     } else {
       setRAName("");
@@ -25,7 +26,6 @@ const AgencyPopup = ({ onClose, selectedAgency, onSubmit }) => {
           throw new Error('Failed to fetch RA list');
         }
         const data = await response.json();
-        console.log(data)
         setRAList(data.data);
       } catch (error) {
         console.error('Error fetching RA list:', error);
@@ -35,7 +35,7 @@ const AgencyPopup = ({ onClose, selectedAgency, onSubmit }) => {
     fetchRAList();
   }, []);
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
     if (!RAName.trim() || !link.trim()) {
@@ -43,17 +43,43 @@ const AgencyPopup = ({ onClose, selectedAgency, onSubmit }) => {
       return;
     }
 
-    const formData = { name: RAName, link };
+    const formData = {
+      advertisingAgencyId: agencyId,
+      expertsId: RAName,
+      link: link,
+      isActive: true,
+    };
 
-    if (selectedAgency) {
-      onSubmit(selectedAgency.id, formData);
-    } else {
-      onSubmit(formData);
+    const url = selectedAgency
+      ? `https://copartners.in:5134/api/ExpertsAdvertisingAgency/${selectedAgency.advertisingAgencyId}`
+      : `https://copartners.in:5134/api/ExpertsAdvertisingAgency`;
+
+    const method = selectedAgency ? "PUT" : "POST";
+
+    try {
+      const response = await fetch(url, {
+        method: method,
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(formData)
+      });
+
+      console.log(formData)
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      console.log(data.data)
+      toast.success(`Agency ${selectedAgency ? 'updated' : 'added'} successfully!`);
+      onSubmit();
+      onClose();
+    } catch (error) {
+      console.error("Error submitting form:", error);
+      toast.error(`Failed to ${selectedAgency ? 'update' : 'add'} agency: ${error.message}`);
     }
-
-    setRAName("");
-    setLink("");
-    onClose();
   };
 
   return (
@@ -80,7 +106,7 @@ const AgencyPopup = ({ onClose, selectedAgency, onSubmit }) => {
               required
             >
               {RAList.map((ra) => (
-                <MenuItem key={ra.id} value={ra.name}>
+                <MenuItem key={ra.id} value={ra.id}>
                   {ra.name}
                 </MenuItem>
               ))}

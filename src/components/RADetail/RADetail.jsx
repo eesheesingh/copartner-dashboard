@@ -29,7 +29,7 @@ const RADetail = () => {
   const fetchData = async () => {
     try {
       const response = await fetch(
-        `https://copartners.in:5132/api/RADashboard/DashboardRADetails?isCoPartner=true&page=1&pageSize=10`
+        `https://copartners.in:5132/api/RADashboard/DashboardRADetails?isCoPartner=true`
       );
       if (!response.ok) {
         throw new Error("Failed to fetch data");
@@ -67,30 +67,37 @@ const RADetail = () => {
   }, []);
 
   const handleSave = useCallback(
-    (item) => {
+    async (item) => {
       if (popup.mode === "view") {
         handleClosePopup();
         return;
       }
 
-      const newData =
-        popup.mode === "edit"
-          ? data.map((dataItem) =>
-              dataItem.id === item.id ? { ...dataItem, ...item } : dataItem
-            )
-          : [
-              ...data,
-              {
-                ...item,
-                id:
-                  data.length > 0 ? Math.max(...data.map((d) => d.id)) + 1 : 1,
-              },
-            ];
+      const url = popup.mode === "add"
+        ? "https://copartners.in:5132/api/Experts"
+        : `https://copartners.in:5132/api/Experts/${item.id}`;
+      const method = popup.mode === "add" ? "POST" : "PUT";
 
-      setData(newData);
+      try {
+        const response = await fetch(url, {
+          method,
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(item),
+        });
+
+        if (!response.ok) {
+          throw new Error("Failed to save data");
+        }
+        fetchData();
+        toast.success("Data saved successfully");
+      } catch (error) {
+        console.error("Error saving data:", error);
+        toast.error("Failed to save data");
+      }
+
       handleClosePopup();
     },
-    [data, popup.mode]
+    [data, popup.mode, handleClosePopup]
   );
 
   const handleButtonClick = (buttonId) => {
@@ -167,13 +174,13 @@ const RADetail = () => {
                         <td className="text-green-600 flex justify-center items-center gap-6">
                           <button
                             onClick={() => handleOpenPopup(item, "edit")}
-                            aria-label={`Edit ${item.RAName}`}
+                            aria-label={`Edit ${item.name}`}
                           >
                             <FaPen className="text-blue-600" />
                           </button>
                           <button
                             onClick={() => handleOpenPopup(item, "view")}
-                            aria-label={`View ${item.RAName}`}
+                            aria-label={`View ${item.name}`}
                           >
                             <IoEyeSharp className=" text-blue-500 text-xl" />
                           </button>
