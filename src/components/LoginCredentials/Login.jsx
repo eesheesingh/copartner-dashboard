@@ -4,25 +4,15 @@ import PageHeader from "../Header/Header";
 import SubAdmin from "./SubAdmin";
 import RaAdmin from "./RaAdmin";
 import ApAdmin from "./ApAdmin";
-import LoginPopup from "./LoginPopup";
 
 const Login = () => {
   const [activeButton, setActiveButton] = useState("Sub-Admin");
   const [hasNotification, setHasNotification] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
-  const [isPopupOpen, setIsPopupOpen] = useState(false);
 
   const handleButtonClick = (buttonId) => {
     setActiveButton(buttonId);
   };
-
-  const openSubAdmin = () => {
-    setIsPopupOpen(true);
-  };
-
-  const closeLogin = () => {
-    setIsPopupOpen(false);
-  }
 
   return (
     <div className="dashboard-container p-0 sm:ml-60">
@@ -65,43 +55,13 @@ const Login = () => {
         <div className="dashboard-view-section mb-4">
           <div className="table-list-mb">
             {activeButton === "Sub-Admin" && (
-              <SubAdmin
-              openSubAdmin={openSubAdmin}  
-              data={[
-                  { name: "Vinit", email: "vinit@gmail.com" },
-                ]}
-                activeButton={activeButton}
-              />
+              <SubAdmin activeButton={activeButton} />
             )}
-            {activeButton === "R.A" && (
-              <RaAdmin
-              openSubAdmin={openSubAdmin}  
-              data={[
-                  {
-                    name: "Anuj Kumar",
-                    email: "Anuj@gmail.com",
-                  },
-                  // Add more data objects as needed
-                ]}
-                activeButton={activeButton}
-              />
-            )}
-            {activeButton === "A.P" && (
-              <ApAdmin
-              openSubAdmin={openSubAdmin}  
-              data={[
-                  {
-                    name: "Anuj Kumar",
-                    email: "Anuj@gmail.com",
-                  },
-                ]}
-                activeButton={activeButton}
-              />
-            )}
+            {activeButton === "R.A" && <RaAdmin activeButton={activeButton} />}
+            {activeButton === "A.P" && <ApAdmin activeButton={activeButton} />}
           </div>
         </div>
       </div>
-      {isPopupOpen && <LoginPopup title={activeButton} closeLogin={closeLogin}  />}
       <ToastContainer />
     </div>
   );

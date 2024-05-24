@@ -8,6 +8,7 @@ import AddPopup from "./AddPopup";
 const Listing = ({ activeButton }) => {
   const [data, setData] = useState([]);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [selectedManager, setSelectedManager] = useState(null);
 
   const fetchData = async () => {
     try {
@@ -31,6 +32,12 @@ const Listing = ({ activeButton }) => {
   }, []);
 
   const handleAddClick = () => {
+    setSelectedManager(null);
+    setIsPopupOpen(true);
+  };
+
+  const handleEditClick = (manager) => {
+    setSelectedManager(manager);
     setIsPopupOpen(true);
   };
 
@@ -93,7 +100,7 @@ const Listing = ({ activeButton }) => {
             {data.map((item) => (
               <tr key={item.id}>
                 <td style={{ textAlign: "left", paddingLeft: "2rem" }}>
-                  {new Date(item.date).toLocaleDateString()}
+                  {new Date(item.createdOn).toLocaleDateString()}
                 </td>
                 <td style={{ textAlign: "left" }}>{item.name}</td>
                 <td>{item.mobile}</td>
@@ -103,7 +110,10 @@ const Listing = ({ activeButton }) => {
                   </button>
                 </td>
                 <td className="flex justify-center items-center gap-6">
-                  <FaPen className="text-blue-600 cursor-pointer" />
+                  <FaPen
+                    className="text-blue-600 cursor-pointer"
+                    onClick={() => handleEditClick(item)}
+                  />
                   <img
                     className="w-6 h-6 cursor-pointer"
                     src={Bin}
@@ -117,7 +127,11 @@ const Listing = ({ activeButton }) => {
         </table>
       </div>
       {isPopupOpen && (
-        <AddPopup onClose={handleClosePopup} onSave={handleSave} />
+        <AddPopup
+          onClose={handleClosePopup}
+          onSave={handleSave}
+          initialData={selectedManager}
+        />
       )}
     </>
   );

@@ -1,13 +1,78 @@
-import React from "react";
-import { FaPen } from "react-icons/fa";
+import React, { useState, useEffect } from "react";
 import Bin from "../../assets/TrashBinMinimalistic.png";
+import AssignAP from "./AssignAP";
+import { toast } from "react-toastify";
 
-const WithAP = ({ activeButton, data }) => {
+const WithAP = ({ activeButton }) => {
+  const [data, setData] = useState([]);
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
+
+  const fetchData = async () => {
+    try {
+      const response = await fetch(
+        "https://copartners.in:5134/api/RelationshipManager/GetByUserId?UserType=AP"
+      );
+      const result = await response.json();
+      if (result.isSuccess) {
+        const filteredData = result.data.filter(
+          (item) => item.affiliatePartners !== null
+        );
+        setData(filteredData);
+      } else {
+        throw new Error("Failed to fetch data");
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      toast.error("Failed to fetch affiliate partners");
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const handleAddClick = () => {
+    setIsPopupOpen(true);
+  };
+
+  const handleClosePopup = () => {
+    setIsPopupOpen(false);
+  };
+
+  const handleSave = () => {
+    fetchData();
+    setIsPopupOpen(false);
+  };
+
+  const handleDelete = async (id) => {
+    try {
+      const response = await fetch(
+        `https://copartners.in:5134/api/RelationshipManager/${id}`,
+        {
+          method: "DELETE",
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to delete relationship manager");
+      }
+
+      toast.success("Relationship manager deleted successfully!");
+      fetchData(); // Refetch data to update the list
+    } catch (error) {
+      console.error("Error deleting data:", error);
+      toast.error("Failed to delete relationship manager");
+    }
+  };
+
   return (
     <>
       <div className="channel-heading flex">
         <h3 className="text-xl font-semibold mr-auto">{activeButton}</h3>
-        <button className=" border-2 border-black rounded-lg px-4 py-1 mr-4">
+        <button
+          className="border-2 border-black rounded-lg px-4 py-1 mr-4"
+          onClick={handleAddClick}
+        >
           + Add Relationship
         </button>
       </div>
@@ -25,16 +90,18 @@ const WithAP = ({ activeButton, data }) => {
             {data.map((item, index) => (
               <tr key={index}>
                 <td style={{ textAlign: "left", paddingLeft: "2rem" }}>
-                  {item.date}
+                  {new Date(item.createdOn).toLocaleDateString()}
                 </td>
-                <td style={{ textAlign: "left" }}>{item.apName}</td>
-                <td>{item.relationManagement}</td>
+                <td style={{ textAlign: "left" }}>
+                  {item.affiliatePartners.name}
+                </td>
+                <td>{item.name}</td>
                 <td className="flex justify-center items-center gap-6">
-                  <FaPen className="text-blue-600 cursor-pointer" />
                   <img
                     className="w-6 h-6 cursor-pointer"
                     src={Bin}
                     alt="Delete"
+                    onClick={() => handleDelete(item.id)}
                   />
                 </td>
               </tr>
@@ -42,6 +109,9 @@ const WithAP = ({ activeButton, data }) => {
           </tbody>
         </table>
       </div>
+      {isPopupOpen && (
+        <AssignAP onClose={handleClosePopup} onSave={handleSave} />
+      )}
     </>
   );
 };

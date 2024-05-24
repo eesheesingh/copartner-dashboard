@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { TextField, Button } from "@mui/material";
 import closeIcon from "../../assets/close.png";
 import { toast } from "react-toastify";
 
-const AddPopup = ({ onClose, onSave }) => {
+const AddPopup = ({ onClose, onSave, initialData }) => {
   const [formData, setFormData] = useState({
     image: null,
     name: "",
@@ -11,6 +11,18 @@ const AddPopup = ({ onClose, onSave }) => {
     document: null,
     mobile: "",
   });
+
+  useEffect(() => {
+    if (initialData) {
+      setFormData({
+        image: initialData.imagePath,
+        name: initialData.name,
+        email: initialData.email,
+        document: initialData.documentPath,
+        mobile: initialData.mobile,
+      });
+    }
+  }, [initialData]);
 
   const handleFileChange = (e) => {
     const { id, files } = e.target;
@@ -52,8 +64,8 @@ const AddPopup = ({ onClose, onSave }) => {
     e.preventDefault();
 
     try {
-      const imageUrl = await uploadFile(formData.image, "Images");
-      const documentUrl = await uploadFile(formData.document, "Images");
+      const imageUrl = formData.image instanceof File ? await uploadFile(formData.image, "Images") : formData.image;
+      const documentUrl = formData.document instanceof File ? await uploadFile(formData.document, "Documents") : formData.document;
 
       const newManager = {
         imagePath: imageUrl,
@@ -63,8 +75,14 @@ const AddPopup = ({ onClose, onSave }) => {
         mobile: formData.mobile,
       };
 
-      const saveResponse = await fetch("https://copartners.in:5134/api/RelationshipManager", {
-        method: "POST",
+      const requestUrl = initialData
+        ? `https://copartners.in:5134/api/RelationshipManager/${initialData.id}`
+        : "https://copartners.in:5134/api/RelationshipManager";
+
+      const requestMethod = initialData ? "PUT" : "POST";
+
+      const saveResponse = await fetch(requestUrl, {
+        method: requestMethod,
         headers: {
           "Content-Type": "application/json",
         },
@@ -75,27 +93,27 @@ const AddPopup = ({ onClose, onSave }) => {
         throw new Error("Failed to save relationship manager");
       }
 
-      const result = await saveResponse.json();
-      console.log(result)
       onSave();
-      toast.success("Relationship manager added successfully!");
+      toast.success(`Relationship manager ${initialData ? "updated" : "added"} successfully!`);
       onClose();
     } catch (error) {
       console.error("Error saving data:", error);
-      toast.error("Failed to save relationship manager");
+      toast.error(`Failed to ${initialData ? "update" : "add"} relationship manager`);
     }
   };
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-      <div className="popup bg-white border-1 border-[#ffffff2a] m-4 rounded-lg w-3/4 text-center">
+      <div className="popup bg-white border-1 border-[#ffffff2a] m-4 rounded-lg w-3/4 text-left">
         <div className="bg-[#dddddd] px-4 py-2 rounded-t-lg flex justify-between">
-          <h2 className="text-left font-semibold text-2xl">Add Relationship Manager</h2>
+          <h2 className="text-left font-semibold text-2xl">
+            {initialData ? "Edit" : "Add"} Relationship Manager
+          </h2>
           <button onClick={onClose}>
             <img className="w-8 h-8 mr-4" src={closeIcon} alt="Close" />
           </button>
         </div>
-        <form onSubmit={handleSubmit} className="px-12 py-4 grid grid-cols-2 text-center gap-8">
+        <form onSubmit={handleSubmit} className="px-12 py-4 grid grid-cols-2 text-left gap-8">
           <div className="flex flex-col gap-4">
             <label htmlFor="image">Upload Image</label>
             <input
@@ -103,8 +121,9 @@ const AddPopup = ({ onClose, onSave }) => {
               id="image"
               accept="image/*"
               onChange={handleFileChange}
-              required
+              required={!initialData}
             />
+            {formData.image && <a className="text-blue-500 underline" target="_blank" rel="noreferrer" href={formData.image}>View Image</a>}
             <TextField
               id="name"
               label="Name"
@@ -131,8 +150,9 @@ const AddPopup = ({ onClose, onSave }) => {
               id="document"
               accept="application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
               onChange={handleFileChange}
-              required
+              required={!initialData}
             />
+            {formData.document && <a className="text-blue-500 underline" target="_blank" rel="noreferrer" href={formData.document}>View Document</a>}
             <TextField
               id="mobile"
               label="Mobile Number"
@@ -145,7 +165,7 @@ const AddPopup = ({ onClose, onSave }) => {
           </div>
           <div className="col-span-2 flex justify-center">
             <Button type="submit" variant="contained" color="primary">
-              Add
+              {initialData ? "Save Changes" : "Add"}
             </Button>
           </div>
         </form>

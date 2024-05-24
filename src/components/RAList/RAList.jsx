@@ -20,7 +20,6 @@ const RAList = () => {
           throw new Error("Failed to fetch data");
         }
         const data = await response.json();
-        console.log(data.data)
         setSelectedRA(data.data);
       } catch (error) {
         toast.error("Error fetching RA data:", error);

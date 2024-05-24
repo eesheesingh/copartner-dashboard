@@ -1,13 +1,71 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { FaPen } from "react-icons/fa";
 import Bin from "../../assets/TrashBinMinimalistic.png";
+import { toast } from "react-toastify";
+import AddSubAdmin from "./AddSubAdmin";
 
-const Listing = ({ activeButton, data, openSubAdmin }) => {
+const SubAdmin = ({ activeButton }) => {
+  const [data, setData] = useState([]);
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
+
+  const fetchData = async () => {
+    try {
+      const response = await fetch(
+        "https://copartners.in:5130/api/Users?userType=SA"
+      );
+      const result = await response.json();
+      if (result.isSuccess) {
+        setData(result.data);
+      } else {
+        throw new Error("Failed to fetch data");
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      toast.error("Failed to fetch sub-admin data");
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const handleAddClick = () => {
+    setIsPopupOpen(true);
+  };
+
+  const handleClosePopup = () => {
+    setIsPopupOpen(false);
+  };
+
+  const handleSave = () => {
+    fetchData();
+    setIsPopupOpen(false);
+  };
+
+  const handleDelete = async (id) => {
+    try {
+      const response = await fetch(
+        `https://copartners.in:5130/api/Users/${id}`,
+        {
+          method: "DELETE",
+        }
+      );
+      toast.success("Sub-admin deleted successfully!");
+      fetchData(); // Refetch data to update the list
+    } catch (error) {
+      console.error("Error deleting data:", error);
+      toast.error("Failed to delete sub-admin");
+    }
+  };
+
   return (
     <>
       <div className="channel-heading flex">
         <h3 className="text-xl font-semibold mr-auto">{activeButton}</h3>
-        <button onClick={openSubAdmin} className="border-2 border-black rounded-lg px-4 py-1 mr-4">
+        <button
+          className="border-2 border-black rounded-lg px-4 py-1 mr-4"
+          onClick={handleAddClick}
+        >
           + Add
         </button>
       </div>
@@ -17,7 +75,6 @@ const Listing = ({ activeButton, data, openSubAdmin }) => {
             <tr>
               <th style={{ textAlign: "left", paddingLeft: "2rem" }}>Name</th>
               <th style={{ textAlign: "left" }}>Email</th>
-              <th>Password</th>
               <th>Action</th>
             </tr>
           </thead>
@@ -28,13 +85,12 @@ const Listing = ({ activeButton, data, openSubAdmin }) => {
                   {item.name}
                 </td>
                 <td style={{ textAlign: "left" }}>{item.email}</td>
-                <td>{item.password}</td>
                 <td className="flex justify-center items-center gap-6">
-                  <FaPen className="text-blue-600 cursor-pointer" />
                   <img
                     className="w-6 h-6 cursor-pointer"
                     src={Bin}
                     alt="Delete"
+                    onClick={() => handleDelete(item.id)}
                   />
                 </td>
               </tr>
@@ -42,8 +98,11 @@ const Listing = ({ activeButton, data, openSubAdmin }) => {
           </tbody>
         </table>
       </div>
+      {isPopupOpen && (
+        <AddSubAdmin onClose={handleClosePopup} onSave={handleSave} />
+      )}
     </>
   );
 };
 
-export default Listing;
+export default SubAdmin;

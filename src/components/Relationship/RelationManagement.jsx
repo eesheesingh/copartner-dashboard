@@ -55,12 +55,7 @@ const RelationManagement = () => {
         <div className="dashboard-view-section mb-4">
           <div className="table-list-mb">
             {activeButton === "Listing" && (
-              <Listing
-                data={[
-                  { date: "01/04/2024", name: "Vinit", number: "9798723498" },
-                ]}
-                activeButton={activeButton}
-              />
+              <Listing activeButton={activeButton} />
             )}
             {activeButton === "With R.A" && (
               <WithRA

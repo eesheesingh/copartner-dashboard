@@ -42,7 +42,6 @@ const AgencyList = () => {
 
   const handleDeleteAgency = async (id) => {
     try {
-      console.log(id);
       const response = await fetch(
         `https://copartners.in:5134/api/AdvertisingAgency/${id}`,
         {

@@ -7,6 +7,7 @@ const AgencyPopup = ({ onClose, selectedAgency, onSubmit, agencyId }) => {
   const [RAName, setRAName] = useState("");
   const [link, setLink] = useState("");
   const [RAList, setRAList] = useState([]);
+  console.log(selectedAgency)
 
   useEffect(() => {
     if (selectedAgency) {
@@ -51,7 +52,7 @@ const AgencyPopup = ({ onClose, selectedAgency, onSubmit, agencyId }) => {
     };
 
     const url = selectedAgency
-      ? `https://copartners.in:5134/api/ExpertsAdvertisingAgency/${selectedAgency.advertisingAgencyId}`
+      ? `https://copartners.in:5134/api/ExpertsAdvertisingAgency/${selectedAgency.id}`
       : `https://copartners.in:5134/api/ExpertsAdvertisingAgency`;
 
     const method = selectedAgency ? "PUT" : "POST";
@@ -70,9 +71,6 @@ const AgencyPopup = ({ onClose, selectedAgency, onSubmit, agencyId }) => {
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-
-      const data = await response.json();
-      console.log(data.data)
       toast.success(`Agency ${selectedAgency ? 'updated' : 'added'} successfully!`);
       onSubmit();
       onClose();

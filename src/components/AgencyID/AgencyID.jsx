@@ -44,8 +44,8 @@ const AgencyID = () => {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
+      fetchAgency();
       toast.success('Agency deleted successfully!');
-      fetchAgency(); // Refetch the agency list
     } catch (error) {
       console.error("Deleting error:", error);
       toast.error(`Failed to delete agency: ${error.message}`);
