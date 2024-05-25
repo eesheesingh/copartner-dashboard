@@ -14,8 +14,8 @@ const Sidebar = () => {
   const location = useLocation();
 
   const Logout = () => {
-    // sessionStorage.removeItem("chatId");
-    // navigate("/login");
+    sessionStorage.removeItem("creds");
+    window.location.reload();
   };
 
   const toggleSidebar = () => {

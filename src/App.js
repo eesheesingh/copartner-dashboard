@@ -7,6 +7,7 @@ import {
   RouterProvider,
   createBrowserRouter,
   createRoutesFromElements,
+  Navigate,
 } from "react-router-dom";
 import ErrorPage from "./components/ErrorPage/ErrorPage";
 import UserDetail from "./components/UserDetail/UserDetail";
@@ -30,33 +31,39 @@ import Login from "./components/LoginCredentials/Login";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import RAUserData from "./components/RAUserData/RAUserData";
+import Signup from "./components/Signup/Signup";
 
 const App = () => {
+  const token = sessionStorage.getItem("creds");
+  
   const router = createBrowserRouter(
     createRoutesFromElements(
-      <Route path="/" element={<Sidebar />} errorElement={<ErrorPage />}>
-        <Route path="" element={<Dashboard />} />
-        <Route path="r.a" element={<RAPage />} />
-        <Route path=":apName" element={<APPage />} />
-        <Route path=":apName/:apId" element={<UserDetail />} />
-        <Route path="r.a/:raId" element={<RAList />} />
-        <Route path="blogs" element={<Blog />} />
-        <Route path="radetails" element={<RADetail />} />
-        <Route path="apdetails" element={<APDetail />} />
-        <Route path="apdetails/:apName" element={<APList />} />
-        <Route path="agencylist" element={<AgencyList />} />
-        <Route path="agencylist/:agencyId" element={<AgencyID />} />
-        <Route path="transaction" element={<Transaction />} />
-        <Route path="transaction/:transactionId" element={<TransactionID />} />
-        <Route path="marketingcontent" element={<MarketingContent />} />
-        <Route path="userdata" element={<UserData />} />
-        <Route path="relationship" element={<RelationManagement />} />
-        <Route path="sub-admin" element={<SubAdmin />} />
-        <Route path="sub-admin/access" element={<Access />} />
-        <Route path="join" element={<Join />} />
-        <Route path="login" element={<Login />} />
-        <Route path="rauserdata" element={<RAUserData />} />
-      </Route>
+      <>
+        <Route path="/" element={token ? <Sidebar /> : <Navigate to="/signup" />} errorElement={<ErrorPage />}>
+          <Route path="" element={<Dashboard />} />
+          <Route path="r.a" element={<RAPage />} />
+          <Route path=":apName" element={<APPage />} />
+          <Route path=":apName/:apId" element={<UserDetail />} />
+          <Route path="r.a/:raId" element={<RAList />} />
+          <Route path="blogs" element={<Blog />} />
+          <Route path="radetails" element={<RADetail />} />
+          <Route path="apdetails" element={<APDetail />} />
+          <Route path="apdetails/:apName" element={<APList />} />
+          <Route path="agencylist" element={<AgencyList />} />
+          <Route path="agencylist/:agencyId" element={<AgencyID />} />
+          <Route path="transaction" element={<Transaction />} />
+          <Route path="transaction/:transactionId" element={<TransactionID />} />
+          <Route path="marketingcontent" element={<MarketingContent />} />
+          <Route path="userdata" element={<UserData />} />
+          <Route path="relationship" element={<RelationManagement />} />
+          <Route path="sub-admin" element={<SubAdmin />} />
+          <Route path="sub-admin/access" element={<Access />} />
+          <Route path="join" element={<Join />} />
+          <Route path="login" element={<Login />} />
+          <Route path="rauserdata" element={<RAUserData />} />
+        </Route>
+        <Route path="signup" element={<Signup />} />
+      </>
     )
   );
 
