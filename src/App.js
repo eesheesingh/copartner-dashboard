@@ -29,6 +29,7 @@ import TransactionID from "./components/Transaction/TransactionID";
 import Login from "./components/LoginCredentials/Login";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import RAUserData from "./components/RAUserData/RAUserData";
 
 const App = () => {
   const router = createBrowserRouter(
@@ -54,6 +55,7 @@ const App = () => {
         <Route path="sub-admin/access" element={<Access />} />
         <Route path="join" element={<Join />} />
         <Route path="login" element={<Login />} />
+        <Route path="rauserdata" element={<RAUserData />} />
       </Route>
     )
   );

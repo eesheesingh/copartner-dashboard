@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import PageHeader from "../Header/Header";
 import "./Blog.css";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import { FaPen } from "react-icons/fa";
 import Bin from "../../assets/TrashBinMinimalistic.png";
 import BlogPage from "../BlogPage/BlogPage";
+import "react-toastify/dist/ReactToastify.css";
 
 const Blog = () => {
   const [hasNotification, setHasNotification] = useState(true);
@@ -38,12 +39,9 @@ const Blog = () => {
 
   const handleDelete = async (id) => {
     try {
-      const response = await fetch(
-        `https://copartners.in:5134/api/Blogs/${id}`,
-        {
-          method: "DELETE",
-        }
-      );
+      const response = await fetch(`https://copartners.in:5134/api/Blogs/${id}`, {
+        method: "DELETE",
+      });
 
       if (!response.ok) {
         throw new Error("Failed to delete blog");
@@ -53,25 +51,16 @@ const Blog = () => {
       fetchBlogs();
     } catch (error) {
       console.error("Error deleting blog:", error);
+      toast.error("Failed to delete blog");
     }
   };
 
-  const handleAddEditBlog = (blogData, id) => {
-    if (id) {
-      setBlogs(
-        blogs.map((blog) => (blog.id === id ? { ...blog, ...blogData } : blog))
-      );
-      toast.success("Blog updated successfully!");
-    } else {
-      const newBlog = {
-        ...blogData,
-        id: blogs.length + 1, // Simple increment for ID, replace with better ID generation in production
-        date: new Date().toISOString().split("T")[0], // Current date
-      };
-      setBlogs([...blogs, newBlog]);
-      toast.success("Blog added successfully!");
+  const handleAddEditBlog = async (responseData) => {
+    if (!responseData.isSuccess) {
+      throw new Error(`Failed to ${editBlog ? "update" : "add"} blog`)
     }
-    handleClosePopup();
+    toast.success(`Blog ${editBlog ? "updated" : "added"} successfully`);
+    fetchBlogs();
   };
 
   const openAddBlog = () => {
@@ -120,12 +109,9 @@ const Blog = () => {
                   {blogs.map((blog) => (
                     <tr key={blog.id} className="even:bg-gray-100 odd:bg-white">
                       <td style={{ textAlign: "left", paddingLeft: "2rem" }}>
-                        {/* {blog.date} */}
+                        {new Date(blog.createdOn).toLocaleDateString()}
                       </td>
-                      <td
-                        style={{ textAlign: "left" }}
-                        className="text-blue-600"
-                      >
+                      <td style={{ textAlign: "left" }} className="text-blue-600">
                         {blog.title}
                       </td>
                       <td className="flex justify-center items-center gap-6">
@@ -155,7 +141,6 @@ const Blog = () => {
           onSubmit={handleAddEditBlog}
         />
       )}
-      <ToastContainer />
     </div>
   );
 };

@@ -12,7 +12,6 @@ const AgencyID = () => {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [selectedAgency, setSelectedAgency] = useState(null);
   const [agencies, setAgencies] = useState([]);
-  console.log(agencies)
 
   useEffect(() => {
     fetchAgency();

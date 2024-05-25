@@ -3,18 +3,20 @@ import { TextField } from "@mui/material";
 import "react-toastify/dist/ReactToastify.css";
 import close from "../../assets/close.png";
 import select from "../../assets/+ Add Currency.png";
+import { toast } from "react-toastify";
 
 function BlogPage({ onClose, blog = null, onSubmit }) {
   const [blogTitle, setBlogTitle] = useState("");
   const [blogDescription, setBlogDescription] = useState("");
   const [selectedImage, setSelectedImage] = useState(null);
+  const [imageUrl, setImageUrl] = useState("");
 
   // Set initial data if editing an existing blog
   useEffect(() => {
     if (blog) {
       setBlogTitle(blog.title);
       setBlogDescription(blog.description);
-      setSelectedImage(blog.image);
+      setImageUrl(blog.blogImagePath);
     }
   }, [blog]);
 
@@ -27,54 +29,70 @@ function BlogPage({ onClose, blog = null, onSubmit }) {
   const handleFormSubmit = async (event) => {
     event.preventDefault();
 
-    const formData = new FormData();
-    formData.append("title", blogTitle);
-    formData.append("description", blogDescription);
-    formData.append("blogImagePath", selectedImage);
-
     try {
+      let uploadedImageUrl = imageUrl;
+
+      if (selectedImage) {
+        const uploadResponse = await uploadImageToS3(selectedImage);
+        if (!uploadResponse.ok) {
+          throw new Error("Failed to upload image");
+        }
+        const uploadData = await uploadResponse.json();
+        uploadedImageUrl = uploadData.data.presignedUrl;
+      }
+
+      const blogData = {
+        title: blogTitle,
+        description: blogDescription,
+        blogImagePath: uploadedImageUrl,
+      };
+
       let response;
       if (blog) {
-        console.log(blog.id);
         response = await fetch(
           `https://copartners.in:5134/api/Blogs/${blog.id}`,
           {
             method: "PUT",
-            body: formData,
+            body: JSON.stringify(blogData),
             headers: {
-              "Content-Type": "application/json",
+              "Content-Type": "application/json-patch+json",
             },
           }
         );
-        console.log("update");
       } else {
         response = await fetch("https://copartners.in:5134/api/Blogs", {
           method: "POST",
-          body: formData,
-          // headers: {
-          //   "Content-Type": "application/json",
-          // },
+          body: JSON.stringify(blogData),
+          headers: {
+            "Content-Type": "application/json-patch+json",
+          },
         });
-        console.log("create new");
-      }
-
-      if (!response.ok) {
-        throw new Error("Failed to submit blog");
       }
 
       const responseData = await response.json();
-      console.log(responseData);
+      if (!responseData.isSuccess) {
+        throw new Error("Failed to submit blog");
+      }
+
       if (onSubmit) {
         onSubmit(responseData);
       }
 
-      setBlogTitle("");
-      setBlogDescription("");
-      setSelectedImage(null);
       onClose();
     } catch (error) {
+      toast.error("Error submitting blog");
       console.error("Error submitting blog:", error);
     }
+  };
+
+  const uploadImageToS3 = async (imageFile) => {
+    const formData = new FormData();
+    formData.append("file", imageFile);
+
+    return fetch("https://copartners.in:5134/api/AWSStorage?prefix=Images", {
+      method: "POST",
+      body: formData,
+    });
   };
 
   const handleSelectImageClick = () => {
@@ -96,8 +114,14 @@ function BlogPage({ onClose, blog = null, onSubmit }) {
           <div className="flex flex-col gap-4">
             <label htmlFor="image-upload">Upload Title Image</label>
             <img
-              className={`w-96 ${selectedImage && 'h-56'} cursor-pointer`}
-              src={selectedImage ? URL.createObjectURL(selectedImage) : select}
+              className={`w-96 ${
+                imageUrl || selectedImage ? "h-56" : ""
+              } cursor-pointer`}
+              src={
+                selectedImage
+                  ? URL.createObjectURL(selectedImage)
+                  : imageUrl || select
+              }
               alt="Select"
               onClick={handleSelectImageClick}
             />
