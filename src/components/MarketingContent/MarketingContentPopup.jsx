@@ -6,6 +6,7 @@ import select from "../../assets/+ Add Currency.png";
 import { toast } from "react-toastify";
 
 function MarketingContentPopup({ onClose, contentType, onSave, content }) {
+  const [loading, setLoading] = useState(false)
   const [inputLabel, setInputLabel] = useState("");
   const [contentName, setContentName] = useState("");
   const [selectedFile, setSelectedFile] = useState(null);
@@ -33,6 +34,7 @@ function MarketingContentPopup({ onClose, contentType, onSave, content }) {
 
     if (selectedFile) {
       try {
+        setLoading(true);
         const formData = new FormData();
         formData.append("file", selectedFile, selectedFile.name);
 
@@ -53,6 +55,8 @@ function MarketingContentPopup({ onClose, contentType, onSave, content }) {
         console.error("Error uploading file:", error);
         toast.error(`Failed to upload ${contentType.toLowerCase()}`);
         return;
+      } finally {
+        setLoading(false)
       }
     }
 
@@ -160,10 +164,11 @@ function MarketingContentPopup({ onClose, contentType, onSave, content }) {
           </div>
         </div>
         <button
-          className="px-12 bg-blue-500 text-white py-2 border-2 rounded-lg mb-8"
+          className={`px-12 ${loading ? "bg-blue-300" : "bg-blue-500"}  text-white py-2 border-2 rounded-lg mb-8`}
           onClick={handleSubmit}
+          disabled={loading}
         >
-          {content ? "Update" : "Add"}
+          {content ? loading ? "Updating" : "Update" : loading ? "Adding" : "Add"}
         </button>
       </div>
     </div>

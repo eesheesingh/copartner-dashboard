@@ -5,7 +5,6 @@ import "react-toastify/dist/ReactToastify.css";
 import close from "../../assets/close.png";
 
 function RAPopup({ onClose, onSave, mode, initialValues }) {
-  console.log(initialValues)
   const [currentMode, setCurrentMode] = useState(mode);
   const [copartnerChecked, setCopartnerChecked] = useState(true);
   const isViewMode = currentMode === "view";
@@ -136,6 +135,7 @@ function RAPopup({ onClose, onSave, mode, initialValues }) {
         },
         body: JSON.stringify(dataToSubmit),
       });
+      console.log(dataToSubmit);
 
       if (!response.ok) {
         throw new Error("Failed to save data");

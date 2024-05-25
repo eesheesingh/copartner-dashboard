@@ -1,13 +1,15 @@
-import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import RejectPopup from './RejectPopup';
-import AcceptPopup from './AcceptPopup';
-import { MenuItem, TextField } from '@mui/material';
-import { ToastContainer, toast } from 'react-toastify';
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import RejectPopup from "./RejectPopup";
+import AcceptPopup from "./AcceptPopup";
+import { MenuItem, TextField } from "@mui/material";
+import { ToastContainer, toast } from "react-toastify";
 
 const TransactionRA = () => {
-  const [acceptPopupOpenForTransaction, setAcceptPopupOpenForTransaction] = useState(null);
-  const [rejectPopupOpenForTransaction, setRejectPopupOpenForTransaction] = useState(null);
+  const [acceptPopupOpenForTransaction, setAcceptPopupOpenForTransaction] =
+    useState(null);
+  const [rejectPopupOpenForTransaction, setRejectPopupOpenForTransaction] =
+    useState(null);
   const [transactions, setTransactions] = useState([]);
 
   useEffect(() => {
@@ -16,14 +18,16 @@ const TransactionRA = () => {
 
   const fetchTransactions = async () => {
     try {
-      const response = await fetch('https://copartners.in:5135/api/Withdrawal?RequestBy=RA');
+      const response = await fetch(
+        "https://copartners.in:5135/api/Withdrawal?RequestBy=RA"
+      );
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       const data = await response.json();
       setTransactions(data.data);
     } catch (error) {
-      console.error('Fetching error:', error);
+      console.error("Fetching error:", error);
       toast.error(`Failed to fetch transactions: ${error.message}`);
     }
   };
@@ -33,7 +37,7 @@ const TransactionRA = () => {
   };
 
   const handleConfirmAccept = async (memberId, transactionId) => {
-    const transaction = transactions.find(t => t.id === memberId);
+    const transaction = transactions.find((t) => t.id === memberId);
     const requestBody = {
       withdrawalBy: transaction.withdrawalBy,
       amount: transaction.amount,
@@ -42,17 +46,20 @@ const TransactionRA = () => {
       requestAction: "A",
       transactionId: transactionId,
       transactionDate: "",
-      rejectReason: ""
+      rejectReason: "",
     };
 
     try {
-      const response = await fetch(`https://copartners.in:5135/api/Withdrawal/${memberId}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(requestBody)
-      });
+      const response = await fetch(
+        `https://copartners.in:5135/api/Withdrawal/${memberId}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(requestBody),
+        }
+      );
 
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
@@ -60,7 +67,7 @@ const TransactionRA = () => {
 
       toast.success("Transaction accepted successfully!");
     } catch (error) {
-      console.error('Error updating transaction:', error);
+      console.error("Error updating transaction:", error);
       toast.error(`Failed to accept transaction: ${error.message}`);
     }
 
@@ -72,7 +79,7 @@ const TransactionRA = () => {
   };
 
   const handleConfirmReject = async (memberId, rejectReason) => {
-    const transaction = transactions.find(t => t.id === memberId);
+    const transaction = transactions.find((t) => t.id === memberId);
     const requestBody = {
       withdrawalBy: transaction.withdrawalBy,
       amount: transaction.amount,
@@ -81,17 +88,20 @@ const TransactionRA = () => {
       requestAction: "R",
       transactionId: "",
       transactionDate: "",
-      rejectReason: rejectReason
+      rejectReason: rejectReason,
     };
 
     try {
-      const response = await fetch(`https://copartners.in:5135/api/Withdrawal/${memberId}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(requestBody)
-      });
+      const response = await fetch(
+        `https://copartners.in:5135/api/Withdrawal/${memberId}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(requestBody),
+        }
+      );
 
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
@@ -100,7 +110,7 @@ const TransactionRA = () => {
       toast.info("Transaction rejected successfully!");
       // Optionally update the local state or refetch transactions
     } catch (error) {
-      console.error('Error updating transaction:', error);
+      console.error("Error updating transaction:", error);
       toast.error(`Failed to reject transaction: ${error.message}`);
     }
 
@@ -117,9 +127,7 @@ const TransactionRA = () => {
           <table className="table-list">
             <thead>
               <tr>
-                <th style={{ textAlign: "left", paddingLeft: "2rem" }}>
-                  Date
-                </th>
+                <th style={{ textAlign: "left", paddingLeft: "2rem" }}>Date</th>
                 <th style={{ textAlign: "left" }}>R.A Name</th>
                 <th style={{ textAlign: "left" }}>SEBI No.</th>
                 <th>Amount</th>
@@ -130,19 +138,14 @@ const TransactionRA = () => {
               {transactions.map((member) => (
                 <tr key={member.id}>
                   <td style={{ textAlign: "left", paddingLeft: "2rem" }}>
-                    {new Date(member.withdrawalRequestDate).toLocaleDateString()}
+                    {new Date(
+                      member.withdrawalRequestDate
+                    ).toLocaleDateString()}
                   </td>
-                  <td
-                    style={{ textAlign: "left" }}
-                    className="text-blue-600"
-                  >
-                    <Link to={`${member.id}`}>
-                      {member.name}
-                    </Link>
+                  <td style={{ textAlign: "left" }} className="text-blue-600">
+                    <Link to={`${member.id}`}>{member.name}</Link>
                   </td>
-                  <td style={{ textAlign: "left" }}>
-                    {member.sebiNo}
-                  </td>
+                  <td style={{ textAlign: "left" }}>{member.sebiNo}</td>
                   <td>{member.amount}</td>
                   <td>
                     <TextField
@@ -152,38 +155,59 @@ const TransactionRA = () => {
                       id={`request-${member.id}`}
                       variant="outlined"
                       fullWidth
-                      value={member.request}
+                      value={
+                        member.requestAction === "A"
+                          ? "accept"
+                          : member.requestAction === "R"
+                          ? "reject"
+                          : member.request
+                      }
+                      disabled={
+                        member.requestAction === "A" ||
+                        member.requestAction === "R"
+                      }
                       onChange={(e) => {
-                        const updatedTransactions = transactions.map(
-                          (t) =>
-                            t.id === member.id
-                              ? { ...t, request: e.target.value }
-                              : t
+                        const updatedTransactions = transactions.map((t) =>
+                          t.id === member.id
+                            ? { ...t, request: e.target.value }
+                            : t
                         );
                         setTransactions(updatedTransactions);
                       }}
                     >
-                      <MenuItem onClick={() => handleAccept(member)} value="accept">
+                      <MenuItem
+                        onClick={() => handleAccept(member)}
+                        value="accept"
+                      >
                         Accept
                       </MenuItem>
-                      <MenuItem onClick={() => handleReject(member)} value="reject">
+                      <MenuItem
+                        onClick={() => handleReject(member)}
+                        value="reject"
+                      >
                         Reject
                       </MenuItem>
                     </TextField>
-                    {acceptPopupOpenForTransaction && acceptPopupOpenForTransaction.id === member.id && (
-                      <AcceptPopup
-                        memberId={member.id}
-                        onConfirm={(transactionId) => handleConfirmAccept(member.id, transactionId)}
-                        onClose={() => setAcceptPopupOpenForTransaction(null)}
-                      />
-                    )}
-                    {rejectPopupOpenForTransaction && rejectPopupOpenForTransaction.id === member.id && (
-                      <RejectPopup
-                        memberId={member.id}
-                        onConfirm={(rejectReason) => handleConfirmReject(member.id, rejectReason)}
-                        onClose={() => setRejectPopupOpenForTransaction(null)}
-                      />
-                    )}
+                    {acceptPopupOpenForTransaction &&
+                      acceptPopupOpenForTransaction.id === member.id && (
+                        <AcceptPopup
+                          memberId={member.id}
+                          onConfirm={(transactionId) =>
+                            handleConfirmAccept(member.id, transactionId)
+                          }
+                          onClose={() => setAcceptPopupOpenForTransaction(null)}
+                        />
+                      )}
+                    {rejectPopupOpenForTransaction &&
+                      rejectPopupOpenForTransaction.id === member.id && (
+                        <RejectPopup
+                          memberId={member.id}
+                          onConfirm={(rejectReason) =>
+                            handleConfirmReject(member.id, rejectReason)
+                          }
+                          onClose={() => setRejectPopupOpenForTransaction(null)}
+                        />
+                      )}
                   </td>
                 </tr>
               ))}
@@ -194,6 +218,6 @@ const TransactionRA = () => {
       <ToastContainer />
     </div>
   );
-}
+};
 
 export default TransactionRA;
