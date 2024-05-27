@@ -6,6 +6,7 @@ import { LuBell } from "react-icons/lu";
 import { motion } from "framer-motion";
 import profileImage from "../../assets/an-avatar-of-a-brown-guy-looking-at-you-with-cute-smiles-with-transparent-background-hes-wearing-a-627855248.png";
 import PropTypes from "prop-types";
+import { Link } from "react-router-dom";
 
 const PageHeader = ({ title, searchQuery, setSearchQuery }) => {
   const [profilePicture, setProfilePicture] = useState(null);
@@ -41,7 +42,7 @@ const PageHeader = ({ title, searchQuery, setSearchQuery }) => {
       <div className="col-span-1 flex items-center justify-end space-x-4">
         <div className="profile-image-container">
           {/* Circular Profile Image with onClick to open the sidebar */}
-          <button title="Profile" onClick={() => setProfileSidebarOpen(true)}>
+          <Link to={"/sub-admin"} title="Profile" onClick={() => setProfileSidebarOpen(true)}>
             <img
               src={
                 profilePicture
@@ -51,7 +52,7 @@ const PageHeader = ({ title, searchQuery, setSearchQuery }) => {
               alt="Profile"
               className="profile-image"
             />
-          </button>
+          </Link>
         </div>
       </div>
     </motion.div>

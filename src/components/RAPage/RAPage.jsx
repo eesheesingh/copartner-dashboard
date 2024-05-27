@@ -49,7 +49,7 @@ const RAPage = () => {
                 <thead>
                   <tr>
                     <th style={{ textAlign: "left", paddingLeft: "2rem" }}>
-                      R.P Name
+                      R.A. Name
                     </th>
                     <th>Users</th>
                     <th>Spend on R.A</th>

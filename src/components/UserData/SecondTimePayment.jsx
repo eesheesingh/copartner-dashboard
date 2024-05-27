@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-const SecondTimePayment = () => {
+const SecondTimePayment = ({searchQuery}) => {
   const [payments, setPayments] = useState([]);
 
   useEffect(() => {
@@ -21,6 +21,10 @@ const SecondTimePayment = () => {
     fetchData();
   }, []);
 
+  const filteredData = payments.filter((user) =>
+    user.mobile.includes(searchQuery)
+  );
+
   return (
     <div className="py-4 px-8">
       <table className="table-list">
@@ -33,7 +37,7 @@ const SecondTimePayment = () => {
           </tr>
         </thead>
         <tbody>
-          {payments.map((payment) => (
+          {filteredData.map((payment) => (
             <tr key={payment.userId}>
               <td style={{ textAlign: 'left', paddingLeft: '2rem' }}>{new Date(payment.date).toLocaleDateString()}</td>
               <td style={{ textAlign: 'left' }}>{payment.mobile}</td>

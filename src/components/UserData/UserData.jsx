@@ -64,9 +64,9 @@ const UserData = () => {
                 Download Sheet
               </button>
             </div>
-            {activeButton === "Registration" && <Registration />}
-            {activeButton === "First Time Payment" && <FirstTimePayment />}
-            {activeButton === "Second Time Payment" && <SecondTimePayment />}
+            {activeButton === "Registration" && <Registration searchQuery={searchQuery}/> }
+            {activeButton === "First Time Payment" && <FirstTimePayment searchQuery={searchQuery}/> }
+            {activeButton === "Second Time Payment" && <SecondTimePayment searchQuery={searchQuery}/> }
           </div>
         </div>
       </div>

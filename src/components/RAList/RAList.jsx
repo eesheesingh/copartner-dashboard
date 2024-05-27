@@ -62,7 +62,7 @@ const RAList = () => {
                 <tr className="requestColumns">
                   <th className="text-left">Date</th>
                   <th className="text-left">Users</th>
-                  <th>Come by A.P</th>
+                  <th>Source</th>
                   <th>Amount Paid</th>
                   <th>Subscription</th>
                 </tr>
@@ -73,7 +73,7 @@ const RAList = () => {
                     <td className="p-3">{new Date(ra.date).toLocaleDateString()}</td>
                     <td className="p-3">{ra.userMobileNo}</td>
                     <td className="p-3 text-center">{ra.apName}</td>
-                    <td className="p-3 text-yellow-400 text-center">
+                    <td className="p-3 text-orange-500 text-center">
                       {ra.amount}
                     </td>
                     <td className="p-3 text-center">{ra.subscription}</td>

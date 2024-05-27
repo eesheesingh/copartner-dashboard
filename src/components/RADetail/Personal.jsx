@@ -104,6 +104,7 @@ const Personal = () => {
                 <th>Join Date</th>
                 <th>R.A</th>
                 <th>SEBI No.</th>
+                <th>Spend</th>
                 <th>Action</th>
               </tr>
             </thead>
@@ -115,6 +116,7 @@ const Personal = () => {
                     <Link to={`/r.a/${item.id}`}>{item.name}</Link>
                   </td>
                   <td>{item.sebiNo}</td>
+                  <td className="text-red-600">{item.raEarning}</td>
                   <td className="text-green-600 flex justify-center items-center gap-6">
                     <button
                       onClick={() => handleOpenPopup(item, "edit")}

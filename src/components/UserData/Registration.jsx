@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-const Registration = () => {
+const Registration = ({searchQuery}) => {
   const [userData, setUserData] = useState([]);
 
   useEffect(() => {
@@ -24,6 +24,10 @@ const Registration = () => {
     fetchUserData();
   }, []);
 
+  const filteredData = userData.filter((user) =>
+    user.mobile.includes(searchQuery)
+  );
+
   return (
     <div className="py-4 px-8">
       <table className="table-list">
@@ -35,7 +39,7 @@ const Registration = () => {
           </tr>
         </thead>
         <tbody>
-          {userData.map((user) => (
+          {filteredData.map((user) => (
             <tr key={user.userId}>
               <td style={{ textAlign: "left", paddingLeft: "2rem" }}>
                 {new Date(user.date).toLocaleDateString()}
