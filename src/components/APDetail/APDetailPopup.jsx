@@ -3,13 +3,21 @@ import { Switch, TextField, Button, Input, InputLabel } from "@mui/material";
 import close from "../../assets/close.png";
 import { toast } from "react-toastify";
 
-function APDetailPopup({ onClose, onSave, mode, initialValues1, onChangeMode }) {
+function APDetailPopup({
+  onClose,
+  onSave,
+  mode,
+  initialValues1,
+  onChangeMode,
+}) {
   const [initialValues, setInitialValues] = useState(initialValues1);
 
   const initialValue = async () => {
     if (initialValues1 && initialValues1.id) {
       try {
-        const response = await fetch(`https://copartners.in:5133/api/AffiliatePartner/${initialValues1.id}`);
+        const response = await fetch(
+          `https://copartners.in:5133/api/AffiliatePartner/${initialValues1.id}`
+        );
         if (!response.ok) {
           throw new Error(`Failed to fetch AP data for ${initialValues1.id}`);
         }
@@ -27,6 +35,7 @@ function APDetailPopup({ onClose, onSave, mode, initialValues1, onChangeMode }) 
 
   const [formData, setFormData] = useState({
     name: "",
+    legalName: "",
     mobileNumber: "",
     email: "",
     pan: "",
@@ -49,6 +58,7 @@ function APDetailPopup({ onClose, onSave, mode, initialValues1, onChangeMode }) 
     } else {
       setFormData({
         name: "",
+        legalName: "",
         mobileNumber: "",
         email: "",
         pan: "",
@@ -136,17 +146,60 @@ function APDetailPopup({ onClose, onSave, mode, initialValues1, onChangeMode }) 
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
     if (Object.keys(errors).length > 0) {
       alert("Please correct the inputs before submitting.");
       return;
     }
-    onSave(formData);
+
+    const dataToSubmit = { ...formData };
+
+    const url =
+      mode === "add"
+        ? "https://copartners.in:5133/api/AffiliatePartner"
+        : `https://copartners.in:5133/api/AffiliatePartner?Id=${initialValues.id}`;
+    const method = mode === "add" ? "POST" : "PATCH";
+
+    let patchData = [];
+
+    if (mode === "edit") {
+      for (const key in dataToSubmit) {
+        if (dataToSubmit[key] !== initialValues[key]) {
+          patchData.push({
+            path: key,
+            op: "replace",
+            value: dataToSubmit[key],
+          });
+        }
+      }
+    }
+
+    try {
+      const response = await fetch(url, {
+        method,
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(method === "PATCH" ? patchData : dataToSubmit),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Failed to save data: ${response.statusText}`);
+      }
+
+      const responseData = await response.json();
+      onSave(responseData);
+    } catch (error) {
+      console.error("Error saving A.P. details:", error);
+      toast.error(`Failed to save A.P. details: ${error.message}`);
+    }
   };
 
   const fields = [
     { id: "name", label: "A.P", required: true },
+    { id: "legalName", label: "Legal Name", required: true },
     {
       id: "mobileNumber",
       label: "Mobile Number",

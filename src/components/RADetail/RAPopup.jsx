@@ -7,6 +7,7 @@ import close from "../../assets/close.png";
 function RAPopup({ onClose, onSave, mode, initialValues }) {
   const [currentMode, setCurrentMode] = useState(mode);
   const [copartnerChecked, setCopartnerChecked] = useState(true);
+  const [loading, setLoading] = useState(false);
   const isViewMode = currentMode === "view";
   const [formData, setFormData] = useState({
     name: "",
@@ -32,10 +33,12 @@ function RAPopup({ onClose, onSave, mode, initialValues }) {
     isActive: true,
   });
   const [errors, setErrors] = useState({});
+  const [originalData, setOriginalData] = useState({});
 
   useEffect(() => {
     if (initialValues && (mode === "edit" || mode === "view")) {
       setFormData({ ...initialValues });
+      setOriginalData({ ...initialValues });
       setCopartnerChecked(initialValues.isCoPartner);
     }
   }, [mode, initialValues]);
@@ -84,7 +87,6 @@ function RAPopup({ onClose, onSave, mode, initialValues }) {
 
     if (file) {
       try {
-        // Create a FormData object
         const formData = new FormData();
         formData.append("file", file, file.name);
 
@@ -95,8 +97,15 @@ function RAPopup({ onClose, onSave, mode, initialValues }) {
             body: formData,
           }
         );
+
+        if (!response.ok) {
+          throw new Error("Failed to upload file");
+        }
+
         const data = await response.json();
         const presignedURL = data.data.presignedUrl;
+
+        console.log(`File uploaded successfully: ${presignedURL}`);
 
         setFormData((prevFormData) => ({
           ...prevFormData,
@@ -124,18 +133,34 @@ function RAPopup({ onClose, onSave, mode, initialValues }) {
     const url =
       currentMode === "add"
         ? "https://copartners.in:5132/api/Experts"
-        : `https://copartners.in:5132/api/Experts/${formData.id}`;
-    const method = currentMode === "add" ? "POST" : "PUT";
+        : `https://copartners.in:5132/api/Experts?Id=${formData.id}`;
+    const method = currentMode === "add" ? "POST" : "PATCH";
+
+    let patchData = [];
+
+    if (currentMode === "edit") {
+      for (const key in dataToSubmit) {
+        if (dataToSubmit[key] !== originalData[key]) {
+          patchData.push({
+            path: key,
+            op: "replace",
+            value: dataToSubmit[key],
+          });
+        }
+      }
+    }
+
+    console.log(patchData);
 
     try {
+      setLoading(true);
       const response = await fetch(url, {
         method,
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(dataToSubmit),
+        body: JSON.stringify(method === "PATCH" ? patchData : dataToSubmit),
       });
-      console.log(dataToSubmit);
 
       if (!response.ok) {
         throw new Error("Failed to save data");
@@ -148,6 +173,8 @@ function RAPopup({ onClose, onSave, mode, initialValues }) {
     } catch (error) {
       console.error("Error saving data:", error);
       toast.error("Failed to save data");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -168,37 +195,41 @@ function RAPopup({ onClose, onSave, mode, initialValues }) {
         <div key={field.name}>
           {field.type === "file" ? (
             <div>
-              <InputLabel name={field.name}>{field.label}</InputLabel>
-              <Input
-                type="file"
-                name={field.name}
-                label={field.label}
-                fullWidth
-                required={field.required}
-                disabled={isDisabled}
-                inputProps={field.inputProps}
-                onChange={handleFileChange}
-                className={inputClasses}
-              />
-              {formData[field.name] && (
-                <div className="mt-2">
-                  {field.name === "sebiRegCertificatePath" || "expertImagePath" || "signatureImage" ? (
-                    <a
-                      href={formData[field.name]}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-blue-500 underline"
-                    >
-                      View {field.label}
-                    </a>
-                  ) : (
-                    <img
-                      src={formData[field.name]}
-                      alt={field.label}
-                      className="max-w-full h-auto"
-                    />
-                  )}
+              <InputLabel htmlFor={field.name}>{field.label}</InputLabel>
+              {isFieldFilled && currentMode === "edit" ? (
+                <div>
+                  <a
+                    href={formData[field.name]}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-500 underline"
+                  >
+                    View {field.label}
+                  </a>
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setFormData((prevFormData) => ({
+                        ...prevFormData,
+                        [field.name]: "",
+                      }))
+                    }
+                    className="ml-4 text-blue-500 underline"
+                  >
+                    Change {field.label}
+                  </button>
                 </div>
+              ) : (
+                <Input
+                  type="file"
+                  name={field.name}
+                  fullWidth
+                  required={field.required}
+                  disabled={isDisabled}
+                  inputProps={{ ...field.inputProps, id: field.name }}
+                  onChange={handleFileChange}
+                  className={inputClasses}
+                />
               )}
             </div>
           ) : field.name === "expertTypeId" ? (
@@ -370,16 +401,21 @@ function RAPopup({ onClose, onSave, mode, initialValues }) {
           </div>
           {currentMode !== "view" ? (
             <button
-              className="col-span-2 mx-auto bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-16 rounded focus:outline-none focus:shadow-outline"
+              className={`col-span-2 mx-auto ${
+                loading ? "bg-blue-400" : "bg-blue-500"
+              } hover:bg-blue-700 text-white font-bold py-2 px-16 rounded focus:outline-none focus:shadow-outline`}
               type="submit"
+              disabled={loading}
             >
               {currentMode === "add" ? "Add" : "Save Changes"}
             </button>
           ) : (
             <button
-              className="col-span-2 mx-auto bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-16 rounded focus:outline-none focus:shadow-outline"
+              className={`col-span-2 mx-auto ${
+                loading ? "bg-blue-400" : "bg-blue-500"
+              } hover:bg-blue-700 text-white font-bold py-2 px-16 rounded focus:outline-none focus:shadow-outline`}
               onClick={() => setCurrentMode("edit")}
-              disabled={currentMode === "edit"}
+              disabled={loading || currentMode === "edit"}
             >
               Edit
             </button>

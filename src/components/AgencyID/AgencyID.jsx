@@ -1,6 +1,6 @@
 import { FaAngleLeft, FaPen } from "react-icons/fa";
 import PageHeader from "../Header/Header";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import Bin from "../../assets/TrashBinMinimalistic.png";
 import { useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
@@ -12,6 +12,9 @@ const AgencyID = () => {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [selectedAgency, setSelectedAgency] = useState(null);
   const [agencies, setAgencies] = useState([]);
+  const location = useLocation();
+
+  const {agencyName} = location.state;
 
   useEffect(() => {
     fetchAgency();
@@ -88,7 +91,7 @@ const AgencyID = () => {
 
       <div className="requestContainer mx-5 bg-[#fff]">
         <div className="channel-heading flex">
-          <h3 className="text-xl font-semibold mr-auto">Ad Agency</h3>
+          <h3 className="text-xl font-semibold mr-auto">{agencyName}</h3>
           <button
             className="border-2 border-black rounded-lg px-4 py-1 mr-4"
             onClick={() => setIsPopupOpen(true)}

@@ -102,8 +102,8 @@ const Personal = () => {
             <thead>
               <tr>
                 <th>Join Date</th>
-                <th>R.A</th>
-                <th>SEBI No.</th>
+                <th>Legal Name</th>
+                <th>GST No.</th>
                 <th>Spend</th>
                 <th>Action</th>
               </tr>
@@ -113,9 +113,9 @@ const Personal = () => {
                 <tr className="even:bg-gray-100 odd:bg-white" key={item.id}>
                   <td>{new Date(item.joinDate).toLocaleDateString()}</td>
                   <td>
-                    <Link to={`/r.a/${item.id}`}>{item.name}</Link>
+                    <Link to={`/r.a/${item.id}`}>{item.legalName}</Link>
                   </td>
-                  <td>{item.sebiNo}</td>
+                  <td>{item.gst}</td>
                   <td className="text-red-600">{item.raEarning}</td>
                   <td className="text-green-600 flex justify-center items-center gap-6">
                     <button

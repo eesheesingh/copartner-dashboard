@@ -94,6 +94,7 @@ const AssignRA = ({ onClose, onSave }) => {
           <FormControl fullWidth>
             <TextField
               select
+              className="text-left"
               label="Manager"
               id="select-manager"
               value={selectedManager}
@@ -110,6 +111,7 @@ const AssignRA = ({ onClose, onSave }) => {
           <FormControl fullWidth>
             <TextField
               select
+              className="text-left"
               label="R.A"
               id="select-ra"
               value={selectedRA}

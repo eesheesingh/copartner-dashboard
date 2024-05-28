@@ -93,6 +93,7 @@ const AssignAP = ({ onClose, onSave }) => {
           <FormControl fullWidth>
             <TextField
               select
+              className="text-left"
               label="Manager"
               id="select-manager"
               value={selectedManager}
@@ -109,6 +110,7 @@ const AssignAP = ({ onClose, onSave }) => {
           <FormControl fullWidth>
             <TextField
               select
+              className="text-left"
               label="A.P"
               id="select-ap"
               value={selectedAP}

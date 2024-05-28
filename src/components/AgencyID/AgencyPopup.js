@@ -7,7 +7,6 @@ const AgencyPopup = ({ onClose, selectedAgency, onSubmit, agencyId }) => {
   const [RAName, setRAName] = useState("");
   const [link, setLink] = useState("");
   const [RAList, setRAList] = useState([]);
-  console.log(selectedAgency)
 
   useEffect(() => {
     if (selectedAgency) {
@@ -65,8 +64,6 @@ const AgencyPopup = ({ onClose, selectedAgency, onSubmit, agencyId }) => {
         },
         body: JSON.stringify(formData)
       });
-
-      console.log(formData)
 
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);

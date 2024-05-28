@@ -58,29 +58,10 @@ const RelationManagement = () => {
               <Listing activeButton={activeButton} />
             )}
             {activeButton === "With R.A" && (
-              <WithRA
-                data={[
-                  {
-                    date: "01/04/2024",
-                    raName: "Anuj Kumar",
-                    relationManagement: "Vinit",
-                  },
-                  // Add more data objects as needed
-                ]}
-                activeButton={activeButton}
-              />
+              <WithRA activeButton={activeButton} />
             )}
             {activeButton === "With A.P" && (
-              <WithAP
-                data={[
-                  {
-                    date: "01/04/2024",
-                    apName: "Anuj Kumar",
-                    relationManagement: "Vinit",
-                  },
-                ]}
-                activeButton={activeButton}
-              />
+              <WithAP activeButton={activeButton} />
             )}
           </div>
         </div>

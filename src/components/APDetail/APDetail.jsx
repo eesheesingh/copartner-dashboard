@@ -52,51 +52,10 @@ const APDetail = () => {
     setViewItem(null);
   };
 
-  const handleSave = async (item) => {
-    const requestBody = {
-      name: item.name,
-      affiliatePartnerImagePath: item.affiliatePartnerImagePath,
-      email: item.email,
-      mobileNumber: item.mobileNumber,
-      gst: item.gst,
-      pan: item.pan,
-      address: item.address,
-      state: item.state,
-      referralCode: item.referralCode,
-      referralLink: item.referralLink,
-      fixCommission1: item.fixCommission1,
-      fixCommission2: item.fixCommission2,
-      relationshipManagerId: "",
-      isActive: item.isActive,
-    };
-
-    const url =
-      editItem && editItem.id
-        ? `https://copartners.in:5133/api/AffiliatePartner/${editItem.id}`
-        : "https://copartners.in:5133/api/AffiliatePartner";
-    const method = editItem && editItem.id ? "PUT" : "POST";
-
-    try {
-      const response = await fetch(url, {
-        method,
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(requestBody),
-      });
-      console.log(requestBody);
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      toast.success("A.P. details saved successfully!");
-      fetchData();
-    } catch (error) {
-      console.error("Error saving A.P. details:", error);
-      toast.error(`Failed to save A.P. details: ${error.message}`);
-    }
-
+  const handleSave = async () => {
+    fetchData(); // Refresh the data after saving
     handleClosePopup();
+    toast.success("A.P. details saved successfully!");
   };
 
   const handleChangeMode = () => {
@@ -132,7 +91,8 @@ const APDetail = () => {
                   <tr>
                     <th>Join Date</th>
                     <th>A.P</th>
-                    <th>Mobile Number</th>
+                    <th>Legal Name</th>
+                    <th>GSTIN</th>
                     <th>CM. Fix 1</th>
                     <th>CM. Fix 2</th>
                     <th>Spend</th>
@@ -146,7 +106,8 @@ const APDetail = () => {
                       <td>
                         <Link to={`/apdetails/${item.id}`}>{item.apName}</Link>
                       </td>
-                      <td>{item.mobileNumber}</td>
+                      <td>{item.legalName}</td>
+                      <td>{item.gst}</td>
                       <td>{item.fixCommission1}</td>
                       <td>{item.fixCommission2}</td>
                       <td className="text-red-600">{item.apEarning}</td>

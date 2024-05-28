@@ -3,7 +3,7 @@ import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
 import PageHeader from "../Header/Header";
 import { ToastContainer, toast } from "react-toastify";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import AdAgencyPopup from "./AdAgencyPopup";
 import Bin from "../../assets/TrashBinMinimalistic.png";
 import { FaPen } from "react-icons/fa";
@@ -14,6 +14,7 @@ const AgencyList = () => {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [selectedAgency, setSelectedAgency] = useState(null);
   const [agencyList, setAgencyList] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchAgencyList();
@@ -114,6 +115,10 @@ const AgencyList = () => {
     }
   };
 
+  const handleNextTab = (agency) => {
+    navigate(`${agency.id}`, { state: { agencyName: agency.agencyName } });
+  };
+
   return (
     <div className="dashboard-container p-0 sm:ml-60">
       <PageHeader
@@ -163,7 +168,9 @@ const AgencyList = () => {
                         }}
                         className="text-blue-400"
                       >
-                        <Link to={`${agency.id}`}>{agency.agencyName}</Link>
+                        <button onClick={() => handleNextTab(agency)}>
+                          {agency.agencyName}
+                        </button>
                       </td>
                       <td style={{ textAlign: "left" }}>
                         {agency.link.substring(0, 20)}...

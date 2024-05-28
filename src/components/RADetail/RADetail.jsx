@@ -21,6 +21,7 @@ const RADetail = () => {
   });
 
   const [data, setData] = useState([]);
+  
 
   useEffect(() => {
     fetchData();
@@ -52,6 +53,7 @@ const RADetail = () => {
           throw new Error("Failed to fetch data");
         }
         const fetchedData = await response.json();
+        console.log(fetchedData.data);
         setPopup({ isOpen: true, item: fetchedData.data, mode });
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -151,8 +153,8 @@ const RADetail = () => {
                   <thead>
                     <tr>
                       <th>Join Date</th>
-                      <th>R.A</th>
-                      <th>SEBI No.</th>
+                      <th>Legal Name</th>
+                      <th>GST No.</th>
                       <th>Commission Fix</th>
                       <th>Spend</th>
                       <th>Action</th>
@@ -166,9 +168,9 @@ const RADetail = () => {
                       >
                         <td>{new Date(item.joinDate).toLocaleDateString()}</td>
                         <td>
-                          <Link to={`/r.a/${item.id}`}>{item.name}</Link>
+                          <Link to={`/r.a/${item.id}`}>{item.legalName}</Link>
                         </td>
-                        <td>{item.sebiNo}</td>
+                        <td>{item.gst}</td>
                         <td>{item.fixCommission}%</td>
                         <td className="text-red-600">{item.raEarning}</td>
                         <td className="text-green-600 flex justify-center items-center gap-6">
