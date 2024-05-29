@@ -68,39 +68,9 @@ const RADetail = () => {
     setPopup({ isOpen: false, item: null, mode: "edit" });
   }, []);
 
-  const handleSave = useCallback(
-    async (item) => {
-      if (popup.mode === "view") {
-        handleClosePopup();
-        return;
-      }
-
-      const url = popup.mode === "add"
-        ? "https://copartners.in:5132/api/Experts"
-        : `https://copartners.in:5132/api/Experts/${item.id}`;
-      const method = popup.mode === "add" ? "POST" : "PUT";
-
-      try {
-        const response = await fetch(url, {
-          method,
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(item),
-        });
-
-        if (!response.ok) {
-          throw new Error("Failed to save data");
-        }
-        fetchData();
-        toast.success("Data saved successfully");
-      } catch (error) {
-        console.error("Error saving data:", error);
-        toast.error("Failed to save data");
-      }
-
-      handleClosePopup();
-    },
-    [data, popup.mode, handleClosePopup]
-  );
+  const handleSave = () => {
+      fetchData();
+    }
 
   const handleButtonClick = (buttonId) => {
     setActiveButton(buttonId);

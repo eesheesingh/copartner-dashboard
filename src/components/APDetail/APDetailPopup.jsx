@@ -185,12 +185,12 @@ function APDetailPopup({
         body: JSON.stringify(method === "PATCH" ? patchData : dataToSubmit),
       });
 
+      console.log(patchData, "patchdata", dataToSubmit, "datato sumbmit");
+
       if (!response.ok) {
         throw new Error(`Failed to save data: ${response.statusText}`);
       }
-
-      const responseData = await response.json();
-      onSave(responseData);
+      onSave();
     } catch (error) {
       console.error("Error saving A.P. details:", error);
       toast.error(`Failed to save A.P. details: ${error.message}`);
@@ -226,14 +226,12 @@ function APDetailPopup({
     {
       id: "affiliatePartnerImagePath",
       label: "Profile Image",
-      required: true,
       type: "file",
       inputProps: { accept: "image/*" },
     },
     {
       id: "kycVideoPath",
       label: "KYC Video",
-      required: true,
       type: "file",
       inputProps: { accept: "video/*" },
     },
@@ -303,7 +301,7 @@ function APDetailPopup({
                   id={field.id}
                   type={field.type}
                   onChange={handleChange}
-                  required={field.required}
+                  required={field.required && mode === "add"}
                   {...field.inputProps}
                   disabled={isDisabled}
                   className={`${inputClasses} ${

@@ -11,6 +11,7 @@ function RAPopup({ onClose, onSave, mode, initialValues }) {
   const isViewMode = currentMode === "view";
   const [formData, setFormData] = useState({
     name: "",
+    legalName:"",
     sebiRegNo: "",
     mobileNumber: "",
     email: "",
@@ -165,9 +166,7 @@ function RAPopup({ onClose, onSave, mode, initialValues }) {
       if (!response.ok) {
         throw new Error("Failed to save data");
       }
-
-      const responseData = await response.json();
-      onSave(responseData);
+      onSave();
       toast.success("Data saved successfully");
       onClose();
     } catch (error) {
@@ -245,7 +244,7 @@ function RAPopup({ onClose, onSave, mode, initialValues }) {
               disabled={isDisabled}
               className={`${inputClasses} h-14`}
             >
-              <MenuItem value={1}>Future & Options</MenuItem>
+              <MenuItem value={1}>Futures & Options</MenuItem>
               <MenuItem value={2}>Equity</MenuItem>
               <MenuItem value={3}>Commodity</MenuItem>
             </TextField>
@@ -273,6 +272,7 @@ function RAPopup({ onClose, onSave, mode, initialValues }) {
 
   const formFields = [
     { name: "name", label: "R.A Name", required: true },
+    { name: "legalName", label: "Legal Name", required: true },
     { name: "sebiRegNo", label: "SEBI No.", required: true },
     {
       name: "mobileNumber",

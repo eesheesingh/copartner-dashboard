@@ -53,7 +53,7 @@ const APDetail = () => {
   };
 
   const handleSave = async () => {
-    fetchData(); // Refresh the data after saving
+    fetchData();
     handleClosePopup();
     toast.success("A.P. details saved successfully!");
   };

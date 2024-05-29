@@ -2,7 +2,7 @@ import { useState, useRef } from "react";
 import { BiLogOut } from "react-icons/bi";
 import { IoSettingsOutline } from "react-icons/io5";
 import Logo from "../../assets/copartner.png";
-import { Link, Outlet, useNavigate, useLocation } from "react-router-dom";
+import { Link, Outlet, useLocation } from "react-router-dom";
 import userIcon from "../../assets/user-octagon.png";
 import { click } from "@testing-library/user-event/dist/click";
 import { ToastContainer } from "react-toastify";
@@ -10,7 +10,6 @@ import { ToastContainer } from "react-toastify";
 const Sidebar = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const sidebarRef = useRef();
-  const navigate = useNavigate();
   const location = useLocation();
 
   const Logout = () => {
@@ -83,6 +82,7 @@ const Sidebar = () => {
     { to: "/sub-admin", title: "Settings", label: "Sub Admin Management", icon: userIcon },
     { to: "/login", title: "Settings", label: "Login Credentials", icon: userIcon },
     { to: "/rauserdata", title: "Settings", label: "RA User Data", icon: userIcon },
+    { to: "/chatids", title: "Settings", label: "Chat IDs", icon: userIcon },
   ];
 
   return (

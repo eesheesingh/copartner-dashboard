@@ -10,8 +10,8 @@ function BlogPage({ onClose, blog = null, onSubmit }) {
   const [blogDescription, setBlogDescription] = useState("");
   const [selectedImage, setSelectedImage] = useState(null);
   const [imageUrl, setImageUrl] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
-  // Set initial data if editing an existing blog
   useEffect(() => {
     if (blog) {
       setBlogTitle(blog.title);
@@ -28,6 +28,7 @@ function BlogPage({ onClose, blog = null, onSubmit }) {
 
   const handleFormSubmit = async (event) => {
     event.preventDefault();
+    setIsLoading(true);
 
     try {
       let uploadedImageUrl = imageUrl;
@@ -73,15 +74,13 @@ function BlogPage({ onClose, blog = null, onSubmit }) {
       if (!responseData.isSuccess) {
         throw new Error("Failed to submit blog");
       }
-
-      if (onSubmit) {
-        onSubmit(responseData);
-      }
-
+      onSubmit(responseData);
       onClose();
     } catch (error) {
       toast.error("Error submitting blog");
       console.error("Error submitting blog:", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -162,8 +161,9 @@ function BlogPage({ onClose, blog = null, onSubmit }) {
           className="px-12 bg-blue-500 text-white py-2 border-2 rounded-lg"
           onClick={handleFormSubmit}
           type="button"
+          disabled={isLoading}
         >
-          {blog ? "Update" : "Add"}
+          {isLoading ? "Submitting..." : blog ? "Update" : "Add"}
         </button>
       </div>
     </div>

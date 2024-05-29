@@ -3,7 +3,6 @@ import { FaPen } from "react-icons/fa";
 import { ToastContainer } from "react-toastify";
 import Bin from "../../assets/TrashBinMinimalistic.png";
 import PageHeader from "../Header/Header";
-import { Switch } from "@mui/material";
 import { Link } from "react-router-dom";
 
 const RAUserData = () => {
@@ -15,14 +14,10 @@ const RAUserData = () => {
     setIsPopupOpen(true);
   };
 
-  const closeSubAdmin = () => {
-    setIsPopupOpen(false);
-  }
-
   return (
     <div className="dashboard-container p-0 sm:ml-60">
       <PageHeader
-        title="Sub Admin Management"
+        title="RA User Data"
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
         hasNotification={hasNotification}

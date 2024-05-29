@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import PageHeader from "../Header/Header";
 import "./Blog.css";
-import { toast } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 import { FaPen } from "react-icons/fa";
 import Bin from "../../assets/TrashBinMinimalistic.png";
 import BlogPage from "../BlogPage/BlogPage";
@@ -39,9 +39,12 @@ const Blog = () => {
 
   const handleDelete = async (id) => {
     try {
-      const response = await fetch(`https://copartners.in:5134/api/Blogs/${id}`, {
-        method: "DELETE",
-      });
+      const response = await fetch(
+        `https://copartners.in:5134/api/Blogs/${id}`,
+        {
+          method: "DELETE",
+        }
+      );
 
       if (!response.ok) {
         throw new Error("Failed to delete blog");
@@ -57,7 +60,7 @@ const Blog = () => {
 
   const handleAddEditBlog = async (responseData) => {
     if (!responseData.isSuccess) {
-      throw new Error(`Failed to ${editBlog ? "update" : "add"} blog`)
+      throw new Error(`Failed to ${editBlog ? "update" : "add"} blog`);
     }
     toast.success(`Blog ${editBlog ? "updated" : "added"} successfully`);
     fetchBlogs();
@@ -111,7 +114,10 @@ const Blog = () => {
                       <td style={{ textAlign: "left", paddingLeft: "2rem" }}>
                         {new Date(blog.createdOn).toLocaleDateString()}
                       </td>
-                      <td style={{ textAlign: "left" }} className="text-blue-600">
+                      <td
+                        style={{ textAlign: "left" }}
+                        className="text-blue-600"
+                      >
                         {blog.title}
                       </td>
                       <td className="flex justify-center items-center gap-6">
@@ -141,6 +147,7 @@ const Blog = () => {
           onSubmit={handleAddEditBlog}
         />
       )}
+      <ToastContainer />
     </div>
   );
 };
