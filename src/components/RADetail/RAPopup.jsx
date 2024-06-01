@@ -71,8 +71,8 @@ function RAPopup({ onClose, onSave, mode, initialValues }) {
     }
 
     if (name === "fixCommission") {
-      if (parseInt(value) > 100) {
-        newErrors.fixCommission = "Commission fix cannot exceed 100%";
+      if (parseInt(value) > 20) {
+        newErrors.fixCommission = "Commission fix cannot exceed 20%";
       } else {
         delete newErrors.fixCommission;
       }

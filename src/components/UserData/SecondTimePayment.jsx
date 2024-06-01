@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
-const SecondTimePayment = ({searchQuery}) => {
-  const [payments, setPayments] = useState([]);
+const SecondTimePayment = ({searchQuery, onTableData}) => {
+  const [SecondTimePayment, setSecondTimePayment] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -9,7 +9,7 @@ const SecondTimePayment = ({searchQuery}) => {
         const response = await fetch('https://copartners.in:5134/api/UserData/UserSecondTimePaymentListing');
         const data = await response.json();
         if (data.isSuccess) {
-          setPayments(data.data);
+          setSecondTimePayment(data.data);
         } else {
           throw new Error('Failed to fetch data');
         }
@@ -21,12 +21,17 @@ const SecondTimePayment = ({searchQuery}) => {
     fetchData();
   }, []);
 
-  const filteredData = payments.filter((user) =>
+  const filteredData = SecondTimePayment.filter((user) =>
     user.mobile.includes(searchQuery)
   );
 
   return (
     <div className="py-4 px-8">
+      <div className="w-full flex flex-row-reverse">
+        <button onClick={() => onTableData(filteredData)} className="border-2 border-black rounded-lg px-4 py-1 mr-4">
+          Download Sheet
+        </button>
+      </div>
       <table className="table-list">
         <thead>
           <tr>

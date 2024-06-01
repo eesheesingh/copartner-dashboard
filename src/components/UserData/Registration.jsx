@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from "react";
 
-const Registration = ({searchQuery}) => {
+const Registration = ({ searchQuery, onTableData }) => {
   const [userData, setUserData] = useState([]);
 
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await fetch("https://copartners.in:5134/api/UserData/UserDataListing");
+        const response = await fetch(
+          "https://copartners.in:5134/api/UserData/UserDataListing"
+        );
         if (!response.ok) {
           throw new Error("Failed to fetch user data");
         }
@@ -30,6 +32,11 @@ const Registration = ({searchQuery}) => {
 
   return (
     <div className="py-4 px-8">
+      <div className="w-full flex flex-row-reverse">
+        <button onClick={() => onTableData(filteredData)} className="border-2 border-black rounded-lg px-4 py-1 mr-4">
+          Download Sheet
+        </button>
+      </div>
       <table className="table-list">
         <thead>
           <tr>

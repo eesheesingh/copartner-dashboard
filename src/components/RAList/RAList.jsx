@@ -10,6 +10,19 @@ const RAList = () => {
   const navigate = useNavigate();
   const [selectedRA, setSelectedRA] = useState([]);
 
+  const getExpertType = (typeId) => {
+    switch (parseInt(typeId)) {
+      case 1:
+        return "Commodity";
+      case 2:
+        return "Equity";
+      case 3:
+        return "Options";
+      default:
+        return "Unknown";
+    }
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -70,13 +83,13 @@ const RAList = () => {
               <tbody>
                 {selectedRA.map((ra, index) => (
                   <tr key={index} className="request-numbers font-semibold">
-                    <td className="p-3">{new Date(ra.date).toLocaleDateString()}</td>
+                    <td className="p-3">{new Date(ra.subscribeDate).toLocaleDateString()}</td>
                     <td className="p-3">{ra.userMobileNo}</td>
                     <td className="p-3 text-center">{ra.apName}</td>
                     <td className="p-3 text-orange-500 text-center">
                       {ra.amount}
                     </td>
-                    <td className="p-3 text-center">{ra.subscription}</td>
+                    <td className="p-3 text-center">{getExpertType(ra.subscription)}</td>
                   </tr>
                 ))}
               </tbody>

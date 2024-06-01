@@ -1,29 +1,41 @@
+import React, { useState, useEffect } from "react";
 import { FaAngleLeft } from "react-icons/fa6";
 import PageHeader from "../Header/Header";
 import { Link, useParams, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const APList = () => {
   const navigate = useNavigate();
   const { apName } = useParams();
+  const [apDetails, setApDetails] = useState([]);
+  const [referralLink, setReferralLink] = useState("");
+  const [apHeading, setApHeading] = useState("")
 
-  const apDetails = [
-    {
-      id: 1,
-      date: "01/04/2024",
-      name: "Anuj Kumar",
-      usersCome: 100,
-      usersPay: 80,
-    },
-    {
-      id: 2,
-      date: "02/04/2024",
-      name: "Arun Kumar",
-      usersCome: 120,
-      usersPay: 90,
-    },
-  ];
+  useEffect(() => {
+    const fetchAPDetails = async () => {
+      try {
+        const response = await fetch(
+          `https://copartners.in:5133/api/APDashboard/GetDashboardAPListingData/${apName}`
+        );
+        if (!response.ok) {
+          throw new Error(`Failed to fetch data for ${apName}`);
+        }
+        const data = await response.json();
+        if (data.isSuccess) {
+          setApDetails(data.data);
+          setReferralLink(data.data[0].referralLink);
+          setApHeading(data.data[0].apName);
+        } else {
+          setApDetails([]);
+        }
+      } catch (error) {
+        console.error("Fetching error:", error);
+        toast.error(`Failed to fetch A.P. details: ${error.message}`);
+      }
+    };
 
-  const apDetail = apDetails.find((ap) => ap.name === apName);
+    fetchAPDetails();
+  }, [apName]);
 
   return (
     <div className="dashboard-container p-0 sm:ml-60">
@@ -34,7 +46,6 @@ const APList = () => {
         hasNotification={false}
         setHasNotification={() => {}}
       />
-
       <div className="back-button flex items-center text-2xl font-bold p-6">
         <button
           style={{ display: "flex", alignItems: "center" }}
@@ -44,14 +55,16 @@ const APList = () => {
           <span className="ml-1">Back</span>
         </button>
       </div>
-
-      {apDetail ? <div className="requestContainer mx-5 bg-[#fff]">
+      <div className="requestContainer mx-5 bg-[#fff]">
         <div className="requestHeading flex justify-between items-center text-2xl font-bold p-4">
-          <h2 className="pl-3 text-xl font-semibold">{apName}</h2>
+          <h2 className="pl-3 text-xl font-semibold">{apHeading}</h2>
           <div className="channelOptions flex place-content-between px-6">
-            <div style={{ justifyContent: "space-around" }} className="chatLinks flex">
+            <div
+              style={{ justifyContent: "space-around" }}
+              className="chatLinks flex"
+            >
               <h3 className="mr-2 channel-heads text-lg">Link:</h3>
-              <p className="text-lg">Lorem ipsum dolor dummy text</p>
+              <p className="text-lg">{referralLink || "N/A"}</p>
             </div>
           </div>
         </div>
@@ -65,21 +78,29 @@ const APList = () => {
               </tr>
             </thead>
             <tbody>
-              {apDetails.map((ap) => (
-                <tr key={ap.id} className="request-numbers font-semibold">
-                  <td style={{ textAlign: "left", paddingLeft: "2rem" }} className="p-3">{ap.date}</td>
-                  <td style={{ textAlign: "left" }} className="p-3">{ap.usersCome}</td>
-                  <td className="p-3 text-center text-blue-500">
-                    <Link to={`/${ap.name}`}>{ap.usersPay}</Link>
-                  </td>
-                </tr>
-              ))}
+              {apDetails.length > 0 &&
+                apDetails.map((apdetail) => (
+                  <tr className="request-numbers font-semibold">
+                    <td
+                      style={{ textAlign: "left", paddingLeft: "2rem" }}
+                      className="p-3"
+                    >
+                      {new Date(apdetail.userJoiningDate).toLocaleDateString()}
+                    </td>
+                    <td style={{ textAlign: "left" }} className="p-3">
+                      {apdetail.userMobileNo}
+                    </td>
+                    <td className="p-3 text-center text-blue-500">
+                      {/* <Link to={`/${apdetail.apName}`}> */}
+                        {apdetail.amount || "N/A"}
+                      {/* </Link> */}
+                    </td>
+                  </tr>
+                ))}
             </tbody>
           </table>
         </div>
-      </div> : <div className="flex items-center justify-center mt-28 text-3xl font-bold p-6">
-          AP not found!
-        </div>}
+      </div>
     </div>
   );
 };

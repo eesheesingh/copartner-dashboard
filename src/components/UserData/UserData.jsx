@@ -4,6 +4,7 @@ import Registration from "./Registration";
 import FirstTimePayment from "./FirstTimePayment";
 import PageHeader from "../Header/Header";
 import SecondTimePayment from "./SecondTimePayment";
+import * as XLSX from "xlsx";
 
 const UserData = () => {
   const [activeButton, setActiveButton] = useState("Registration");
@@ -12,6 +13,25 @@ const UserData = () => {
 
   const handleButtonClick = (buttonId) => {
     setActiveButton(buttonId);
+  };
+
+  const handleDownloadSheet = (data) => {
+    if (data.length === 0) {
+      return;
+    }
+
+    const worksheet = XLSX.utils.json_to_sheet(data);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, activeButton);
+
+    XLSX.writeFile(
+      workbook,
+      `${activeButton}-${new Date().toLocaleString()}.xlsx`
+    );
+  };
+
+  const handleTableData = (data) => {
+    handleDownloadSheet(data);
   };
 
   return (
@@ -60,13 +80,25 @@ const UserData = () => {
           <div className="table-list-mb">
             <div className="channel-heading flex">
               <h3 className="text-xl font-semibold mr-auto">{activeButton}</h3>
-              <button className=" border-2 border-black rounded-lg px-4 py-1 mr-4">
-                Download Sheet
-              </button>
             </div>
-            {activeButton === "Registration" && <Registration searchQuery={searchQuery}/> }
-            {activeButton === "First Time Payment" && <FirstTimePayment searchQuery={searchQuery}/> }
-            {activeButton === "Second Time Payment" && <SecondTimePayment searchQuery={searchQuery}/> }
+            {activeButton === "Registration" && (
+              <Registration
+                searchQuery={searchQuery}
+                onTableData={handleTableData}
+              />
+            )}
+            {activeButton === "First Time Payment" && (
+              <FirstTimePayment
+                searchQuery={searchQuery}
+                onTableData={handleTableData}
+              />
+            )}
+            {activeButton === "Second Time Payment" && (
+              <SecondTimePayment
+                searchQuery={searchQuery}
+                onTableData={handleTableData}
+              />
+            )}
           </div>
         </div>
       </div>

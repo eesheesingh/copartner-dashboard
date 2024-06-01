@@ -33,6 +33,12 @@ const TransactionAP = () => {
     }
   };
 
+  const sortedTransactions = transactions.sort((a, b) => {
+    if (a.requestAction && !b.requestAction) return 1;
+    if (!a.requestAction && b.requestAction) return -1;
+    return 0;
+  });
+
   const handleAccept = (member) => {
     setAcceptPopupOpenForTransaction(member);
   };
@@ -130,13 +136,13 @@ const TransactionAP = () => {
               <tr>
                 <th style={{ textAlign: "left", paddingLeft: "2rem" }}>Date</th>
                 <th style={{ textAlign: "left" }}>A.P Name</th>
-                <th style={{ textAlign: "left" }}>Mobile No.</th>
+                <th style={{ textAlign: "left" }}>Legal Name</th>
                 <th>Amount</th>
                 <th>Request</th>
               </tr>
             </thead>
             <tbody>
-              {transactions.map((member, index) => (
+              {sortedTransactions.map((member, index) => (
                 <tr key={index}>
                   <td style={{ textAlign: "left", paddingLeft: "2rem" }}>
                     {new Date(
@@ -146,7 +152,7 @@ const TransactionAP = () => {
                   <td style={{ textAlign: "left" }} className="text-blue-600">
                     <Link to={`${member.id}`}>{member.name}</Link>
                   </td>
-                  <td style={{ textAlign: "left" }}>{member.mobileNo}</td>
+                  <td style={{ textAlign: "left" }}>{member.legalName}</td>
                   <td>{member.amount}</td>
                   <td>
                     <TextField

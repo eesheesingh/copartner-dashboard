@@ -10,6 +10,19 @@ const APPage = () => {
   const navigate = useNavigate();
   const [apData, setApData] = useState(null);
 
+  const getExpertType = (typeId) => {
+    switch (parseInt(typeId)) {
+      case 1:
+        return "Commodity";
+      case 2:
+        return "Equity";
+      case 3:
+        return "Options";
+      default:
+        return "Unknown";
+    }
+  };
+
   useEffect(() => {
     fetchAPData();
   }, [apName]);
@@ -81,16 +94,16 @@ const APPage = () => {
                 {apData.map((data, index) => (
                   <tr key={index} className="request-numbers font-semibold">
                     <td className="p-3">
-                      {new Date(data.date).toLocaleDateString()}
+                      {new Date(data.subscribeDate).toLocaleDateString()}
                     </td>
                     <td className="p-3">
-                      <Link to={`/${apName}/${data.userMobileNo}`}>
+                      {/* <Link to={`/${apName}/${data.userMobileNo}`}> */}
                         {data.userMobileNo}
-                      </Link>
+                      {/* </Link> */}
                     </td>
                     <td className="p-3 text-center">{data.amount}</td>
                     <td className="p-3 text-center">{data.raName}</td>
-                    <td className="p-3 text-center">{data.subscription}</td>
+                    <td className="p-3 text-center">{getExpertType(data.subscription)}</td>
                   </tr>
                 ))}
               </tbody>

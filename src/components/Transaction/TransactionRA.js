@@ -32,6 +32,12 @@ const TransactionRA = () => {
     }
   };
 
+  const sortedTransactions = transactions.sort((a, b) => {
+    if (a.requestAction && !b.requestAction) return 1;
+    if (!a.requestAction && b.requestAction) return -1;
+    return 0;
+  });
+
   const handleAccept = (member) => {
     setAcceptPopupOpenForTransaction(member);
   };
@@ -64,8 +70,8 @@ const TransactionRA = () => {
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-
       toast.success("Transaction accepted successfully!");
+      fetchTransactions();
     } catch (error) {
       console.error("Error updating transaction:", error);
       toast.error(`Failed to accept transaction: ${error.message}`);
@@ -129,13 +135,13 @@ const TransactionRA = () => {
               <tr>
                 <th style={{ textAlign: "left", paddingLeft: "2rem" }}>Date</th>
                 <th style={{ textAlign: "left" }}>R.A Name</th>
-                <th style={{ textAlign: "left" }}>SEBI No.</th>
+                <th style={{ textAlign: "left" }}>GST No.</th>
                 <th>Amount</th>
                 <th>Request</th>
               </tr>
             </thead>
             <tbody>
-              {transactions.map((member) => (
+              {sortedTransactions.map((member) => (
                 <tr key={member.id}>
                   <td style={{ textAlign: "left", paddingLeft: "2rem" }}>
                     {new Date(
@@ -145,7 +151,7 @@ const TransactionRA = () => {
                   <td style={{ textAlign: "left" }} className="text-blue-600">
                     <Link to={`${member.id}`}>{member.name}</Link>
                   </td>
-                  <td style={{ textAlign: "left" }}>{member.sebiNo}</td>
+                  <td style={{ textAlign: "left" }}>{member.gst}</td>
                   <td>{member.amount}</td>
                   <td>
                     <TextField

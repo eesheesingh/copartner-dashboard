@@ -10,29 +10,6 @@ function APDetailPopup({
   initialValues1,
   onChangeMode,
 }) {
-  const [initialValues, setInitialValues] = useState(initialValues1);
-
-  const initialValue = async () => {
-    if (initialValues1 && initialValues1.id) {
-      try {
-        const response = await fetch(
-          `https://copartners.in:5133/api/AffiliatePartner/${initialValues1.id}`
-        );
-        if (!response.ok) {
-          throw new Error(`Failed to fetch AP data for ${initialValues1.id}`);
-        }
-        const data = await response.json();
-        setInitialValues(data.data);
-      } catch (error) {
-        console.log(error);
-      }
-    }
-  };
-
-  useEffect(() => {
-    initialValue();
-  }, [initialValues1]);
-
   const [formData, setFormData] = useState({
     name: "",
     legalName: "",
@@ -53,28 +30,43 @@ function APDetailPopup({
   const [errors, setErrors] = useState({});
 
   useEffect(() => {
-    if ((mode === "edit" || mode === "view") && initialValues) {
-      setFormData({ ...formData, ...initialValues });
-    } else {
-      setFormData({
-        name: "",
-        legalName: "",
-        mobileNumber: "",
-        email: "",
-        pan: "",
-        gst: "",
-        fixCommission1: "",
-        fixCommission2: "",
-        isActive: true,
-        affiliatePartnerImagePath: null,
-        kycVideoPath: null,
-        address: "",
-        state: "",
-        referralCode: "",
-        referralLink: "",
-      });
-    }
-  }, [mode, initialValues]);
+    const fetchInitialValues = async () => {
+      if (initialValues1?.id) {
+        try {
+          const response = await fetch(
+            `https://copartners.in:5133/api/AffiliatePartner/${initialValues1.id}`
+          );
+          if (!response.ok) {
+            throw new Error(`Failed to fetch AP data for ${initialValues1.id}`);
+          }
+          const data = await response.json();
+          setFormData({ ...formData, ...data.data });
+        } catch (error) {
+          console.log(error);
+        }
+      } else {
+        setFormData({
+          name: "",
+          legalName: "",
+          mobileNumber: "",
+          email: "",
+          pan: "",
+          gst: "",
+          fixCommission1: "",
+          fixCommission2: "",
+          isActive: true,
+          affiliatePartnerImagePath: null,
+          kycVideoPath: null,
+          address: "",
+          state: "",
+          referralCode: "",
+          referralLink: "",
+        });
+      }
+    };
+
+    fetchInitialValues();
+  }, [initialValues1?.id]);
 
   const handleChange = async (e) => {
     const { id, value, files } = e.target;
@@ -126,16 +118,16 @@ function APDetailPopup({
       }
 
       if (id === "fixCommission1") {
-        if (parseInt(value) > 100) {
-          newErrors.fixCommission1 = "Commission fix cannot exceed 100%";
+        if (parseInt(value) > 80) {
+          newErrors.fixCommission1 = "Commission fix cannot exceed 80%";
         } else {
           delete newErrors.fixCommission1;
         }
       }
 
       if (id === "fixCommission2") {
-        if (parseInt(value) > 100) {
-          newErrors.fixCommission2 = "Commission fix cannot exceed 100%";
+        if (parseInt(value) > 80) {
+          newErrors.fixCommission2 = "Commission fix cannot exceed 80%";
         } else {
           delete newErrors.fixCommission2;
         }
@@ -159,14 +151,14 @@ function APDetailPopup({
     const url =
       mode === "add"
         ? "https://copartners.in:5133/api/AffiliatePartner"
-        : `https://copartners.in:5133/api/AffiliatePartner?Id=${initialValues.id}`;
+        : `https://copartners.in:5133/api/AffiliatePartner?Id=${initialValues1.id}`;
     const method = mode === "add" ? "POST" : "PATCH";
 
     let patchData = [];
 
     if (mode === "edit") {
       for (const key in dataToSubmit) {
-        if (dataToSubmit[key] !== initialValues[key]) {
+        if (dataToSubmit[key] !== initialValues1[key]) {
           patchData.push({
             path: key,
             op: "replace",

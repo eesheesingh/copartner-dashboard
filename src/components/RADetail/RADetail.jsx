@@ -123,7 +123,7 @@ const RADetail = () => {
                   <thead>
                     <tr>
                       <th>Join Date</th>
-                      <th>Legal Name</th>
+                      <th>Channel Name</th>
                       <th>GST No.</th>
                       <th>Commission Fix</th>
                       <th>Spend</th>
@@ -138,7 +138,7 @@ const RADetail = () => {
                       >
                         <td>{new Date(item.joinDate).toLocaleDateString()}</td>
                         <td>
-                          <Link to={`/r.a/${item.id}`}>{item.legalName}</Link>
+                          <Link to={`/r.a/${item.id}`}>{item.channelName}</Link>
                         </td>
                         <td>{item.gst}</td>
                         <td>{item.fixCommission}%</td>

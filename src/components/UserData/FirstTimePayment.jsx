@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-const FirstTimePayment = ({searchQuery}) => {
+const FirstTimePayment = ({searchQuery, onTableData}) => {
   const [payments, setPayments] = useState([]);
 
   useEffect(() => {
@@ -27,6 +27,11 @@ const FirstTimePayment = ({searchQuery}) => {
 
   return (
     <div className="py-4 px-8">
+      <div className="w-full flex flex-row-reverse">
+        <button onClick={() => onTableData(filteredData)} className="border-2 border-black rounded-lg px-4 py-1 mr-4">
+          Download Sheet
+        </button>
+      </div>
       <table className="table-list">
         <thead>
           <tr>
