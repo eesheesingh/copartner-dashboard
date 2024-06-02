@@ -48,7 +48,6 @@ const Join = () => {
                     </th>
                     <th style={{ textAlign: "left" }}>Link</th>
                     <th style={{textAlign: "left"}}>Count</th>
-                    <th>Action</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -60,10 +59,6 @@ const Join = () => {
                       Lorem ipsum dolor sit amet, consectetur adipisicing elit.
                     </td>
                     <td style={{textAlign: "left"}}>1000</td>
-                    <td className="flex justify-center items-center gap-6">
-                        <FaPen className="text-blue-600 cursor-pointer" />
-                        <img className="w-6 h-6 cursor-pointer" src={Bin} alt="Delete" />
-                      </td>
                   </tr>
                 </tbody>
               </table>

@@ -244,9 +244,9 @@ function RAPopup({ onClose, onSave, mode, initialValues }) {
               disabled={isDisabled}
               className={`${inputClasses} h-14`}
             >
-              <MenuItem value={1}>Futures & Options</MenuItem>
+              <MenuItem value={1}>Commodity</MenuItem>
               <MenuItem value={2}>Equity</MenuItem>
-              <MenuItem value={3}>Commodity</MenuItem>
+              <MenuItem value={3}>Futures & Options</MenuItem>
             </TextField>
           ) : (
             <TextField

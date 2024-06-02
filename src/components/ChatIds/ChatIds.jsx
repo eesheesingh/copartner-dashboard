@@ -20,6 +20,10 @@ const ChatIds = () => {
       });
   }, []);
 
+  const filteredData = chatData.filter((user) =>
+    user.chatName.toLowerCase().includes(searchQuery)
+  );
+
   return (
     <div className="dashboard-container p-0 sm:ml-60">
       <PageHeader
@@ -46,7 +50,7 @@ const ChatIds = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {chatData.map((chat) => (
+                  {filteredData.map((chat) => (
                     <tr key={chat._id}>
                       <td style={{ textAlign: "left", paddingLeft: "2rem" }}>
                         {chat.chatName}
