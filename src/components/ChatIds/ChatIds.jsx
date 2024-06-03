@@ -43,6 +43,7 @@ const ChatIds = () => {
               <table className="table-list">
                 <thead>
                   <tr>
+                    <th>Date</th>
                     <th style={{ textAlign: "left", paddingLeft: "2rem" }}>
                       Channel Name
                     </th>
@@ -52,6 +53,7 @@ const ChatIds = () => {
                 <tbody>
                   {filteredData.map((chat) => (
                     <tr key={chat._id}>
+                      <td>{chat.createdAt ? new Date(chat.createdAt).toLocaleDateString() : ""}</td>
                       <td style={{ textAlign: "left", paddingLeft: "2rem" }}>
                         {chat.chatName}
                       </td>
