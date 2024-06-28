@@ -5,6 +5,7 @@ import { DateRange } from "react-date-range";
 const Registration = ({ searchQuery, onTableData }) => {
   const [userData, setUserData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
+  const [count, setCount] = useState("");
   const [dateRange, setDateRange] = useState([
     {
       startDate: null,
@@ -18,7 +19,7 @@ const Registration = ({ searchQuery, onTableData }) => {
     const fetchUserData = async () => {
       try {
         const response = await fetch(
-          "https://copartners.in:5134/api/UserData/UserDataListing"
+          "https://copartners.in:5134/api/UserData/UserDataListing?page=1&pageSize=100000"
         );
         if (!response.ok) {
           throw new Error("Failed to fetch user data");
@@ -52,11 +53,23 @@ const Registration = ({ searchQuery, onTableData }) => {
       .sort((a, b) => new Date(b.date) - new Date(a.date));
 
     setFilteredData(filteredAndSortedData);
+    setCount(filteredAndSortedData.length);
   }, [userData, searchQuery, dateRange]);
+
+  const determineUserType = (userData) => {
+    if (userData.apId) {
+      return "AP";
+    } else if (userData.expertId) {
+      return "RA";
+    } else {
+      return "CP";
+    }
+  };
 
   return (
     <div className="py-4 px-8">
       <div className="w-full flex flex-row-reverse">
+        <div>Count: {count}</div>
         <button
           onClick={() => onTableData(filteredData)}
           className="border-2 border-black rounded-lg px-4 py-1 mr-4"
@@ -95,7 +108,9 @@ const Registration = ({ searchQuery, onTableData }) => {
         <thead>
           <tr>
             <th className="text-left pl-8">Date</th>
+            <th className="text-left pl-8">Time</th>
             <th className="text-left">User Number</th>
+            <th className="text-left">Source</th>
             <th>Name</th>
           </tr>
         </thead>
@@ -105,7 +120,11 @@ const Registration = ({ searchQuery, onTableData }) => {
               <td className="text-left pl-8">
                 {new Date(user.date).toLocaleDateString()}
               </td>
+              <td className="text-left pl-8">
+                {new Date(user.date).toLocaleTimeString()}
+              </td>
               <td className="text-left">{user.mobile}</td>
+              <td className="text-left">{determineUserType(user)}</td>
               <td>{user.name || "-"}</td>
             </tr>
           ))}

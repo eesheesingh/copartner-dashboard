@@ -23,7 +23,7 @@ const AgencyList = () => {
   const fetchAgencyList = async () => {
     try {
       const response = await fetch(
-        "https://copartners.in:5134/api/AdvertisingAgency"
+        "https://copartners.in:5134/api/AdvertisingAgency?page=1&pageSize=10000"
       );
       if (!response.ok) {
         throw new Error("Failed to fetch agency list");

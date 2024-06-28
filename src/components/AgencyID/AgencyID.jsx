@@ -23,7 +23,7 @@ const AgencyID = () => {
   const fetchAgency = async () => {
     try {
       const response = await fetch(
-        `https://copartners.in:5134/api/ExpertsAdvertisingAgency/${agencyId}`
+        `https://copartners.in:5134/api/ExpertsAdvertisingAgency/${agencyId}?page=1&pageSize=10000`
       );
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);

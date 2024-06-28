@@ -13,7 +13,7 @@ const AssignRA = ({ onClose, onSave }) => {
     const fetchManagers = async () => {
       try {
         const response = await fetch(
-          "https://copartners.in:5134/api/RelationshipManager"
+          "https://copartners.in:5134/api/RelationshipManager?page=1&pageSize=10000"
         );
         const data = await response.json();
         setManagers(data.data);
@@ -25,7 +25,7 @@ const AssignRA = ({ onClose, onSave }) => {
 
     const fetchRAs = async () => {
       try {
-        const response = await fetch("https://copartners.in:5132/api/Experts");
+        const response = await fetch("https://copartners.in:5132/api/Experts?page=1&pageSize=10000");
         const data = await response.json();
         setRAs(data.data);
       } catch (error) {

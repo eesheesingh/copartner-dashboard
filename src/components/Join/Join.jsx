@@ -1,14 +1,30 @@
-import React, { useState } from "react";
-import { ToastContainer } from "react-toastify";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
 import PageHeader from "../Header/Header";
 import JoinPopup from "./JoinPopup";
-import { FaPen } from "react-icons/fa";
-import Bin from '../../assets/TrashBinMinimalistic.png'
 
 const Join = () => {
   const [hasNotification, setHasNotification] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [channels, setChannels] = useState([]);
+
+  useEffect(() => {
+    fetchChannels();
+  }, []);
+
+  const fetchChannels = async () => {
+    try {
+      const response = await axios.get(
+        "https://api.hailgrotech.com/api/chatmembers/getJoinBotData"
+      );
+      setChannels(response.data);
+    } catch (error) {
+      console.error("Error fetching channels:", error);
+      toast.error("Failed to fetch channels");
+    }
+  };
 
   const openSubAdmin = () => {
     setIsPopupOpen(true);
@@ -46,27 +62,42 @@ const Join = () => {
                     <th style={{ textAlign: "left", paddingLeft: "2rem" }}>
                       Channel Name
                     </th>
-                    <th style={{ textAlign: "left" }}>Link</th>
-                    <th style={{textAlign: "left"}}>Count</th>
+                    <th style={{ textAlign: "left" }}>Links</th>
+                    <th style={{ textAlign: "left" }}>Count</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td style={{ textAlign: "left", paddingLeft: "2rem" }}>
-                      Option Empire
-                    </td>
-                    <td style={{ textAlign: "left" }} className="text-blue-600">
-                      Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                    </td>
-                    <td style={{textAlign: "left"}}>1000</td>
-                  </tr>
+                  {channels.map((channel) => (
+                    <tr
+                      className="even:bg-gray-100 odd:bg-white"
+                      key={channel._id}
+                    >
+                      <td style={{ textAlign: "left", paddingLeft: "2rem" }}>
+                        {channel.channelName}
+                      </td>
+                      <td style={{ textAlign: "left" }}>
+                        {channel.linksWithCounts.map((linkWithCount, index) => (
+                          <div key={index} className="text-blue-600">
+                            {linkWithCount.link}
+                          </div>
+                        ))}
+                      </td>
+                      <td style={{ textAlign: "left" }}>
+                        {channel.linksWithCounts.map((linkWithCount, index) => (
+                          <div key={index}>{linkWithCount.membersCount}</div>
+                        ))}
+                      </td>
+                    </tr>
+                  ))}
                 </tbody>
               </table>
             </div>
           </div>
         </div>
       </div>
-      {isPopupOpen && <JoinPopup closeJoin={closeSubAdmin} />}
+      {isPopupOpen && (
+        <JoinPopup closeJoin={closeSubAdmin} fetchChannels={fetchChannels} />
+      )}
       <ToastContainer />
     </div>
   );

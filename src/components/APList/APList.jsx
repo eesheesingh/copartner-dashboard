@@ -15,14 +15,17 @@ const APList = () => {
     const fetchAPDetails = async () => {
       try {
         const response = await fetch(
-          `https://copartners.in:5133/api/APDashboard/GetDashboardAPListingData/${apName}`
+          `https://copartners.in:5133/api/APDashboard/GetDashboardAPListingData/${apName}?page=1&pageSize=10000`
         );
         if (!response.ok) {
           throw new Error(`Failed to fetch data for ${apName}`);
         }
         const data = await response.json();
         if (data.isSuccess) {
-          setApDetails(data.data);
+          const sortedData = data.data.sort(
+            (a, b) => new Date(b.userJoiningDate) - new Date(a.userJoiningDate)
+          );
+          setApDetails(sortedData);
           setReferralLink(data.data[0].referralLink);
           setApHeading(data.data[0].apName);
         } else {
@@ -92,7 +95,7 @@ const APList = () => {
                     </td>
                     <td className="p-3 text-center text-blue-500">
                       {/* <Link to={`/${apdetail.apName}`}> */}
-                        {apdetail.amount || "N/A"}
+                        {apdetail.amount}
                       {/* </Link> */}
                     </td>
                   </tr>

@@ -13,7 +13,7 @@ const Listing = ({ activeButton }) => {
   const fetchData = async () => {
     try {
       const response = await fetch(
-        "https://copartners.in:5134/api/RelationshipManager"
+        "https://copartners.in:5134/api/RelationshipManager?page=1&pageSize=10000"
       );
       const result = await response.json();
       if (result.isSuccess) {

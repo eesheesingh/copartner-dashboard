@@ -20,7 +20,7 @@ const Blog = () => {
 
   const fetchBlogs = async () => {
     try {
-      const response = await fetch("https://copartners.in:5134/api/Blogs");
+      const response = await fetch(`https://copartners.in:5134/api/Blogs?page=1&pageSize=10000`);
       if (!response.ok) {
         throw new Error("Failed to fetch blogs");
       }

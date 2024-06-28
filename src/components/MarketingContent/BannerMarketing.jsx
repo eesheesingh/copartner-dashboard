@@ -53,7 +53,7 @@ const BannerMarketing = ({ banner, update, onEditClick }) => {
         <img
           src={banner?.imagePath}
           alt={banner.bannerName}
-          className="w-full h-full object-cover"
+          className="w-full h-48 object-cover"
         />
       </div>
     </div>

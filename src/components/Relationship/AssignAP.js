@@ -13,7 +13,7 @@ const AssignAP = ({ onClose, onSave }) => {
     const fetchManagers = async () => {
       try {
         const response = await fetch(
-          "https://copartners.in:5134/api/RelationshipManager"
+          "https://copartners.in:5134/api/RelationshipManager?page=1&pageSize=10000"
         );
         const data = await response.json();
         setManagers(data.data);
@@ -26,7 +26,7 @@ const AssignAP = ({ onClose, onSave }) => {
     const fetchAPs = async () => {
       try {
         const response = await fetch(
-          "https://copartners.in:5133/api/AffiliatePartner"
+          "https://copartners.in:5133/api/AffiliatePartner?page=1&pageSize=10000"
         );
         const data = await response.json();
         setAPs(data.data);

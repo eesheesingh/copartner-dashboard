@@ -321,7 +321,6 @@ function RAPopup({ onClose, onSave, mode, initialValues }) {
     {
       name: "gst",
       label: "GST Number",
-      required: true,
     },
     {
       name: "expertImagePath",

@@ -20,13 +20,16 @@ const Personal = () => {
   const fetchData = async () => {
     try {
       const response = await fetch(
-        `https://copartners.in:5132/api/RADashboard/DashboardRADetails?isCoPartner=false&page=1&pageSize=10`
+        `https://copartners.in:5132/api/RADashboard/DashboardRADetails?isCoPartner=false&page=1&pageSize=10000`
       );
       if (!response.ok) {
         throw new Error("Failed to fetch data");
       }
       const fetchedData = await response.json();
-      setData(fetchedData.data);
+      const sortedData = fetchedData.data.sort(
+        (a, b) => new Date(b.joinDate) - new Date(a.joinDate)
+      );
+      setData(sortedData);
     } catch (error) {
       console.error("Error fetching data:", error);
       toast.error("Failed to fetch RA Details");

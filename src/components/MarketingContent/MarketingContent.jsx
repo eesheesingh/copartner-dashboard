@@ -17,7 +17,7 @@ const MarketingContent = () => {
 
   const fetchData = async () => {
     try {
-      const response = await fetch("https://copartners.in:5134/api/MarketingContent");
+      const response = await fetch("https://copartners.in:5134/api/MarketingContent?page=1&pageSize=10000");
       const data = await response.json();
       setBannersData(data.data.filter(item => item.contentType.toLowerCase() === "banner"));
       setVideosData(data.data.filter(item => item.contentType.toLowerCase() === "videos"));

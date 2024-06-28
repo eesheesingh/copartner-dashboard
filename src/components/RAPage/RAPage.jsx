@@ -14,9 +14,11 @@ const RAPage = () => {
   useEffect(() => {
     const fetchRAData = async () => {
       try {
-        const response = await fetch("https://copartners.in:5132/api/RADashboard/DashboardRAListing?page=1&pageSize=10");
+        const response = await fetch(
+          "https://copartners.in:5132/api/RADashboard/DashboardRAListing?page=1&pageSize=10000"
+        );
         if (!response.ok) {
-          throw new Error('Something went wrong, status ' + response.status);
+          throw new Error("Something went wrong, status " + response.status);
         }
         const data = await response.json();
         setRpData(data.data);
@@ -27,6 +29,10 @@ const RAPage = () => {
 
     fetchRAData();
   }, []);
+
+  const totalUsersCount = rpData.reduce((sum, row) => sum + row.usersCount, 0);
+  const totalRaEarning = rpData.reduce((sum, row) => sum + row.raEarning, 0);
+  const totalCpEarning = rpData.reduce((sum, row) => sum + row.cpEarning, 0);
 
   return (
     <div className="dashboard-container p-0 sm:ml-60">
@@ -69,6 +75,32 @@ const RAPage = () => {
                       <td className="text-green-600">{row.cpEarning}</td>
                     </tr>
                   ))}
+                  <tr className="bg-gray-100">
+                    <td
+                      style={{
+                        textAlign: "left",
+                        paddingLeft: "2rem",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      Total
+                    </td>
+                    <td
+                      style={{ fontWeight: "bold" }}
+                      className="text-blue-600"
+                    >
+                      {totalUsersCount}
+                    </td>
+                    <td style={{ fontWeight: "bold" }} className="text-red-500">
+                      {totalRaEarning.toFixed(1)}
+                    </td>
+                    <td
+                      style={{ fontWeight: "bold" }}
+                      className="text-green-600"
+                    >
+                      {totalCpEarning.toFixed(1)}
+                    </td>
+                  </tr>
                 </tbody>
               </table>
             </div>

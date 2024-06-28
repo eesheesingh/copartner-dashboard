@@ -5,6 +5,7 @@ import { DateRange } from "react-date-range";
 const SecondTimePayment = ({ searchQuery, onTableData }) => {
   const [SecondTimePayment, setSecondTimePayment] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
+  const [count, setCount] = useState("");
   const [dateRange, setDateRange] = useState([
     {
       startDate: null,
@@ -18,7 +19,7 @@ const SecondTimePayment = ({ searchQuery, onTableData }) => {
     const fetchData = async () => {
       try {
         const response = await fetch(
-          "https://copartners.in:5134/api/UserData/UserSecondTimePaymentListing"
+          "https://copartners.in:5134/api/UserData/UserSecondTimePaymentListing?page=1&pageSize=100000"
         );
         const data = await response.json();
         if (data.isSuccess) {
@@ -47,11 +48,23 @@ const SecondTimePayment = ({ searchQuery, onTableData }) => {
     ).sort((a, b) => new Date(b.date) - new Date(a.date));
 
     setFilteredData(filteredAndSortedData);
+    setCount(filteredAndSortedData.length);
   }, [SecondTimePayment, searchQuery, dateRange]);
+
+  const determineUserType = (userData) => {
+    if (userData.apId) {
+      return "AP";
+    } else if (userData.raId) {
+      return "RA";
+    } else {
+      return "CP";
+    }
+  };
 
   return (
     <div className="py-4 px-8">
       <div className="w-full flex flex-row-reverse">
+        <div>Count: {count}</div>
         <button
           onClick={() => onTableData(filteredData)}
           className="border-2 border-black rounded-lg px-4 py-1 mr-4"
@@ -90,7 +103,9 @@ const SecondTimePayment = ({ searchQuery, onTableData }) => {
         <thead>
           <tr>
             <th style={{ textAlign: "left", paddingLeft: "2rem" }}>Date</th>
+            <th style={{ textAlign: "left", paddingLeft: "2rem" }}>Time</th>
             <th style={{ textAlign: "left" }}>User Number</th>
+            <th style={{ textAlign: "left" }}>Source</th>
             <th>Name</th>
             <th>Payment</th>
           </tr>
@@ -101,7 +116,11 @@ const SecondTimePayment = ({ searchQuery, onTableData }) => {
               <td style={{ textAlign: "left", paddingLeft: "2rem" }}>
                 {new Date(payment.date).toLocaleDateString()}
               </td>
+              <td style={{ textAlign: "left", paddingLeft: "2rem" }}>
+                {new Date(payment.date).toLocaleTimeString()}
+              </td>
               <td style={{ textAlign: "left" }}>{payment.mobile}</td>
+              <td style={{ textAlign: "left" }}>{determineUserType(payment)}</td>
               <td>{payment.name || "-"}</td>
               <td>{payment.payment}</td>
             </tr>

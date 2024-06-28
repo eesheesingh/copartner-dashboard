@@ -12,7 +12,10 @@ const ChatIds = () => {
     axios
       .get("https://phonepe.copartner.in/api/getChatNames")
       .then((res) => {
-        setChatData(res.data);
+        const sortedData = res.data.sort(
+          (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+        );
+        setChatData(sortedData);
       })
       .catch((error) => {
         console.error("Error fetching chat names:", error);

@@ -53,7 +53,7 @@ const MarketingVideo = ({ video, update, onEditClick }) => {
         <video
           src={video?.imagePath}
           alt={video.imagePath}
-          className="w-full h-full object-cover"
+          className="w-full h-48 object-cover"
           controls
         />
       </div>

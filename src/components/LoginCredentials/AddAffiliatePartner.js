@@ -22,7 +22,7 @@ const AddAffiliatePartner = ({ onClose, onSave }) => {
   const fetchAPList = async () => {
     try {
       const response = await fetch(
-        "https://copartners.in:5133/api/AffiliatePartner"
+        "https://copartners.in:5133/api/AffiliatePartner?page=1&pageSize=10000"
       );
       const result = await response.json();
       if (result.isSuccess) {

@@ -11,7 +11,7 @@ const RaAdmin = ({ activeButton }) => {
   const fetchData = async () => {
     try {
       const response = await fetch(
-        "https://copartners.in:5130/api/Users?userType=RA"
+        "https://copartners.in:5130/api/Users?userType=RA&page=1&pageSize=10000"
       );
       const result = await response.json();
       if (result.isSuccess) {

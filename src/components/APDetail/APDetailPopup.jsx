@@ -200,7 +200,7 @@ function APDetailPopup({
     },
     { id: "email", label: "Mail ID", required: true },
     { id: "pan", label: "PAN Card Number", required: true },
-    { id: "gst", label: "GST Number", required: true },
+    { id: "gst", label: "GST Number" },
     {
       id: "fixCommission1",
       label: "CM. Fix 1",

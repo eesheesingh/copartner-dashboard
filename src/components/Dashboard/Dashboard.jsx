@@ -19,7 +19,7 @@ const Dashboard = () => {
   const fetchData = async () => {
     try {
       const response = await fetch(
-        `https://copartners.in:5133/api/APDashboard/DashboardAPListing?page=1&pageSize=10`
+        `https://copartners.in:5133/api/APDashboard/DashboardAPListing?page=1&pageSize=10000`
       );
       if (!response.ok) {
         throw new Error("Failed to fetch data");
@@ -32,6 +32,12 @@ const Dashboard = () => {
       });
     }
   };
+
+  const totalUsersCount = data.reduce((sum, row) => sum + row.usersCount, 0);
+  const totalUsersPay = data.reduce((sum, row) => sum + row.usersPayment, 0);
+  const totalApEarning = data.reduce((sum, row) => sum + row.apEarning, 0);
+  const totalRaEarning = data.reduce((sum, row) => sum + row.raEarning, 0);
+  const totalCpEarning = data.reduce((sum, row) => sum + row.cpEarning, 0);
 
   return (
     <div className="dashboard-container p-0 sm:ml-60">
@@ -63,7 +69,7 @@ const Dashboard = () => {
                 </thead>
                 <tbody>
                   {data.map((row, index) => (
-                    <tr key={index} className={index % 2 === 0 ? "even:bg-gray-100 odd:bg-white" : "odd:bg-gray-100 even:bg-white"}>
+                    <tr key={index} className="even:bg-gray-100 odd:bg-white">
                       <td>
                         <Link to={`/${row.id}`}>{row.apName}</Link>
                       </td>
@@ -76,6 +82,43 @@ const Dashboard = () => {
                       <td className="text-green-600">{row.cpEarning}</td>
                     </tr>
                   ))}
+                  <tr className="bg-gray-100">
+                    <td
+                      style={{
+                        paddingLeft: "2rem",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      Total
+                    </td>
+                    <td
+                      style={{ fontWeight: "bold" }}
+                      className="text-blue-600"
+                    >
+                      {totalUsersCount}
+                    </td>
+                    <td
+                      style={{ fontWeight: "bold" }}
+                      className="text-blue-600"
+                    >
+                      {totalUsersPay}
+                    </td>
+                    <td style={{ fontWeight: "bold" }} className="text-red-500">
+                      {totalApEarning.toFixed(1)}
+                    </td>
+                    <td
+                      style={{ fontWeight: "bold" }}
+                      className="text-green-600"
+                    >
+                      {totalRaEarning.toFixed(1)}
+                    </td>
+                    <td
+                      style={{ fontWeight: "bold" }}
+                      className="text-green-600"
+                    >
+                      {totalCpEarning.toFixed(1)}
+                    </td>
+                  </tr>
                 </tbody>
               </table>
             </div>

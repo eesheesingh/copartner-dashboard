@@ -12,13 +12,13 @@ const LoginPopup = ({ closeLogin, title }) => {
 
   useEffect(() => {
     if (title === "Sub-Admin") {
-      setAPI("https://copartners.in:5131/api/User");
+      setAPI("https://copartners.in:5131/api/User?page=1&pageSize=10000");
       setUserType("SA");
     } else if (title === "R.A") {
-      setAPI("https://copartners.in:5132/api/Experts");
+      setAPI("https://copartners.in:5132/api/Experts?page=1&pageSize=10000");
       setUserType("RA");
     } else {
-      setAPI("https://copartners.in:5133/api/AffiliatePartner");
+      setAPI("https://copartners.in:5133/api/AffiliatePartner?page=1&pageSize=10000");
       setUserType("AP");
     }
   }, [title]);

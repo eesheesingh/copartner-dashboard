@@ -21,7 +21,7 @@ const AgencyPopup = ({ onClose, selectedAgency, onSubmit, agencyId }) => {
   useEffect(() => {
     const fetchRAList = async () => {
       try {
-        const response = await fetch('https://copartners.in:5132/api/Experts');
+        const response = await fetch('https://copartners.in:5132/api/Experts?page=1&pageSize=10000');
         if (!response.ok) {
           throw new Error('Failed to fetch RA list');
         }
