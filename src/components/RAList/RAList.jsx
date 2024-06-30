@@ -50,6 +50,7 @@ const RAList = () => {
         );
 
         setSelectedRA(sortedData);
+        console.log(sortedData)
         setFilteredData(sortedData); // Set initial filtered data
       } catch (error) {
         toast.error("Error fetching RA data:", error);
@@ -184,7 +185,7 @@ const RAList = () => {
                     className="even:bg-gray-100 odd:bg-white font-semibold"
                   >
                     <td className="p-3">
-                      {new Date(ra.subscribeDate).toLocaleDateString()}
+                      {ra.subscribeDate ? new Date(ra.subscribeDate).toLocaleDateString() : new Date(ra.userJoiningDate).toLocaleDateString()}
                     </td>
                     <td className="p-3">{ra.userMobileNo}</td>
                     <td className="p-3 text-center">{ra.apName}</td>
