@@ -33,6 +33,7 @@ import "react-toastify/dist/ReactToastify.css";
 import RAUserData from "./components/RAUserData/RAUserData";
 import Signup from "./components/Signup/Signup";
 import ChatIds from "./components/ChatIds/ChatIds";
+import Notification from "./components/Notification/Notification";
 
 const App = () => {
   const token = sessionStorage.getItem("creds");
@@ -63,6 +64,7 @@ const App = () => {
           <Route path="login" element={<Login />} />
           <Route path="rauserdata" element={<RAUserData />} />
           <Route path="chatids" element={<ChatIds />} />
+          <Route path="notification" element={<Notification />} />
         </Route>
         <Route path="signup" element={<Signup />} />
       </>

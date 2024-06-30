@@ -38,6 +38,7 @@ const Sidebar = () => {
   };
 
   const links = [
+    { to: "/notification", title: "Notification", label: "Notification", icon: userIcon },
     { to: "/", title: "Dashboard", label: "A.P", icon: userIcon },
     { to: "/r.a", title: "Overview", label: "R.A", icon: userIcon },
     {
