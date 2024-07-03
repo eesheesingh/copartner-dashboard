@@ -4,6 +4,7 @@ import { IoEyeSharp } from "react-icons/io5";
 import { Link } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import RAPopup from "./RAPopup";
+import axios from "axios";
 
 const Personal = () => {
   const [data, setData] = useState([]);
@@ -107,7 +108,7 @@ const Personal = () => {
                 <th>Join Date</th>
                 <th>Channel Name</th>
                 <th>GST No.</th>
-                <th>Spend</th>
+                <th>Wallet Bal.</th>
                 <th>Action</th>
               </tr>
             </thead>
@@ -119,7 +120,9 @@ const Personal = () => {
                     <Link to={`/r.a/${item.id}`}>{item.channelName}</Link>
                   </td>
                   <td>{item.gst}</td>
-                  <td className="text-red-600">{item.raEarning}</td>
+                  <td className="text-red-600">
+                    <AsyncRaEarning id={item.id} />
+                  </td>
                   <td className="text-green-600 flex justify-center items-center gap-6">
                     <button
                       onClick={() => handleOpenPopup(item, "edit")}
@@ -151,6 +154,36 @@ const Personal = () => {
       <ToastContainer />
     </div>
   );
+};
+
+const AsyncRaEarning = ({ id }) => {
+  const [earning, setEarning] = useState(null);
+
+  const totalRaEarning = async (id) => {
+    try {
+      const response = await axios.get(
+        `https://copartners.in:5135/api/Wallet/GetWalletWithdrawalBalance/${id}?userType=RA`
+      );
+      return response.data.data.withdrawalBalance;
+    } catch (error) {
+      console.error(error.message);
+      return "Error fetching data";
+    }
+  };
+
+  useEffect(() => {
+    const fetchEarning = async () => {
+      const result = await totalRaEarning(id);
+      setEarning(result !== null && result !== undefined ? result : 0);
+    };
+    fetchEarning();
+  }, [id]);
+
+  if (earning === "Error fetching data") {
+    return <span>Error fetching data</span>;
+  }
+
+  return earning !== null ? earning : "Loading...";
 };
 
 export default Personal;

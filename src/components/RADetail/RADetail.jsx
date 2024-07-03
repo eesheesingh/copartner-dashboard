@@ -9,6 +9,7 @@ import { FaPen } from "react-icons/fa";
 import { IoEyeSharp } from "react-icons/io5";
 import RAPopup from "./RAPopup";
 import Personal from "./Personal";
+import axios from "axios";
 
 const RADetail = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -128,7 +129,7 @@ const RADetail = () => {
                       <th>Channel Name</th>
                       <th>GST No.</th>
                       <th>Commission Fix</th>
-                      <th>Spend</th>
+                      <th>Wallet Bal.</th>
                       <th>Action</th>
                     </tr>
                   </thead>
@@ -144,7 +145,9 @@ const RADetail = () => {
                         </td>
                         <td>{item.gst}</td>
                         <td>{item.fixCommission}%</td>
-                        <td className="text-red-600">{item.raEarning}</td>
+                        <td className="text-red-600">
+                          <AsyncRaEarning id={item.id} />
+                        </td>
                         <td className="text-green-600 flex justify-center items-center gap-6">
                           <button
                             onClick={() => handleOpenPopup(item, "edit")}
@@ -181,6 +184,36 @@ const RADetail = () => {
       <ToastContainer />
     </div>
   );
+};
+
+const AsyncRaEarning = ({ id }) => {
+  const [earning, setEarning] = useState(null);
+
+  const totalRaEarning = async (id) => {
+    try {
+      const response = await axios.get(
+        `https://copartners.in:5135/api/Wallet/GetWalletWithdrawalBalance/${id}?userType=RA`
+      );
+      return response.data.data.withdrawalBalance;
+    } catch (error) {
+      console.error(error.message);
+      return "Error fetching data";
+    }
+  };
+
+  useEffect(() => {
+    const fetchEarning = async () => {
+      const result = await totalRaEarning(id);
+      setEarning(result !== null && result !== undefined ? result : 0);
+    };
+    fetchEarning();
+  }, [id]);
+
+  if (earning === "Error fetching data") {
+    return <span>Error fetching data</span>;
+  }
+
+  return earning !== null ? earning : "Loading...";
 };
 
 export default RADetail;

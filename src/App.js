@@ -65,6 +65,7 @@ const App = () => {
           <Route path="rauserdata" element={<RAUserData />} />
           <Route path="chatids" element={<ChatIds />} />
           <Route path="notification" element={<Notification />} />
+          <Route path="telegrampage" element={<Notification />} />
         </Route>
         <Route path="signup" element={<Signup />} />
       </>

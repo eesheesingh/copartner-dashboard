@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 import { FaPen } from "react-icons/fa";
 import APDetailPopup from "./APDetailPopup";
 import { IoEyeSharp } from "react-icons/io5";
+import axios from "axios";
 
 const APDetail = () => {
   const [hasNotification, setHasNotification] = useState(true);
@@ -113,7 +114,9 @@ const APDetail = () => {
                       <td>{item.gst}</td>
                       <td>{item.fixCommission1}</td>
                       <td>{item.fixCommission2}</td>
-                      <td className="text-red-600">{item.apEarning}</td>
+                      <td style={{textAlign: "center"}} className="text-red-600">
+                        <AsyncApEarning id={item.id} />
+                      </td>
                       <td className="text-green-600 flex justify-center items-center gap-6">
                         <button
                           onClick={() => handleOpenPopup(item, "edit")}
@@ -156,6 +159,36 @@ const APDetail = () => {
       <ToastContainer />
     </div>
   );
+};
+
+const AsyncApEarning = ({ id }) => {
+  const [earning, setEarning] = useState(null);
+
+  const totalRaEarning = async (id) => {
+    try {
+      const response = await axios.get(
+        `https://copartners.in:5135/api/Wallet/GetWalletWithdrawalBalance/${id}?userType=AP`
+      );
+      return response.data.data.withdrawalBalance;
+    } catch (error) {
+      console.error(error.message);
+      return "Error fetching data";
+    }
+  };
+
+  useEffect(() => {
+    const fetchEarning = async () => {
+      const result = await totalRaEarning(id);
+      setEarning(result !== null && result !== undefined ? result : 0);
+    };
+    fetchEarning();
+  }, [id]);
+
+  if (earning === "Error fetching data") {
+    return <span>Error fetching data</span>;
+  }
+
+  return earning !== null ? earning : "Loading...";
 };
 
 export default APDetail;

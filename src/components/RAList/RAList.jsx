@@ -46,11 +46,10 @@ const RAList = () => {
         }
         const data = await response.json();
         const sortedData = data.data.sort(
-          (a, b) => new Date(b.subscribeDate) - new Date(a.subscribeDate)
+          (a, b) => new Date(b.subscribeDate || b.userJoiningDate) - new Date(a.subscribeDate || a.userJoiningDate)
         );
 
         setSelectedRA(sortedData);
-        console.log(sortedData)
         setFilteredData(sortedData); // Set initial filtered data
       } catch (error) {
         toast.error("Error fetching RA data:", error);

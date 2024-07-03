@@ -84,6 +84,7 @@ const Sidebar = () => {
     { to: "/login", title: "Settings", label: "Login Credentials", icon: userIcon },
     { to: "/rauserdata", title: "Settings", label: "RA User Data", icon: userIcon },
     { to: "/chatids", title: "Settings", label: "Chat IDs", icon: userIcon },
+    { to: "/telegrampage", title: "Settings", label: "Telegram Page", icon: userIcon },
   ];
 
   return (
