@@ -34,6 +34,7 @@ import RAUserData from "./components/RAUserData/RAUserData";
 import Signup from "./components/Signup/Signup";
 import ChatIds from "./components/ChatIds/ChatIds";
 import Notification from "./components/Notification/Notification";
+import TelegramPage from "./components/TelegramPage/TelegramPage";
 
 const App = () => {
   const token = sessionStorage.getItem("creds");
@@ -65,7 +66,7 @@ const App = () => {
           <Route path="rauserdata" element={<RAUserData />} />
           <Route path="chatids" element={<ChatIds />} />
           <Route path="notification" element={<Notification />} />
-          <Route path="telegrampage" element={<Notification />} />
+          <Route path="telegrampage" element={<TelegramPage />} />
         </Route>
         <Route path="signup" element={<Signup />} />
       </>
