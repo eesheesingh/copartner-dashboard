@@ -3,6 +3,7 @@ import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import PageHeader from "../Header/Header";
 import TelegramPopup from "./TelegramPopup";
+import { FaTrash } from "react-icons/fa";
 
 const TelegramPage = () => {
   const [hasNotification, setHasNotification] = useState(true);
@@ -42,6 +43,22 @@ const TelegramPage = () => {
     setIsPopupOpen(false);
   };
 
+  const handleDelete = async (id) => {
+    try {
+      const response = await axios.delete(
+        `https://copartners.in:5134/api/TelegramMessage/${id}`
+      );
+      if (response.data.isSuccess) {
+        toast.success("Channel deleted successfully");
+        fetchChannels(); // Refresh the channel list after deletion
+      } else {
+        toast.error("Failed to delete channel");
+      }
+    } catch (error) {
+      toast.error("An error occurred while deleting the channel");
+    }
+  };
+
   return (
     <div className="dashboard-container p-0 sm:ml-60">
       <PageHeader
@@ -75,6 +92,7 @@ const TelegramPage = () => {
                     <th>Leave Message</th>
                     <th>Marketing Message</th>
                     <th>Assigned to</th>
+                    <th>Action</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -96,6 +114,12 @@ const TelegramPage = () => {
                       <td>{channel.leaveMessage}</td>
                       <td>{channel.marketingMessage}</td>
                       <td>{channel.expertsName || channel.affiliatePartnersName}</td>
+                      <td className="flex justify-center">
+                        <FaTrash
+                          className="text-red-500 cursor-pointer"
+                          onClick={() => handleDelete(channel.id)}
+                        />
+                      </td>
                     </tr>
                   ))}
                 </tbody>

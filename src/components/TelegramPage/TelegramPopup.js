@@ -31,7 +31,7 @@ const TelegramPopup = ({ onClose, onSave }) => {
     const fetchChatNames = async () => {
       try {
         const response = await fetch(
-          "https://phonepe.copartner.in/api/getChatNames"
+          "https://phonepe.copartner.in/api/getStockChannels"
         );
         const data = await response.json();
         setChatNames(data);
