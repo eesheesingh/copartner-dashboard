@@ -11,7 +11,7 @@ function RAPopup({ onClose, onSave, mode, initialValues }) {
   const isViewMode = currentMode === "view";
   const [formData, setFormData] = useState({
     name: "",
-    legalName:"",
+    legalName: "",
     sebiRegNo: "",
     mobileNumber: "",
     email: "",
@@ -22,7 +22,9 @@ function RAPopup({ onClose, onSave, mode, initialValues }) {
     telegramFollower: "",
     fixCommission: "",
     telegramChannel: "",
-    premiumTelegramChannel: "",
+    premiumTelegramChannel1: "",
+    premiumTelegramChannel2: "",
+    premiumTelegramChannel3: "",
     expertImagePath: null,
     sebiRegCertificatePath: null,
     pan: "",
@@ -32,6 +34,9 @@ function RAPopup({ onClose, onSave, mode, initialValues }) {
     gst: "",
     isCoPartner: true,
     isActive: true,
+    chatId1: "",
+    chatId2: "",
+    chatId3: "",
   });
   const [errors, setErrors] = useState({});
   const [originalData, setOriginalData] = useState({});
@@ -129,7 +134,10 @@ function RAPopup({ onClose, onSave, mode, initialValues }) {
       return;
     }
 
-    const dataToSubmit = { ...formData, isCoPartner: copartnerChecked };
+    const dataToSubmit = {
+      ...formData,
+      isCoPartner: copartnerChecked,
+    };
 
     const url =
       currentMode === "add"
@@ -150,8 +158,6 @@ function RAPopup({ onClose, onSave, mode, initialValues }) {
         }
       }
     }
-
-    console.log(patchData);
 
     try {
       setLoading(true);
@@ -297,12 +303,12 @@ function RAPopup({ onClose, onSave, mode, initialValues }) {
       type: "number",
     },
     { name: "telegramChannel", label: "Telegram Channel Link", required: true },
-    {
-      name: "premiumTelegramChannel",
-      label: "Premium Channel Link",
-      required: true,
-    },
-    { name: "chatId", label: "Chat ID", required: true },
+    { name: "premiumTelegramChannel1", label: "Premium Channel C Link" },
+    { name: "premiumTelegramChannel2", label: "Premium Channel E Link" },
+    { name: "premiumTelegramChannel3", label: "Premium Channel FO Link" },
+    { name: "chatId1", label: "Chat ID C", required: true },
+    { name: "chatId2", label: "Chat ID E", required: true },
+    { name: "chatId3", label: "Chat ID FO", required: true },
     {
       name: "pan",
       label: "PAN Card",

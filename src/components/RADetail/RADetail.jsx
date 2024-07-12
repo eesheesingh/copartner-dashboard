@@ -56,7 +56,6 @@ const RADetail = () => {
           throw new Error("Failed to fetch data");
         }
         const fetchedData = await response.json();
-        console.log(fetchedData.data);
         setPopup({ isOpen: true, item: fetchedData.data, mode });
       } catch (error) {
         console.error("Error fetching data:", error);

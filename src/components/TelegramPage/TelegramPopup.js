@@ -192,7 +192,6 @@ const TelegramPopup = ({ onClose, onSave }) => {
             onChange={handleChange}
             variant="outlined"
             fullWidth
-            required
           />
           <TextField
             id="leaveMessage"
@@ -201,7 +200,6 @@ const TelegramPopup = ({ onClose, onSave }) => {
             onChange={handleChange}
             variant="outlined"
             fullWidth
-            required
           />
           <TextField
             id="marketingMessage"
@@ -210,7 +208,6 @@ const TelegramPopup = ({ onClose, onSave }) => {
             onChange={handleChange}
             variant="outlined"
             fullWidth
-            required
           />
           <FormControl fullWidth variant="outlined">
             <InputLabel id="userType-label">User Type</InputLabel>
