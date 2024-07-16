@@ -306,9 +306,9 @@ function RAPopup({ onClose, onSave, mode, initialValues }) {
     { name: "premiumTelegramChannel1", label: "Premium Channel C Link" },
     { name: "premiumTelegramChannel2", label: "Premium Channel E Link" },
     { name: "premiumTelegramChannel3", label: "Premium Channel FO Link" },
-    { name: "chatId1", label: "Chat ID C", required: true },
-    { name: "chatId2", label: "Chat ID E", required: true },
-    { name: "chatId3", label: "Chat ID FO", required: true },
+    { name: "chatId1", label: "Chat ID C" },
+    { name: "chatId2", label: "Chat ID E" },
+    { name: "chatId3", label: "Chat ID FO" },
     {
       name: "pan",
       label: "PAN Card",

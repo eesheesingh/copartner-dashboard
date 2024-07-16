@@ -93,12 +93,18 @@ const TelegramPopup = ({ onClose, onSave }) => {
   const handleUserChange = (e) => {
     const selectedUserId = e.target.value;
     const selectedUser = userOptions.find((user) => user.id === selectedUserId);
+    console.log(selectedUser);
     setFormData({
       ...formData,
       expertsName: userType === "RA" ? selectedUser.name : formData.expertsName,
-      expertsId: userType === "RA" ? selectedUser.id : formData.expertsId,
-      affiliatePartnersName: userType === "AP" ? selectedUser.name : formData.affiliatePartnersName,
-      affiliatePartnersId: userType === "AP" ? selectedUser.id : formData.affiliatePartnersId,
+      expertsId:
+        userType === "RA" ? selectedUser.stackholderId : formData.expertsId,
+      affiliatePartnersName:
+        userType === "AP" ? selectedUser.name : formData.affiliatePartnersName,
+      affiliatePartnersId:
+        userType === "AP"
+          ? selectedUser.stackholderId
+          : formData.affiliatePartnersId,
     });
   };
 

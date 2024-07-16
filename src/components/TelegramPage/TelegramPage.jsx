@@ -113,7 +113,9 @@ const TelegramPage = () => {
                       <td>{channel.joinMessage}</td>
                       <td>{channel.leaveMessage}</td>
                       <td>{channel.marketingMessage}</td>
-                      <td>{channel.expertsName || channel.affiliatePartnersName}</td>
+                      <td>
+                        {channel.expertsName || channel.affiliatePartnersName}
+                      </td>
                       <td className="flex justify-center">
                         <FaTrash
                           className="text-red-500 cursor-pointer"
