@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { addDays, format } from "date-fns";
+import { addDays } from "date-fns";
 import { DateRange } from "react-date-range";
 
-const SecondTimePayment = ({ searchQuery, onTableData }) => {
-  const [SecondTimePayment, setSecondTimePayment] = useState([]);
+const MinorSubscription = ({ searchQuery, onTableData }) => {
+  const [payments, setPayments] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   const [count, setCount] = useState("");
   const [dateRange, setDateRange] = useState([
@@ -16,20 +16,36 @@ const SecondTimePayment = ({ searchQuery, onTableData }) => {
   const [showDatePicker, setShowDatePicker] = useState(false);
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchFirstTimePayments = async () => {
+      try {
+        const response = await fetch(
+          "https://copartners.in:5134/api/UserData/UserFirstTimePaymentListing?page=1&pageSize=100000"
+        );
+        const data = await response.json();
+        return data.isSuccess ? data.data : [];
+      } catch (error) {
+        console.error("Error fetching first time payments:", error);
+        return [];
+      }
+    };
+
+    const fetchSecondTimePayments = async () => {
       try {
         const response = await fetch(
           "https://copartners.in:5134/api/UserData/UserSecondTimePaymentListing?page=1&pageSize=100000"
         );
         const data = await response.json();
-        if (data.isSuccess) {
-          setSecondTimePayment(data.data);
-        } else {
-          throw new Error("Failed to fetch data");
-        }
+        return data.isSuccess ? data.data : [];
       } catch (error) {
-        console.error("Error fetching data:", error);
+        console.error("Error fetching second time payments:", error);
+        return [];
       }
+    };
+
+    const fetchData = async () => {
+      const firstTimePayments = await fetchFirstTimePayments();
+      const secondTimePayments = await fetchSecondTimePayments();
+      setPayments([...firstTimePayments, ...secondTimePayments]);
     };
 
     fetchData();
@@ -39,17 +55,18 @@ const SecondTimePayment = ({ searchQuery, onTableData }) => {
     const start = dateRange[0].startDate;
     const end = dateRange[0].endDate;
 
-    const filteredAndSortedData = SecondTimePayment.filter(
-      (user) =>
-        user.mobile.includes(searchQuery) && !user.isSpecialSubscription &&
-        (!start ||
-          !end ||
-          (new Date(user.date) >= start && new Date(user.date) <= end))
-    ).sort((a, b) => new Date(b.date) - new Date(a.date));
+    const filteredAndSortedData = payments
+      .filter(
+        (user) =>
+          user.mobile.includes(searchQuery) &&
+          user.isSpecialSubscription &&
+          (!start || !end || (new Date(user.date) >= start && new Date(user.date) <= end))
+      )
+      .sort((a, b) => new Date(b.date) - new Date(a.date));
 
     setFilteredData(filteredAndSortedData);
     setCount(filteredAndSortedData.length);
-  }, [SecondTimePayment, searchQuery, dateRange]);
+  }, [payments, searchQuery, dateRange]);
 
   const determineUserType = (userData) => {
     if (userData.apId) {
@@ -131,4 +148,4 @@ const SecondTimePayment = ({ searchQuery, onTableData }) => {
   );
 };
 
-export default SecondTimePayment;
+export default MinorSubscription;

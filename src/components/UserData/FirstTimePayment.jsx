@@ -42,7 +42,7 @@ const FirstTimePayment = ({ searchQuery, onTableData }) => {
     const filteredAndSortedData = payments
       .filter(
         (user) =>
-          user.mobile.includes(searchQuery) &&
+          user.mobile.includes(searchQuery) && !user.isSpecialSubscription &&
           (!start ||
             !end ||
             (new Date(user.date) >= start && new Date(user.date) <= end))
