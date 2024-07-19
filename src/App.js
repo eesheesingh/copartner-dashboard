@@ -35,6 +35,7 @@ import Signup from "./components/Signup/Signup";
 import ChatIds from "./components/ChatIds/ChatIds";
 import Notification from "./components/Notification/Notification";
 import TelegramPage from "./components/TelegramPage/TelegramPage";
+import MiniSub from "./components/MiniSub/MiniSub";
 
 const App = () => {
   const token = sessionStorage.getItem("creds");
@@ -52,6 +53,7 @@ const App = () => {
           <Route path="radetails" element={<RADetail />} />
           <Route path="apdetails" element={<APDetail />} />
           <Route path="apdetails/:apName" element={<APList />} />
+          <Route path="minisub" element={<MiniSub />} />
           <Route path="agencylist" element={<AgencyList />} />
           <Route path="agencylist/:agencyId" element={<AgencyID />} />
           <Route path="transaction" element={<Transaction />} />

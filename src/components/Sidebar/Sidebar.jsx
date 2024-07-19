@@ -60,6 +60,12 @@ const Sidebar = () => {
       icon: IoSettingsOutline,
     },
     {
+      to: "/minisub",
+      title: "Settings",
+      label: "Mini Sub",
+      icon: IoSettingsOutline,
+    },
+    {
       to: "/agencylist",
       title: "Settings",
       label: "Ad Agency",
