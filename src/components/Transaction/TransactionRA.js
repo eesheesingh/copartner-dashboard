@@ -19,7 +19,7 @@ const TransactionRA = () => {
   const fetchTransactions = async () => {
     try {
       const response = await fetch(
-        "https://copartners.in:5135/api/Withdrawal?RequestBy=RA"
+        "https://copartners.in:5135/api/Withdrawal?RequestBy=RA&page=1&pageSize=1000000"
       );
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
