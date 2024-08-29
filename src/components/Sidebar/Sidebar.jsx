@@ -41,6 +41,7 @@ const Sidebar = () => {
     // { to: "/notification", title: "Notification", label: "Notification", icon: userIcon },
     { to: "/", title: "Dashboard", label: "A.P", icon: userIcon },
     { to: "/r.a", title: "Overview", label: "R.A", icon: userIcon },
+    {to: "/ApCpTotal", title:"totalRAAp",label:"CP Earning", icon:userIcon},
     {
       to: "/blogs",
       title: "Settings",
