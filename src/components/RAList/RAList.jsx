@@ -61,9 +61,9 @@ const RAList = () => {
 
   useEffect(() => {
     if (selectedRA) {
-      const start = dateRange[0].startDate;
-      const end = dateRange[0].endDate;
-
+      const start = dateRange[0].startDate ? new Date(dateRange[0].startDate.setHours(0, 0, 0, 0)) : null;
+      const end = dateRange[0].endDate ? new Date(dateRange[0].endDate.setHours(23, 59, 59, 999)) : null;
+  
       const filteredAndSortedData = selectedRA.filter((ra) => {
         const subscribeDate = new Date(ra.subscribeDate);
         return (
@@ -73,7 +73,7 @@ const RAList = () => {
           (!start || !end || (subscribeDate >= start && subscribeDate <= end))
         );
       });
-
+  
       setFilteredData(filteredAndSortedData);
     }
   }, [filter, selectedRA, dateRange]);

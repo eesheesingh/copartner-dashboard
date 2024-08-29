@@ -36,6 +36,7 @@ import ChatIds from "./components/ChatIds/ChatIds";
 import Notification from "./components/Notification/Notification";
 import TelegramPage from "./components/TelegramPage/TelegramPage";
 import CPDiscount from "./components/CPDiscount/CPDiscount";
+import ApCpTotal from "./components/ApCpTotal/APCpTotal";
 
 const App = () => {
   const token = sessionStorage.getItem("creds");
@@ -69,6 +70,7 @@ const App = () => {
           <Route path="notification" element={<Notification />} />
           <Route path="telegrampage" element={<TelegramPage />} />
           <Route path="CPDiscount" element={<CPDiscount />} />
+          <Route path="ApCpTotal" element={<ApCpTotal />} />
         </Route>
         <Route path="signup" element={<Signup />} />
       </>
