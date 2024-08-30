@@ -58,6 +58,9 @@ const Sidebar = () => {
       to: "/MinorSub",
       title: "Minor Sub",
       label: "Minor Sub",
+      to: "/minisub",
+      title: "Settings",
+      label: "Mini Sub",
       icon: IoSettingsOutline,
     },
     {

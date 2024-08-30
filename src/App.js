@@ -39,6 +39,7 @@ import CPDiscount from "./components/CPDiscount/CPDiscount";
 import ApCpTotal from "./components/ApCpTotal/APCpTotal";
 import MinorSubscription from "./components/UserData/MinorSubscription";
 import MinorSub from "./components/MinorSub/MinorSub";
+import MiniSub from "./components/MiniSub/MiniSub";
 
 const App = () => {
   const token = sessionStorage.getItem("creds");
@@ -57,6 +58,7 @@ const App = () => {
           <Route path="MinorSub" element={<MinorSub />} />
           <Route path="apdetails" element={<APDetail />} />
           <Route path="apdetails/:apName" element={<APList />} />
+          <Route path="minisub" element={<MiniSub />} />
           <Route path="agencylist" element={<AgencyList />} />
           <Route path="agencylist/:agencyId" element={<AgencyID />} />
           <Route path="transaction" element={<Transaction />} />
