@@ -43,12 +43,6 @@ const Sidebar = () => {
     { to: "/r.a", title: "Overview", label: "R.A", icon: userIcon },
     {to: "/ApCpTotal", title:"totalRAAp",label:"CP Earning", icon:userIcon},
     {
-      to: "/blogs",
-      title: "Settings",
-      label: "Blog Upload",
-      icon: IoSettingsOutline,
-    },
-    {
       to: "/radetails",
       title: "Settings",
       label: "R.A Details",
@@ -61,10 +55,22 @@ const Sidebar = () => {
       icon: IoSettingsOutline,
     },
     {
+      to: "/MinorSub",
+      title: "Minor Sub",
+      label: "Minor Sub",
+      icon: IoSettingsOutline,
+    },
+    {
       to: "/agencylist",
       title: "Settings",
       label: "Ad Agency",
       icon: userIcon,
+    },
+    {
+      to: "/blogs",
+      title: "Settings",
+      label: "Blog Upload",
+      icon: IoSettingsOutline,
     },
     {
       to: "/transaction",
