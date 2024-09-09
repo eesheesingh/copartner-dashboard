@@ -19,25 +19,28 @@ const TransactionAP = () => {
   const fetchTransactions = async () => {
     try {
       const response = await fetch(
-        "https://copartners.in:5135/api/Withdrawal?RequestBy=AP"
+        "https://copartners.in:5135/api/Withdrawal?RequestBy=AP&page=1&pageSize=1000000"
       );
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       const data = await response.json();
-      console.log(data.data);
-      setTransactions(data.data);
+      
+      // Sort by most recent date first, then by requestAction if needed
+      const sortedTransactions = data.data.sort((a, b) => {
+        const dateComparison = new Date(b.withdrawalRequestDate) - new Date(a.withdrawalRequestDate);
+        if (dateComparison !== 0) return dateComparison;
+        if (a.requestAction && !b.requestAction) return 1;
+        if (!a.requestAction && b.requestAction) return -1;
+        return 0;
+      });
+
+      setTransactions(sortedTransactions);
     } catch (error) {
       console.error("Fetching error:", error);
       toast.error(`Failed to fetch transactions: ${error.message}`);
     }
   };
-
-  const sortedTransactions = transactions.sort((a, b) => {
-    if (a.requestAction && !b.requestAction) return 1;
-    if (!a.requestAction && b.requestAction) return -1;
-    return 0;
-  });
 
   const handleAccept = (member) => {
     setAcceptPopupOpenForTransaction(member);
@@ -73,7 +76,7 @@ const TransactionAP = () => {
       }
 
       toast.success("Transaction accepted successfully!");
-      // Optionally update the local state or refetch transactions
+      fetchTransactions(); // Refresh transactions after accept
     } catch (error) {
       console.error("Error updating transaction:", error);
       toast.error(`Failed to accept transaction: ${error.message}`);
@@ -116,6 +119,7 @@ const TransactionAP = () => {
       }
 
       toast.info("Transaction rejected successfully!");
+      fetchTransactions(); // Refresh transactions after reject
     } catch (error) {
       console.error("Error updating transaction:", error);
       toast.error(`Failed to reject transaction: ${error.message}`);
@@ -142,7 +146,7 @@ const TransactionAP = () => {
               </tr>
             </thead>
             <tbody>
-              {sortedTransactions.map((member, index) => (
+              {transactions.map((member, index) => (
                 <tr key={index}>
                   <td style={{ textAlign: "left", paddingLeft: "2rem" }}>
                     {new Date(

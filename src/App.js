@@ -35,6 +35,10 @@ import Signup from "./components/Signup/Signup";
 import ChatIds from "./components/ChatIds/ChatIds";
 import Notification from "./components/Notification/Notification";
 import TelegramPage from "./components/TelegramPage/TelegramPage";
+import CPDiscount from "./components/CPDiscount/CPDiscount";
+import ApCpTotal from "./components/ApCpTotal/APCpTotal";
+import MinorSubscription from "./components/UserData/MinorSubscription";
+import MinorSub from "./components/MinorSub/MinorSub";
 import MiniSub from "./components/MiniSub/MiniSub";
 
 const App = () => {
@@ -51,6 +55,7 @@ const App = () => {
           <Route path="r.a/:raId" element={<RAList />} />
           <Route path="blogs" element={<Blog />} />
           <Route path="radetails" element={<RADetail />} />
+          <Route path="MinorSub" element={<MinorSub />} />
           <Route path="apdetails" element={<APDetail />} />
           <Route path="apdetails/:apName" element={<APList />} />
           <Route path="minisub" element={<MiniSub />} />
@@ -69,6 +74,8 @@ const App = () => {
           <Route path="chatids" element={<ChatIds />} />
           <Route path="notification" element={<Notification />} />
           <Route path="telegrampage" element={<TelegramPage />} />
+          <Route path="CPDiscount" element={<CPDiscount />} />
+          <Route path="ApCpTotal" element={<ApCpTotal />} />
         </Route>
         <Route path="signup" element={<Signup />} />
       </>

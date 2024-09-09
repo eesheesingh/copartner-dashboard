@@ -41,12 +41,7 @@ const Sidebar = () => {
     // { to: "/notification", title: "Notification", label: "Notification", icon: userIcon },
     { to: "/", title: "Dashboard", label: "A.P", icon: userIcon },
     { to: "/r.a", title: "Overview", label: "R.A", icon: userIcon },
-    {
-      to: "/blogs",
-      title: "Settings",
-      label: "Blog Upload",
-      icon: IoSettingsOutline,
-    },
+    {to: "/ApCpTotal", title:"totalRAAp",label:"CP Earning", icon:userIcon},
     {
       to: "/radetails",
       title: "Settings",
@@ -60,6 +55,9 @@ const Sidebar = () => {
       icon: IoSettingsOutline,
     },
     {
+      to: "/MinorSub",
+      title: "Minor Sub",
+      label: "Minor Sub",
       to: "/minisub",
       title: "Settings",
       label: "Mini Sub",
@@ -70,6 +68,12 @@ const Sidebar = () => {
       title: "Settings",
       label: "Ad Agency",
       icon: userIcon,
+    },
+    {
+      to: "/blogs",
+      title: "Settings",
+      label: "Blog Upload",
+      icon: IoSettingsOutline,
     },
     {
       to: "/transaction",
@@ -91,6 +95,8 @@ const Sidebar = () => {
     { to: "/rauserdata", title: "Settings", label: "RA User Data", icon: userIcon },
     { to: "/chatids", title: "Settings", label: "Chat IDs", icon: userIcon },
     { to: "/telegrampage", title: "Settings", label: "Telegram Page", icon: userIcon },
+    { to: "/CPDiscount", title: "Settings", label: "CP Discount", icon: userIcon },
+
   ];
 
   return (
